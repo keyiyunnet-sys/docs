@@ -1,0 +1,265 @@
+---
+title: "Sora Video Generation API"
+description: "Generate videos using Sora models with OpenAI-compatible format"
+---
+
+# Sora Video Generation API
+
+Generate high-quality videos using Sora's advanced AI models through an OpenAI-compatible API interface.
+
+## Endpoint Information
+
+<CodeGroup>
+```bash Create Video
+POST https://api.apimart.ai/sora/videos
+```
+
+```bash Query Video Status
+GET https://api.apimart.ai/v1/videos/{id}
+```
+</CodeGroup>
+
+## Authentication
+
+All requests require Bearer token authentication in the header:
+
+```bash
+Authorization: Bearer {{your_api_key}}
+```
+
+## Create Video Generation
+
+### Request Parameters
+
+<ParamField path="model" type="string" required>
+  Model name. Available options:
+  - `sora-2`: Supports 10 or 15 seconds
+  - `sora-2-stable`: Supports 10 or 15 seconds  
+  - `sora-2-pro`: Supports 10 seconds (HD), 15 seconds (HD), or 25 seconds
+</ParamField>
+
+<ParamField path="prompt" type="string" required>
+  Video generation prompt describing the desired content.
+  
+  Example: `"A cat dancing in the rain"`
+</ParamField>
+
+<ParamField path="size" type="string">
+  Video dimensions. Default: `720x1280`
+  
+  Options:
+  - `720x1280` (portrait)
+  - `1280x720` (landscape)
+  
+  <Note>Use either `size` or `aspect_ratio`, not both</Note>
+</ParamField>
+
+<ParamField path="aspect_ratio" type="string">
+  Video aspect ratio format:
+  - `16:9` (landscape)
+  - `9:16` (portrait)
+  
+  <Note>Use either `aspect_ratio` or `size`, not both</Note>
+</ParamField>
+
+<ParamField path="duration" type="integer">
+  Video duration in seconds. Supports 10 and 15.
+  
+  <Note>Use either `duration` or `seconds`, not both</Note>
+</ParamField>
+
+<ParamField path="seconds" type="integer">
+  Video duration in seconds. Supports 10 and 15.
+  
+  <Note>Use either `seconds` or `duration`, not both</Note>
+</ParamField>
+
+<ParamField path="input_reference" type="array">
+  Array of reference image URLs to guide video generation. Maximum 3 images.
+  
+  <Note>Use either `input_reference` or `image_urls`, not both</Note>
+</ParamField>
+
+<ParamField path="image_urls" type="array">
+  Array of reference image URLs to guide video generation.
+  
+  <Note>Use either `image_urls` or `input_reference`, not both</Note>
+</ParamField>
+
+### Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier for the video generation task
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, always `video.generation`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used for generation
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Current status:
+  - `queued` - Task is queued
+  - `processing` - Video is being generated
+  - `completed` - Generation completed
+  - `failed` - Generation failed
+  - `cancelled` - Task was cancelled
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message when status is `failed`
+</ResponseField>
+
+### Request Example
+
+<CodeGroup>
+```bash cURL
+curl --request POST \
+  --url https://api.apimart.ai/sora/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "sora-2",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "aspect_ratio": "16:9",
+    "seconds": 10,
+    "input_reference": [
+      "https://example.com/reference1.jpg",
+      "https://example.com/reference2.jpg"
+    ]
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.apimart.ai/sora/videos', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer {{key}}',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    model: 'sora-2',
+    prompt: 'A cat dancing in the rain, cinematic style',
+    aspect_ratio: '16:9',
+    seconds: 10,
+    input_reference: [
+      'https://example.com/reference1.jpg',
+      'https://example.com/reference2.jpg'
+    ]
+  })
+});
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.apimart.ai/sora/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'sora-2',
+        'prompt': 'A cat dancing in the rain, cinematic style',
+        'aspect_ratio': '16:9',
+        'seconds': 10,
+        'input_reference': [
+            'https://example.com/reference1.jpg',
+            'https://example.com/reference2.jpg'
+        ]
+    }
+)
+```
+</CodeGroup>
+
+### Response Example
+
+```json
+{
+  "id": "sora_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "sora-2",
+  "status": "queued"
+}
+```
+
+## Query Video Status
+
+Use the returned `id` to check the generation status and retrieve the completed video.
+
+### Request Example
+
+<CodeGroup>
+```bash cURL
+curl --request GET \
+  --url https://api.apimart.ai/v1/videos/sora_abc123def456 \
+  --header 'Authorization: Bearer {{key}}'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.apimart.ai/v1/videos/sora_abc123def456', {
+  headers: {
+    'Authorization': 'Bearer {{key}}'
+  }
+});
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.apimart.ai/v1/videos/sora_abc123def456',
+    headers={'Authorization': 'Bearer {{key}}'}
+)
+```
+</CodeGroup>
+
+### Response Example (Completed)
+
+```json
+{
+  "id": "sora_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "sora-2",
+  "status": "completed",
+  "video_url": "https://example.com/video.mp4",
+  "error": null
+}
+```
+
+## Important Notes
+
+<Warning>
+Video generation is asynchronous. Use the returned `id` to query task status and retrieve results.
+</Warning>
+
+<Info>
+**Parameter Selection Rules:**
+- **Size**: Choose either `size` or `aspect_ratio` (for compatibility)
+- **Duration**: Choose either `duration` or `seconds` (for compatibility)  
+- **References**: Choose either `input_reference` or `image_urls`
+</Info>
+
+<Tip>
+**Model Capabilities:**
+- `sora-2` and `sora-2-stable`: Support 10 or 15 seconds
+- `sora-2-pro`: Supports 10s (HD), 15s (HD), or 25s
+</Tip>
+
+### Best Practices
+
+1. Use JSON format for all requests
+2. Include clear, descriptive prompts for better results
+3. Reference images can guide the overall style (max 3 images)
+4. Poll the status endpoint every 30-60 seconds until completion
+5. Describe visual effects and style preferences in your prompt
