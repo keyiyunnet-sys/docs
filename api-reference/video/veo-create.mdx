@@ -1,0 +1,283 @@
+---
+title: "VEO - 创建任务"
+description: "使用 VEO 模型创建视频生成任务，支持参考图片和首尾帧引导"
+api: "POST https://api.globalaiopc.com/v1/veo/videos/"
+---
+
+# VEO 创建视频任务
+
+使用 VEO 的先进 AI 模型创建高质量视频生成任务，支持两种图片引导模式。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## 请求参数
+
+<ParamField path="model" type="string">
+  模型名称，默认为 `veo3.1-fast`
+  
+  可选值：
+  - `veo3.1-fast` - 快速生成模型
+</ParamField>
+
+<ParamField path="prompt" type="string" required>
+  视频生成提示词，描述所需的视频内容
+  
+  示例：`"A cat dancing in the rain, cinematic style"`
+</ParamField>
+
+<ParamField path="size" type="string">
+  视频尺寸，默认为 `1280x720`
+  
+  可选值：
+  - `1280x720` - 横屏
+  - `720x1280` - 竖屏
+  
+  <Note>与 `aspect_ratio` 二选一使用</Note>
+</ParamField>
+
+<ParamField path="aspect_ratio" type="string">
+  视频宽高比
+  
+  可选值：
+  - `16:9` - 横屏
+  - `9:16` - 竖屏
+  
+  <Note>与 `size` 二选一使用</Note>
+</ParamField>
+
+<ParamField path="duration" type="integer">
+  视频时长（秒），支持 8，默认为 8
+  
+  <Note>与 `seconds` 二选一使用</Note>
+</ParamField>
+
+<ParamField path="seconds" type="integer">
+  视频时长（秒），支持 8，默认为 8
+  
+  <Note>与 `duration` 二选一使用</Note>
+</ParamField>
+
+### 参考图片模式
+
+<ParamField path="input_reference" type="array">
+  参考图片数组，用于指导视频生成，最多支持 3 张图片
+  
+  <Warning>与首尾帧模式互斥，与 `image_urls` 二选一</Warning>
+</ParamField>
+
+<ParamField path="image_urls" type="array">
+  参考图片URL数组，用于指导视频生成，最多支持 3 张图片
+  
+  <Warning>与首尾帧模式互斥，与 `input_reference` 二选一</Warning>
+</ParamField>
+
+### 首尾帧模式
+
+<ParamField path="first_image" type="string">
+  首帧图片 URL，用于指定视频的开始帧
+  
+  <Warning>与参考图片模式互斥</Warning>
+</ParamField>
+
+<ParamField path="last_image" type="string">
+  尾帧图片 URL，用于指定视频的结束帧
+  
+  <Warning>需要同时提供 `first_image`，与参考图片模式互斥</Warning>
+</ParamField>
+
+## 响应参数
+
+<ResponseField name="id" type="string">
+  视频生成任务的唯一标识符，用于后续查询任务状态
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  对象类型，固定为 `video.generation`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  任务创建时间戳
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  使用的模型名称
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  任务状态：
+  - `queued` - 排队中
+  - `processing` - 处理中
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  错误信息，当 status 为 `failed` 时返回
+</ResponseField>
+
+## 图片引导模式
+
+VEO 支持两种互斥的图片引导模式：
+
+<CardGroup cols={2}>
+  <Card title="参考图片模式" icon="images">
+    使用 `input_reference` 或 `image_urls` 提供最多 3 张参考图片，指导整体风格和内容
+  </Card>
+  <Card title="首尾帧模式" icon="film">
+    使用 `first_image` 和可选的 `last_image` 指定视频的精确开始和结束帧
+  </Card>
+</CardGroup>
+
+<Warning>
+**重要：** 两种模式不能同时使用，只能选择其中一种
+</Warning>
+
+## 参数选择规则
+
+<Warning>
+**参数互斥规则：**
+- **尺寸参数**：`size` 和 `aspect_ratio` 二选一
+- **时长参数**：`duration` 和 `seconds` 二选一  
+- **参考图片**：`input_reference` 和 `image_urls` 二选一
+- **引导模式**：参考图片模式 OR 首尾帧模式，不能同时使用
+</Warning>
+
+## VEO 特性
+
+<CardGroup cols={2}>
+  <Card title="固定时长" icon="clock">
+    VEO 模型固定生成 8 秒视频
+  </Card>
+  <Card title="双引导模式" icon="layer-group">
+    支持参考图片和首尾帧两种引导方式
+  </Card>
+  <Card title="高质量输出" icon="sparkles">
+    veo3.1-fast 模型提供高质量视频生成
+  </Card>
+  <Card title="灵活控制" icon="sliders">
+    首尾帧模式提供精确的开始和结束控制
+  </Card>
+</CardGroup>
+
+<Info>
+**最佳实践：**
+1. 视频生成为异步处理，需要通过返回的 `id` 查询任务状态和结果
+2. 在提示词中明确描述所需的视觉效果和风格
+3. 选择合适的引导模式：
+   - 参考图片模式：适合风格引导
+   - 首尾帧模式：适合精确控制开始和结束
+4. 如果使用首尾帧模式，确保首帧图片始终提供
+</Info>
+
+<Tip>
+**引导模式选择建议：**
+- **参考图片模式**：当你想要整体风格一致但允许创意变化时使用
+- **首尾帧模式**：当你需要精确控制视频的开始和结束画面时使用
+</Tip>
+
+<RequestExample>
+
+```bash cURL (参考图片)
+curl --request POST \
+  --url https://api.globalaiopc.com/veo/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "veo3.1-fast",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "aspect_ratio": "16:9",
+    "seconds": 8,
+    "input_reference": [
+      "https://example.com/reference1.jpg",
+      "https://example.com/reference2.jpg"
+    ]
+  }'
+```
+
+```bash cURL (首尾帧)
+curl --request POST \
+  --url https://api.globalaiopc.com/veo/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "veo3.1-fast",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "aspect_ratio": "16:9",
+    "seconds": 8,
+    "first_image": "https://example.com/first-frame.jpg",
+    "last_image": "https://example.com/last-frame.jpg"
+  }'
+```
+
+```java Java (参考图片)
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.List;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "veo3.1-fast",
+    "prompt", "A cat dancing in the rain, cinematic style",
+    "aspect_ratio", "16:9",
+    "seconds", 8,
+    "input_reference", List.of(
+        "https://example.com/reference1.jpg",
+        "https://example.com/reference2.jpg"
+    )
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.globalaiopc.com/veo/videos"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python (首尾帧)
+import requests
+
+response = requests.post(
+    'https://api.globalaiopc.com/veo/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'veo3.1-fast',
+        'prompt': 'A cat dancing in the rain, cinematic style',
+        'aspect_ratio': '16:9',
+        'seconds': 8,
+        'first_image': 'https://example.com/first-frame.jpg',
+        'last_image': 'https://example.com/last-frame.jpg'
+    }
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 创建成功
+{
+  "id": "vgen_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "veo3.1-fast",
+  "status": "queued"
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,318 @@
+---
+title: "Gemini Chat API"
+description: "基于 Chat 兼容格式的 AI 对话服务，支持多模态输入"
+api: "POST https://api.globalaiopc.com/v1/chat/completions"
+---
+
+# Gemini Chat API
+
+Gemini 聊天接口提供基于 Chat 兼容格式的 AI 对话服务。给定一个提示，该模型将返回一个或多个预测的完成，并且还可以返回每个位置的替代标记的概率。
+
+<Info>
+官方文档：https://ai.google.dev/gemini-api/docs
+</Info>
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{YOUR_API_KEY}}
+```
+
+## 请求参数
+
+<ParamField path="model" type="string" required>
+  要使用的模型的 ID。支持的模型：
+  - `gemini-3-flash-preview`
+  - `gemini-2.5-flash-lite`
+  - `gemini-2.5-flash`
+  - `gemini-3.1-pro-preview`
+  - `gemini-3-pro-preview`
+  - `gemini-2.5-pro`
+</ParamField>
+
+<ParamField path="messages" type="array" required>
+  至今为止对话所包含的消息列表。每个消息对象包含 `role` 和 `content` 字段
+</ParamField>
+
+<ParamField path="temperature" type="number">
+  采样温度，介于 0 和 2 之间。较高的值（如 0.8）使输出更随机，较低的值（如 0.2）使输出更集中和确定。
+  
+  <Note>建议改变此参数或 `top_p`，但不要同时改变两者</Note>
+</ParamField>
+
+<ParamField path="top_p" type="number">
+  核采样参数，模型考虑具有 top_p 概率质量的标记的结果。例如 0.1 意味着只考虑构成前 10% 概率质量的标记。
+  
+  <Note>建议改变此参数或 `temperature`，但不要同时改变两者</Note>
+</ParamField>
+
+<ParamField path="stream" type="boolean">
+  默认为 false。如果设置为 true，则会像 ChatGPT 一样发送部分消息增量。标记将以仅数据的服务器发送事件的形式发送，并在 `data: [DONE]` 消息终止流
+</ParamField>
+
+<ParamField path="max_completion_tokens" type="integer">
+  默认为 inf。在聊天补全中生成的最大标记数。输入标记和生成标记的总长度受模型的上下文长度限制
+</ParamField>
+
+<ParamField path="stop" type="string/array">
+  默认为 null。最多 4 个序列，API 将停止进一步生成标记
+</ParamField>
+
+<ParamField path="presence_penalty" type="number">
+  -2.0 和 2.0 之间的数字。正值会根据到目前为止是否出现在文本中来惩罚新标记，从而增加模型谈论新主题的可能性
+</ParamField>
+
+<ParamField path="frequency_penalty" type="number">
+  默认为 0。-2.0 到 2.0 之间的数字。正值根据文本目前的存在频率惩罚新标记，降低模型重复相同行的可能性
+</ParamField>
+
+### Messages 数组结构
+
+每个 message 对象包含以下字段：
+
+<ParamField path="role" type="string" required>
+  消息角色，可选值：`system`、`user`、`assistant`
+</ParamField>
+
+<ParamField path="content" type="string/array" required>
+  消息内容。可以是字符串（纯文本），或数组（多模态内容，支持文本、图片、视频）
+</ParamField>
+
+### 多模态内容结构
+
+当 `content` 为数组时，支持以下类型的对象：
+
+**文本对象：**
+```json
+{
+  "type": "text",
+  "text": "消息文本内容"
+}
+```
+
+**图片/视频对象：**
+```json
+{
+  "type": "image_url",
+  "image_url": {
+    "url": "图片或视频URL地址"
+  }
+}
+```
+
+## 响应参数
+
+<ResponseField name="id" type="string">
+  聊天补全的唯一标识符
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  对象类型，固定为 `chat.completion` 或 `chat.completion.chunk`（流式）
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  创建时间戳
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  使用的模型名称
+</ResponseField>
+
+<ResponseField name="choices" type="array">
+  补全选择列表
+</ResponseField>
+
+<ResponseField name="usage" type="object">
+  令牌使用情况统计（仅非流式响应）
+</ResponseField>
+
+## 多模态支持
+
+Gemini 模型支持多模态输入，可以在同一个请求中处理文本、图片和视频：
+
+<CardGroup cols={2}>
+  <Card title="纯文本对话" icon="message">
+    `content` 直接使用字符串
+  </Card>
+  <Card title="图片分析" icon="image">
+    `content` 使用数组，包含 `text` 和 `image_url` 对象
+  </Card>
+  <Card title="视频分析" icon="video">
+    `content` 使用数组，视频也使用 `image_url` 类型传递
+  </Card>
+  <Card title="混合输入" icon="layer-group">
+    可以在同一个 `content` 数组中同时包含文本、图片和视频
+  </Card>
+</CardGroup>
+
+<Warning>
+**重要提示：**
+- 图片和视频 URL 必须可公开访问
+- 视频文件也使用 `image_url` 类型传递，不是 `video_url`
+- 不同模型对多模态的支持程度可能不同，建议使用 `gemini-3.1-pro-preview` 或更高版本
+</Warning>
+
+## 注意事项
+
+<Note>
+**最佳实践：**
+1. 请求必须使用 `application/json` 格式
+2. `temperature` 和 `top_p` 建议只调整其中一个参数
+3. 使用 JSON 模式时，必须在消息中明确指示模型生成 JSON
+4. 流式响应以 Server-Sent Events (SSE) 格式返回，以 `data: [DONE]` 结束
+5. `finish_reason` 为 `length` 时，表示生成超过了 `max_completion_tokens` 或对话超过了最大上下文长度
+</Note>
+
+<RequestExample>
+
+```bash cURL (纯文本)
+curl --request POST \
+  --url https://api.globalaiopc.com/v1/chat/completions \
+  --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "gemini-3.1-pro-preview",
+    "messages": [
+      {
+        "role": "system",
+        "content": "你是一个情感陪伴助手"
+      },
+      {
+        "role": "user",
+        "content": "hello world"
+      }
+    ],
+    "temperature": 0.7,
+    "max_completion_tokens": 2000
+  }'
+```
+
+```bash cURL (图片分析)
+curl --request POST \
+  --url https://api.globalaiopc.com/v1/chat/completions \
+  --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "gemini-3.1-pro-preview",
+    "messages": [
+      {
+        "role": "system",
+        "content": "你是一个图片分析专家。"
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "请分析这张图片的内容"
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "https://example.com/image.jpg"
+            }
+          }
+        ]
+      }
+    ]
+  }'
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.List;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "gemini-3.1-pro-preview",
+    "messages", List.of(
+        Map.of("role", "system", "content", "你是一个情感陪伴助手"),
+        Map.of("role", "user", "content", "hello world")
+    ),
+    "temperature", 0.7,
+    "max_completion_tokens", 2000
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.globalaiopc.com/v1/chat/completions"))
+    .header("Authorization", "Bearer {{YOUR_API_KEY}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.globalaiopc.com/v1/chat/completions',
+    headers={
+        'Authorization': 'Bearer {{YOUR_API_KEY}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'gemini-3.1-pro-preview',
+        'messages': [
+            {
+                'role': 'system',
+                'content': '你是一个情感陪伴助手'
+            },
+            {
+                'role': 'user',
+                'content': 'hello world'
+            }
+        ],
+        'temperature': 0.7,
+        'max_completion_tokens': 2000
+    }
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 非流式响应
+{
+  "id": "chatcmpl-abc123",
+  "object": "chat.completion",
+  "created": 1761635478,
+  "model": "gemini-3.1-pro-preview",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "你好！我是 Gemini，很高兴为你服务。有什么我可以帮助你的吗？"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 25,
+    "completion_tokens": 150,
+    "total_tokens": 175
+  }
+}
+```
+
+```json 流式响应
+data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1761635478,"model":"gemini-3.1-pro-preview","choices":[{"index":0,"delta":{"role":"assistant","content":"你"},"finish_reason":null}]}
+
+data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1761635478,"model":"gemini-3.1-pro-preview","choices":[{"index":0,"delta":{"content":"好"},"finish_reason":null}]}
+
+data: [DONE]
+```
+
+</ResponseExample>

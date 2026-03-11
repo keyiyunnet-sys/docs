@@ -1,0 +1,201 @@
+---
+title: "Navo Banana - 创建任务"
+description: "创建图片生成任务，支持多种模型和分辨率选项"
+api: "POST https://api.globalaiopc.com/v1/image/banana/"
+---
+
+# 创建图片生成任务
+
+使用 Navo Banana API 创建高质量的 AI 图片生成任务，支持多种模型和分辨率选项。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## 请求参数
+
+<ParamField path="model" type="string" required>
+  模型名称，可选值：
+  - `NanoBanana` - 基础模型
+  - `NanoBanana2` - 增强模型，支持分辨率设置
+  - `NanoBanana-pro` - 专业版模型，支持分辨率设置
+</ParamField>
+
+<ParamField path="prompt" type="string" required>
+  图片生成提示词
+  
+  示例：`"一只可爱的橙色猫咪坐在窗台上看着外面的风景"`
+</ParamField>
+
+<ParamField path="resolution" type="string">
+  分辨率设置，仅 `NanoBanana2` 和 `NanoBanana-pro` 支持
+  
+  可选值：
+  - `1k` - 1K 分辨率
+  - `2k` - 2K 分辨率  
+  - `4k` - 4K 分辨率
+</ParamField>
+
+<ParamField path="size" type="string">
+  宽高比设置
+  
+  可选值：
+  - `1:1` - 正方形
+  - `16:9` - 横屏宽屏
+  - `9:16` - 竖屏
+  - `4:3` - 标准横屏
+  - `3:4` - 标准竖屏
+  - `3:2` - 经典横屏
+  - `2:3` - 经典竖屏
+  - `5:4` - 略宽横屏
+  - `4:5` - 略高竖屏
+  - `21:9` - 超宽屏
+</ParamField>
+
+<ParamField path="image_urls" type="array">
+  参考图片URL数组，用于指导图片生成风格
+</ParamField>
+
+## 响应参数
+
+<ResponseField name="id" type="string">
+  图片生成任务的唯一标识符，用于后续查询任务状态
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  对象类型，固定为 `navobanana`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  任务创建时间戳
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  使用的模型名称
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  任务状态：
+  - `queued` - 排队中
+  - `processing` - 处理中
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  错误信息，当 status 为 `failed` 时返回
+</ResponseField>
+
+## 模型特性
+
+<CardGroup cols={3}>
+  <Card title="NanoBanana" icon="image">
+    基础模型，快速生成，适合一般用途
+  </Card>
+  <Card title="NanoBanana2" icon="sparkles">
+    增强模型，支持分辨率设置，质量更高
+  </Card>
+  <Card title="NanoBanana-pro" icon="crown">
+    专业版模型，最高质量，支持 4K 分辨率
+  </Card>
+</CardGroup>
+
+## 注意事项
+
+<Warning>
+**重要提示：**
+- 图片生成为异步处理，需要通过返回的 `id` 查询任务状态和结果
+- `resolution` 参数仅在使用 `NanoBanana2` 或 `NanoBanana-pro` 模型时有效
+- 建议轮询间隔为 2-5 秒，避免频繁请求
+</Warning>
+
+<Tip>
+**最佳实践：**
+1. 使用 `application/json` 格式发送请求
+2. 提示词应该清晰描述所需的图片内容和风格
+3. 参考图片可以帮助指导生成风格，但不是必需的
+4. 选择合适的宽高比以匹配你的使用场景
+</Tip>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://api.globalaiopc.com/v1/image/banana/ \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "NanoBanana2",
+    "prompt": "一只可爱的橙色猫咪坐在窗台上看着外面的风景",
+    "resolution": "2k",
+    "size": "16:9",
+    "image_urls": []
+  }'
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.List;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "NanoBanana2",
+    "prompt", "一只可爱的橙色猫咪坐在窗台上看着外面的风景",
+    "resolution", "2k",
+    "size", "16:9",
+    "image_urls", List.of()
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.globalaiopc.com/v1/image/banana/"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.globalaiopc.com/v1/image/banana/',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'NanoBanana2',
+        'prompt': '一只可爱的橙色猫咪坐在窗台上看着外面的风景',
+        'resolution': '2k',
+        'size': '16:9',
+        'image_urls': []
+    }
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 创建成功
+{
+  "id": "abc123def456",
+  "object": "navobanana",
+  "created": 1761635478,
+  "model": "navobanana",
+  "status": "queued"
+}
+```
+
+</ResponseExample>

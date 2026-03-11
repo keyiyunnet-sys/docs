@@ -1,0 +1,87 @@
+/* 自定义样式 - 优化 API 文档布局 */
+
+/* 隐藏搜索框 - 使用最强的选择器 */
+*[class*="search" i]:not(.mintlify-code-group):not(.mintlify-content),
+*[id*="search" i],
+*[data-search],
+*[role="search"],
+input[type="search"],
+input[placeholder*="搜索" i],
+input[placeholder*="search" i],
+button[aria-label*="search" i],
+button[aria-label*="搜索" i],
+.mintlify-search,
+.mintlify-search-input,
+.mintlify-search-container,
+.mintlify-search-modal,
+.mintlify-search-overlay,
+.mintlify-search-button,
+.search-container,
+.search-input,
+.search-button,
+.search-box,
+.search-field,
+.search-form,
+nav input,
+header input,
+.mintlify-navbar input,
+.mintlify-header input,
+.mintlify-topbar input {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  z-index: -1 !important;
+}
+
+/* 隐藏右侧目录导航 */
+.mintlify-toc {
+  display: none !important;
+}
+
+/* 调整主内容区域宽度 */
+.mintlify-content {
+  max-width: none !important;
+  margin-right: 0 !important;
+}
+
+/* 固定代码示例区域 */
+.mintlify-code-group {
+  position: sticky !important;
+  top: 80px !important;
+  z-index: 5 !important;
+  background: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 暗色模式下的代码区域 */
+[data-theme="dark"] .mintlify-code-group {
+  background: #1a1a1a !important;
+}
+
+/* 参数文档区域可滚动 */
+.mintlify-param-field,
+.mintlify-response-field {
+  margin-bottom: 1.5rem !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .mintlify-code-group {
+    position: relative !important;
+    top: auto !important;
+  }
+}
+
+/* 优化代码块样式 */
+.mintlify-code-block {
+  max-height: 500px !important;
+  overflow-y: auto !important;
+}

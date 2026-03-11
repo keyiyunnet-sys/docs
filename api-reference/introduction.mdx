@@ -1,33 +1,165 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "APIMart — OpenAI 兼容 API 网关"
+description: "统一的 OpenAI 兼容端点，支持 GPT-5、Claude、Gemini、Sora 和 VEO"
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+# APIMart — OpenAI 兼容 API 网关
 
-## Welcome
+OpenAI 兼容 API，支持 GPT-5、Claude、Gemini。多供应商路由、透明定价、低延迟。企业 SLA、SDK 支持、按需付费。
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+统一的 OpenAI 兼容端点，支持 GPT-5、Claude 和 Gemini。只需将 Base URL 更改为 `https://api.globalaiopc.com/v1`，即可在几分钟内从 OpenAI 迁移——保留现有 SDK，无需重写代码。多供应商路由确保低延迟和高可用性。透明定价、企业 SLA 和全球 CDN 加速。
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+## 快速开始
 
-## Authentication
+立即开始使用 OpenAI 兼容的聊天 API，支持 GPT-5、Claude Sonnet 4.5、Gemini 2.0。切换 Base URL，无需修改代码。
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+### OpenAI 兼容端点
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+APIMart 提供 OpenAI 风格的端点，实现无缝迁移。只需更改 Base URL 并继续使用现有 SDK。所有接口遵循 OpenAI 标准，扩展支持 Claude、Gemini、Sora 和 VEO 模型。
+
+## 核心 API 服务
+
+<CardGroup cols={3}>
+  <Card title="聊天补全 API" icon="message" href="/api-reference/text/gemini-chat">
+    支持 GPT-5、GPT-4o、Claude Sonnet 4.5、Gemini 2.0 Flash。OpenAI 兼容 API，支持流式传输和低延迟。
+  </Card>
+  <Card title="图像生成 API" icon="image" href="/api-reference/image/navo-banana-create">
+    支持 GPT-4o Image、Gemini 2.5 Flash Image-preview 模型。OpenAI 风格 API，无缝集成。
+  </Card>
+  <Card title="视频生成 API" icon="video" href="/api-reference/video/sora-create">
+    支持 OpenAI Sora2、Google VEO3 模型。异步任务管理，支持状态追踪和 Webhook。
+  </Card>
+</CardGroup>
+
+## 平台优势
+
+### 透明定价
+
+按需付费，无需订阅。所有模型清晰的按 Token 计费，比官方供应商更实惠，同时保持相同质量和低延迟。
+
+- 所有模型清晰的按 Token 计费
+- 企业用量批量折扣
+- 无隐藏费用
+- 只为实际使用量付费
+
+### 多供应商路由与企业 SLA
+
+内置智能路由，跨多个 LLM 供应商确保高可用性和低延迟。当某个供应商出现问题时，请求自动路由到备用供应商，无服务中断。
+
+<CardGroup cols={2}>
+  <Card title="99.9% 可用性 SLA" icon="shield-check">
+    企业级可靠性，自动故障转移。多供应商路由确保您的请求始终以最小延迟响应。
+  </Card>
+  <Card title="全球 CDN 加速" icon="globe">
+    全球边缘节点，实现最低延迟。优化路由减少响应时间，提升全球用户体验。
+  </Card>
+  <Card title="速率限制管理" icon="gauge">
+    跨供应商自动处理速率限制。智能请求分发防止节流，确保平稳运行。
+  </Card>
+  <Card title="实时状态监控" icon="chart-line">
+    监控端点健康和性能。追踪图像和视频生成的异步任务进度，支持 Webhook 通知。
+  </Card>
+</CardGroup>
+
+## SDK 与代码示例
+
+官方 SDK 支持 Python、Node.js 和 Java。所有 SDK 均 OpenAI 兼容，仅需更改 Base URL 配置即可无缝迁移。
+
+<CodeGroup>
+```python Python SDK
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.globalaiopc.com/v1",
+    api_key="your-apimart-key"
+)
 ```
+
+```javascript Node.js SDK
+import OpenAI from 'openai';
+
+const client = new OpenAI({
+  baseURL: 'https://api.globalaiopc.com/v1',
+  apiKey: 'your-apimart-key'
+});
+```
+
+```java Java SDK
+import com.openai.OpenAI;
+
+OpenAI client = OpenAI.builder()
+    .baseUrl("https://api.globalaiopc.com/v1")
+    .apiKey("your-apimart-key")
+    .build();
+```
+</CodeGroup>
+
+## 从 OpenAI 迁移
+
+5 分钟内切换到 APIMart。无需重写代码——只需更改 Base URL 和 API Key。
+
+<Steps>
+  <Step title="获取 API Key">
+    注册 APIMart 并从控制台获取 API Key。
+  </Step>
+  <Step title="更新 Base URL">
+    将 OpenAI Base URL 改为 APIMart 端点。现有 SDK 集成无需修改即可工作。
+  </Step>
+  <Step title="测试端点">
+    使用新的 Base URL 运行现有代码。所有 OpenAI 兼容端点响应格式完全相同。在控制台查看延迟和速率限制。
+  </Step>
+</Steps>
+
+## 统一端点支持的模型
+
+通过一个 OpenAI 兼容网关访问领先的 LLM 供应商。所有模型支持一致的请求/响应格式。
+
+### 聊天补全模型
+
+用于聊天、补全和代码任务的领先语言模型：
+
+- **GPT-5**：OpenAI 旗舰模型，增强推理能力
+- **GPT-4o & GPT-4o Mini**：多模态模型，平衡性能与成本
+- **Claude Sonnet 4.5 & Haiku 4.5**：Anthropic 复杂推理模型
+- **Gemini 2.0 Flash & Flash Thinking**：Google 多模态模型
+
+### 图像生成模型
+
+从文本提示生成图像：
+
+- **GPT-4o Image**：OpenAI 图像生成模型
+- **Gemini 2.5 Flash Image-preview**：Google 高效图像模型
+
+### 视频生成模型
+
+支持异步任务追踪和 Webhook 回调的视频生成：
+
+- **OpenAI Sora2**：OpenAI 视频生成模型
+- **Google VEO3**：Google 视频生成模型
+
+### 语音模型
+
+通过 OpenAI 兼容端点实现语音转文本和文本转语音：
+
+- **Whisper-1**：OpenAI 转录模型
+- **TTS**：多种音色的文本转语音
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="如何从 OpenAI 迁移？">
+    只需更改 Base URL 为 `https://api.globalaiopc.com/v1` 并使用 APIMart API Key。现有代码无需修改，所有 OpenAI SDK 都兼容。
+  </Accordion>
+  
+  <Accordion title="SLA 包含什么？">
+    我们提供 99.9% 可用性 SLA，包括自动故障转移、多供应商路由和企业级支持。
+  </Accordion>
+  
+  <Accordion title="定价如何与 OpenAI 比较？">
+    我们提供透明的按 Token 计费，通常比官方供应商更实惠，同时保持相同的质量和性能。
+  </Accordion>
+  
+  <Accordion title="延迟和性能如何？">
+    通过全球 CDN 和智能路由，我们确保最低延迟。多供应商架构提供比单一供应商更好的性能和可靠性。
+  </Accordion>
+</AccordionGroup>

@@ -8,11 +8,71 @@
     "dark": "#1E40AF"
   },
   "favicon": "/favicon.svg",
+  "layout": "api",
+  "api": {
+    "playground": {
+      "mode": "show"
+    }
+  },
   "navigation": {
     "tabs": [
       {
+        "tab": "API reference",
+        "groups": [
+          {
+            "group": "API 介绍",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          },
+          {
+            "group": "文字系列 API",
+            "pages": [
+              "api-reference/text/gemini-chat"
+            ]
+          },
+          {
+            "group": "图片系列 API",
+            "pages": [
+              {
+                "group": "Navo Banana",
+                "pages": [
+                  "api-reference/image/navo-banana-create",
+                  "api-reference/image/navo-banana-query"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "视频系列 API",
+            "pages": [
+              {
+                "group": "Sora",
+                "pages": [
+                  "api-reference/video/sora-create",
+                  "api-reference/video/sora-query"
+                ]
+              },
+              {
+                "group": "VEO",
+                "pages": [
+                  "api-reference/video/veo-create",
+                  "api-reference/video/veo-query"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Guides",
         "groups": [
+          {
+            "group": "快速开始",
+            "pages": [
+              "guides/quickstart"
+            ]
+          },
           {
             "group": "Getting started",
             "pages": [
@@ -46,48 +106,10 @@
             ]
           }
         ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
-          },
-          {
-            "group": "Video APIs",
-            "pages": [
-              "temp-api-docs/sora-video-api",
-              "temp-api-docs/veo-video-api"
-            ]
-          }
-        ]
       }
     ],
     "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
+      "anchors": []
     }
   },
   "logo": {
@@ -95,12 +117,7 @@
     "dark": "/logo/dark.svg"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
+    "links": [],
     "primary": {
       "type": "button",
       "label": "Dashboard",
@@ -125,5 +142,20 @@
       "github": "https://github.com/mintlify",
       "linkedin": "https://linkedin.com/company/mintlify"
     }
-  }
+  },
+  "modeToggle": {
+    "default": "light",
+    "isHidden": false
+  },
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true,
+    "raiseIssue": true
+  },
+  "search": false,
+  "search": {
+    "prompt": "搜索文档...",
+    "disabled": true
+  },
+  "css": ["styles.css"]
 }

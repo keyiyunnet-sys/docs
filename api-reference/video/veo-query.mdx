@@ -1,0 +1,187 @@
+---
+title: "VEO - 查询任务"
+description: "查询 VEO 视频生成任务的状态和结果"
+api: "GET https://api.globalaiopc.com/videos/{id}"
+---
+
+# VEO 查询视频任务
+
+使用任务 ID 查询 VEO 视频生成任务的状态和结果。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## 路径参数
+
+<ParamField path="id" type="string" required>
+  视频生成任务的唯一标识符，从创建任务接口返回
+</ParamField>
+
+## 响应参数
+
+<ResponseField name="id" type="string">
+  视频生成任务的唯一标识符
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  对象类型，固定为 `video.generation`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  任务创建时间戳
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  使用的模型名称
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  任务状态：
+  - `queued` - 排队中
+  - `processing` - 处理中
+  - `completed` - 已完成
+  - `failed` - 失败
+</ResponseField>
+
+<ResponseField name="video_url" type="string">
+  生成的视频URL，当 status 为 `completed` 时返回
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  错误信息，当 status 为 `failed` 时返回
+</ResponseField>
+
+## 状态流程
+
+<Steps>
+  <Step title="queued">
+    任务已创建并加入队列，等待处理
+  </Step>
+  <Step title="processing">
+    任务正在处理中，VEO 模型正在生成视频
+  </Step>
+  <Step title="completed">
+    任务完成，视频生成成功，可通过 `video_url` 获取结果
+  </Step>
+</Steps>
+
+## 轮询建议
+
+<Info>
+**轮询策略：**
+- 建议轮询间隔：30-60 秒
+- VEO 生成速度相对较快，通常 2-5 分钟完成
+- 避免过于频繁的请求以免触发限流
+- 当状态为 `completed` 或 `failed` 时停止轮询
+</Info>
+
+## 视频URL说明
+
+<Warning>
+**重要提示：**
+- 生成的视频URL有效期通常为 24 小时
+- 请及时下载并保存视频到你的存储系统
+- URL 过期后将无法访问视频
+- 视频文件通常为 MP4 格式，固定 8 秒时长
+</Warning>
+
+## 生成时间预估
+
+<CardGroup cols={2}>
+  <Card title="参考图片模式" icon="images">
+    预计生成时间：2-4 分钟
+  </Card>
+  <Card title="首尾帧模式" icon="film">
+    预计生成时间：3-5 分钟
+  </Card>
+</CardGroup>
+
+## VEO vs Sora 对比
+
+| 特性 | VEO | Sora |
+|------|-----|------|
+| 视频时长 | 固定 8 秒 | 10/15/25 秒可选 |
+| 生成速度 | 较快 (2-5分钟) | 较慢 (3-15分钟) |
+| 引导模式 | 参考图片 + 首尾帧 | 仅参考图片 |
+| 模型选择 | veo3.1-fast | sora-2, sora-2-stable, sora-2-pro |
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://api.globalaiopc.com/videos/vgen_abc123def456 \
+  --header 'Authorization: Bearer {{key}}'
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+
+HttpClient client = HttpClient.newHttpClient();
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.globalaiopc.com/videos/vgen_abc123def456"))
+    .header("Authorization", "Bearer {{key}}")
+    .GET()
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.globalaiopc.com/videos/vgen_abc123def456',
+    headers={'Authorization': 'Bearer {{key}}'}
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 处理中状态
+{
+  "id": "vgen_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "veo3.1-fast",
+  "status": "processing",
+  "video_url": null,
+  "error": null
+}
+```
+
+```json 已完成状态
+{
+  "id": "vgen_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "veo3.1-fast",
+  "status": "completed",
+  "video_url": "https://example.com/video.mp4",
+  "error": null
+}
+```
+
+```json 失败状态
+{
+  "id": "vgen_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "veo3.1-fast",
+  "status": "failed",
+  "video_url": null,
+  "error": "生成失败：提示词包含违规内容"
+}
+```
+
+</ResponseExample>

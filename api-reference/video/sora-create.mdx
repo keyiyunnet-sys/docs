@@ -1,0 +1,241 @@
+---
+title: "Sora - 创建任务"
+description: "使用 Sora 模型创建视频生成任务，支持多种时长和分辨率"
+api: "POST https://api.globalaiopc.com/v1/sora/videos"
+---
+
+# Sora 创建视频任务
+
+使用 Sora 的先进 AI 模型创建高质量视频生成任务，支持多种模型和时长选项。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## 请求参数
+
+<ParamField path="model" type="string" required>
+  模型名称，可选值：
+  - `sora-2` - 支持 10 或 15 秒
+  - `sora-2-stable` - 支持 10 或 15 秒  
+  - `sora-2-pro` - 支持 10 秒 (HD)、15 秒 (HD) 或 25 秒
+</ParamField>
+
+<ParamField path="prompt" type="string" required>
+  视频生成提示词，描述所需的视频内容
+  
+  示例：`"A cat dancing in the rain, cinematic style"`
+</ParamField>
+
+<ParamField path="size" type="string">
+  视频尺寸，默认为 `720x1280`
+  
+  可选值：
+  - `720x1280` - 竖屏
+  - `1280x720` - 横屏
+  
+  <Note>与 `aspect_ratio` 二选一使用</Note>
+</ParamField>
+
+<ParamField path="aspect_ratio" type="string">
+  视频宽高比
+  
+  可选值：
+  - `16:9` - 横屏
+  - `9:16` - 竖屏
+  
+  <Note>与 `size` 二选一使用</Note>
+</ParamField>
+
+<ParamField path="duration" type="integer">
+  视频时长（秒），支持 10 和 15
+  
+  <Note>与 `seconds` 二选一使用</Note>
+</ParamField>
+
+<ParamField path="seconds" type="integer">
+  视频时长（秒），支持 10 和 15
+  
+  <Note>与 `duration` 二选一使用</Note>
+</ParamField>
+
+<ParamField path="input_reference" type="array">
+  参考图片数组，用于指导视频生成，最多支持 3 张图片
+  
+  <Note>与 `image_urls` 二选一使用</Note>
+</ParamField>
+
+<ParamField path="image_urls" type="array">
+  参考图片URL数组，用于指导视频生成
+  
+  <Note>与 `input_reference` 二选一使用</Note>
+</ParamField>
+
+## 响应参数
+
+<ResponseField name="id" type="string">
+  视频生成任务的唯一标识符，用于后续查询任务状态
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  对象类型，固定为 `video.generation`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  任务创建时间戳
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  使用的模型名称
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  任务状态：
+  - `queued` - 排队中
+  - `processing` - 处理中
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  错误信息，当 status 为 `failed` 时返回
+</ResponseField>
+
+## 模型特性
+
+<CardGroup cols={3}>
+  <Card title="sora-2" icon="video">
+    标准模型，支持 10 或 15 秒视频生成
+  </Card>
+  <Card title="sora-2-stable" icon="shield-check">
+    稳定版模型，支持 10 或 15 秒，更稳定的输出
+  </Card>
+  <Card title="sora-2-pro" icon="crown">
+    专业版模型，支持 10s (HD)、15s (HD) 或 25s
+  </Card>
+</CardGroup>
+
+## 参数选择规则
+
+<Warning>
+**参数互斥规则：**
+- **尺寸参数**：`size` 和 `aspect_ratio` 二选一
+- **时长参数**：`duration` 和 `seconds` 二选一  
+- **参考图片**：`input_reference` 和 `image_urls` 二选一
+</Warning>
+
+## 视频时长支持
+
+| 模型 | 支持时长 |
+|------|----------|
+| sora-2 | 10 秒、15 秒 |
+| sora-2-stable | 10 秒、15 秒 |
+| sora-2-pro | 10 秒 (HD)、15 秒 (HD)、25 秒 |
+
+<Info>
+**最佳实践：**
+1. 视频生成为异步处理，需要通过返回的 `id` 查询任务状态和结果
+2. 在提示词中明确描述所需的视觉效果和风格
+3. 参考图片可以指导整体风格，最多支持 3 张
+4. 选择合适的宽高比以匹配你的使用场景
+</Info>
+
+<Tip>
+**提示词建议：**
+- 包含具体的场景描述
+- 添加风格关键词（如 "cinematic", "artistic", "realistic"）
+- 描述动作和运动方式
+- 指定光照和色彩偏好
+</Tip>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://api.globalaiopc.com/sora/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "sora-2",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "aspect_ratio": "16:9",
+    "seconds": 10,
+    "input_reference": [
+      "https://example.com/reference1.jpg",
+      "https://example.com/reference2.jpg"
+    ]
+  }'
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.List;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "sora-2",
+    "prompt", "A cat dancing in the rain, cinematic style",
+    "aspect_ratio", "16:9",
+    "seconds", 10,
+    "input_reference", List.of(
+        "https://example.com/reference1.jpg",
+        "https://example.com/reference2.jpg"
+    )
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.globalaiopc.com/sora/videos"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.globalaiopc.com/sora/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'sora-2',
+        'prompt': 'A cat dancing in the rain, cinematic style',
+        'aspect_ratio': '16:9',
+        'seconds': 10,
+        'input_reference': [
+            'https://example.com/reference1.jpg',
+            'https://example.com/reference2.jpg'
+        ]
+    }
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 创建成功
+{
+  "id": "sora_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "sora-2",
+  "status": "queued"
+}
+```
+
+</ResponseExample>
