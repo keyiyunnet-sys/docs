@@ -124,5 +124,8 @@
     "prompt": "搜索文档...",
     "disabled": true
   },
+  "ai": {
+    "disabled": true
+  },
   "css": ["styles.css"]
 }
