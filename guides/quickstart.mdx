@@ -9,10 +9,10 @@ description: "快速开始使用我们的API服务"
 
 ## 第一步：获取API密钥
 
-1. 访问 API密钥管理页面
-2. 登录您的账户
-3. 创建新的API密钥
-4. 保存您的密钥（密钥只显示一次）
+- 访问 API密钥管理页面
+- 登录您的账户
+- 创建新的API密钥
+- 保存您的密钥（密钥只显示一次）
 
 ## 第二步：选择模型
 
@@ -34,7 +34,7 @@ description: "快速开始使用我们的API服务"
 ### 文字生成示例
 
 ```bash
-curl -X POST https://api.apimart.ai/v1/chat/completions \
+curl -X POST https://api.globalaiopc.com/v1/chat/completions \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -51,7 +51,7 @@ curl -X POST https://api.apimart.ai/v1/chat/completions \
 ### 图像生成示例
 
 ```bash
-curl -X POST https://api.apimart.ai/v1/images/generations \
+curl -X POST https://api.globalaiopc.com/v1/images/generations \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -65,7 +65,7 @@ curl -X POST https://api.apimart.ai/v1/images/generations \
 ### 视频生成示例
 
 ```bash
-curl -X POST https://api.apimart.ai/v1/videos/generations \
+curl -X POST https://api.globalaiopc.com/v1/videos/generations \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -81,11 +81,10 @@ curl -X POST https://api.apimart.ai/v1/videos/generations \
 由于我们使用异步处理模式，您需要查询任务状态来获取结果：
 
 ```bash
-curl -X GET https://api.apimart.ai/v1/tasks/YOUR_TASK_ID \
+curl -X GET https://api.globalaiopc.com/v1/tasks/YOUR_TASK_ID \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 ## 下一步
 
-- 查看 [API文档](/api-reference/introduction) 详细了解所有可用的API接口
-- 探索更多 [使用指南](/guides) 了解高级功能
+查看API文档详细了解所有可用的API接口
