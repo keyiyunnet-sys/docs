@@ -1,0 +1,283 @@
+---
+title: "VEO - Create Task"
+description: "Create video generation tasks using VEO models with support for reference images and first/last frame guidance"
+api: "POST https://api.globalaiopc.com/v1/veo/videos/"
+---
+
+# VEO Create Video Task
+
+Create high-quality video generation tasks using VEO's advanced AI models with support for two image guidance modes.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Request Parameters
+
+<ParamField path="model" type="string">
+  Model name, defaults to `veo3.1-fast`
+  
+  Available options:
+  - `veo3.1-fast` - Fast generation model
+</ParamField>
+
+<ParamField path="prompt" type="string" required>
+  Video generation prompt describing the desired video content
+  
+  Example: `"A cat dancing in the rain, cinematic style"`
+</ParamField>
+
+<ParamField path="size" type="string">
+  Video dimensions, defaults to `1280x720`
+  
+  Available options:
+  - `1280x720` - Landscape
+  - `720x1280` - Portrait
+  
+  <Note>Use either this or `aspect_ratio`, not both</Note>
+</ParamField>
+
+<ParamField path="aspect_ratio" type="string">
+  Video aspect ratio
+  
+  Available options:
+  - `16:9` - Landscape
+  - `9:16` - Portrait
+  
+  <Note>Use either this or `size`, not both</Note>
+</ParamField>
+
+<ParamField path="duration" type="integer">
+  Video duration in seconds, supports 8, defaults to 8
+  
+  <Note>Use either this or `seconds`, not both</Note>
+</ParamField>
+
+<ParamField path="seconds" type="integer">
+  Video duration in seconds, supports 8, defaults to 8
+  
+  <Note>Use either this or `duration`, not both</Note>
+</ParamField>
+
+### Reference Image Mode
+
+<ParamField path="input_reference" type="array">
+  Reference image array to guide video generation, supports up to 3 images
+  
+  <Warning>Mutually exclusive with first/last frame mode, choose either this or `image_urls`</Warning>
+</ParamField>
+
+<ParamField path="image_urls" type="array">
+  Reference image URL array to guide video generation, supports up to 3 images
+  
+  <Warning>Mutually exclusive with first/last frame mode, choose either this or `input_reference`</Warning>
+</ParamField>
+
+### First/Last Frame Mode
+
+<ParamField path="first_image" type="string">
+  First frame image URL to specify the video's starting frame
+  
+  <Warning>Mutually exclusive with reference image mode</Warning>
+</ParamField>
+
+<ParamField path="last_image" type="string">
+  Last frame image URL to specify the video's ending frame
+  
+  <Warning>Requires `first_image` to be provided, mutually exclusive with reference image mode</Warning>
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier for the video generation task, used for subsequent status queries
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, always `video.generation`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when status is `failed`
+</ResponseField>
+
+## Image Guidance Modes
+
+VEO supports two mutually exclusive image guidance modes:
+
+<CardGroup cols={2}>
+  <Card title="Reference Image Mode" icon="images">
+    Use `input_reference` or `image_urls` to provide up to 3 reference images for overall style and content guidance
+  </Card>
+  <Card title="First/Last Frame Mode" icon="film">
+    Use `first_image` and optional `last_image` to specify precise start and end frames of the video
+  </Card>
+</CardGroup>
+
+<Warning>
+**Important:** The two modes cannot be used simultaneously, choose only one
+</Warning>
+
+## Parameter Selection Rules
+
+<Warning>
+**Mutually Exclusive Parameters:**
+- **Size parameters**: Choose either `size` or `aspect_ratio`
+- **Duration parameters**: Choose either `duration` or `seconds`  
+- **Reference images**: Choose either `input_reference` or `image_urls`
+- **Guidance modes**: Reference image mode OR first/last frame mode, cannot use both
+</Warning>
+
+## VEO Features
+
+<CardGroup cols={2}>
+  <Card title="Fixed Duration" icon="clock">
+    VEO model generates fixed 8-second videos
+  </Card>
+  <Card title="Dual Guidance Modes" icon="layer-group">
+    Supports both reference image and first/last frame guidance
+  </Card>
+  <Card title="High Quality Output" icon="sparkles">
+    veo3.1-fast model provides high-quality video generation
+  </Card>
+  <Card title="Flexible Control" icon="sliders">
+    First/last frame mode provides precise start and end control
+  </Card>
+</CardGroup>
+
+<Info>
+**Best Practices:**
+1. Video generation is asynchronous, use the returned `id` to query task status and results
+2. Clearly describe desired visual effects and style in the prompt
+3. Choose appropriate guidance mode:
+   - Reference image mode: Suitable for style guidance
+   - First/last frame mode: Suitable for precise start and end control
+4. If using first/last frame mode, always provide the first frame image
+</Info>
+
+<Tip>
+**Guidance Mode Selection:**
+- **Reference Image Mode**: Use when you want overall style consistency but allow creative variation
+- **First/Last Frame Mode**: Use when you need precise control over video start and end frames
+</Tip>
+
+<RequestExample>
+
+```bash cURL (Reference Images)
+curl --request POST \
+  --url https://api.globalaiopc.com/veo/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "veo3.1-fast",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "aspect_ratio": "16:9",
+    "seconds": 8,
+    "input_reference": [
+      "https://example.com/reference1.jpg",
+      "https://example.com/reference2.jpg"
+    ]
+  }'
+```
+
+```bash cURL (First/Last Frame)
+curl --request POST \
+  --url https://api.globalaiopc.com/veo/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "veo3.1-fast",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "aspect_ratio": "16:9",
+    "seconds": 8,
+    "first_image": "https://example.com/first-frame.jpg",
+    "last_image": "https://example.com/last-frame.jpg"
+  }'
+```
+
+```java Java (Reference Images)
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.List;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "veo3.1-fast",
+    "prompt", "A cat dancing in the rain, cinematic style",
+    "aspect_ratio", "16:9",
+    "seconds", 8,
+    "input_reference", List.of(
+        "https://example.com/reference1.jpg",
+        "https://example.com/reference2.jpg"
+    )
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.globalaiopc.com/veo/videos"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python (First/Last Frame)
+import requests
+
+response = requests.post(
+    'https://api.globalaiopc.com/veo/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'veo3.1-fast',
+        'prompt': 'A cat dancing in the rain, cinematic style',
+        'aspect_ratio': '16:9',
+        'seconds': 8,
+        'first_image': 'https://example.com/first-frame.jpg',
+        'last_image': 'https://example.com/last-frame.jpg'
+    }
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Creation Success
+{
+  "id": "vgen_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "veo3.1-fast",
+  "status": "queued"
+}
+```
+
+</ResponseExample>

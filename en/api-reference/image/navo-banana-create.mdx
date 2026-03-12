@@ -1,0 +1,201 @@
+---
+title: "Navo Banana - Create Task"
+description: "Create image generation tasks with support for multiple models and resolution options"
+api: "POST https://api.globalaiopc.com/v1/image/banana/"
+---
+
+# Create Image Generation Task
+
+Use the Navo Banana API to create high-quality AI image generation tasks with support for multiple models and resolution options.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Request Parameters
+
+<ParamField path="model" type="string" required>
+  Model name, available options:
+  - `NanoBanana` - Basic model
+  - `NanoBanana2` - Enhanced model with resolution settings support
+  - `NanoBanana-pro` - Professional model with resolution settings support
+</ParamField>
+
+<ParamField path="prompt" type="string" required>
+  Image generation prompt
+  
+  Example: `"A cute orange cat sitting on a windowsill looking at the scenery outside"`
+</ParamField>
+
+<ParamField path="resolution" type="string">
+  Resolution setting, only supported by `NanoBanana2` and `NanoBanana-pro`
+  
+  Available options:
+  - `1k` - 1K resolution
+  - `2k` - 2K resolution  
+  - `4k` - 4K resolution
+</ParamField>
+
+<ParamField path="size" type="string">
+  Aspect ratio setting
+  
+  Available options:
+  - `1:1` - Square
+  - `16:9` - Landscape widescreen
+  - `9:16` - Portrait
+  - `4:3` - Standard landscape
+  - `3:4` - Standard portrait
+  - `3:2` - Classic landscape
+  - `2:3` - Classic portrait
+  - `5:4` - Slightly wide landscape
+  - `4:5` - Slightly tall portrait
+  - `21:9` - Ultra-wide
+</ParamField>
+
+<ParamField path="image_urls" type="array">
+  Array of reference image URLs to guide image generation style
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier for the image generation task, used for subsequent status queries
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, always `navobanana`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when status is `failed`
+</ResponseField>
+
+## Model Features
+
+<CardGroup cols={3}>
+  <Card title="NanoBanana" icon="image">
+    Basic model, fast generation, suitable for general use
+  </Card>
+  <Card title="NanoBanana2" icon="sparkles">
+    Enhanced model with resolution settings support, higher quality
+  </Card>
+  <Card title="NanoBanana-pro" icon="crown">
+    Professional model, highest quality, supports 4K resolution
+  </Card>
+</CardGroup>
+
+## Important Notes
+
+<Warning>
+**Important:**
+- Image generation is asynchronous, use the returned `id` to query task status and results
+- `resolution` parameter is only effective when using `NanoBanana2` or `NanoBanana-pro` models
+- Recommended polling interval is 2-5 seconds, avoid frequent requests
+</Warning>
+
+<Tip>
+**Best Practices:**
+1. Use `application/json` format for requests
+2. Prompts should clearly describe the desired image content and style
+3. Reference images can help guide generation style but are not required
+4. Choose appropriate aspect ratio to match your use case
+</Tip>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://api.globalaiopc.com/v1/image/banana/ \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "NanoBanana2",
+    "prompt": "A cute orange cat sitting on a windowsill looking at the scenery outside",
+    "resolution": "2k",
+    "size": "16:9",
+    "image_urls": []
+  }'
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.List;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "NanoBanana2",
+    "prompt", "A cute orange cat sitting on a windowsill looking at the scenery outside",
+    "resolution", "2k",
+    "size", "16:9",
+    "image_urls", List.of()
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.globalaiopc.com/v1/image/banana/"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.globalaiopc.com/v1/image/banana/',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'NanoBanana2',
+        'prompt': 'A cute orange cat sitting on a windowsill looking at the scenery outside',
+        'resolution': '2k',
+        'size': '16:9',
+        'image_urls': []
+    }
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Creation Success
+{
+  "id": "abc123def456",
+  "object": "navobanana",
+  "created": 1761635478,
+  "model": "navobanana",
+  "status": "queued"
+}
+```
+
+</ResponseExample>

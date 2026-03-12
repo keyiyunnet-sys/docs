@@ -1,0 +1,318 @@
+---
+title: "Gemini Chat API"
+description: "AI conversation service based on Chat-compatible format, supporting multimodal input"
+api: "POST https://api.globalaiopc.com/v1/chat/completions"
+---
+
+# Gemini Chat API
+
+The Gemini chat interface provides AI conversation services based on Chat-compatible format. Given a prompt, the model will return one or more predicted completions, and can also return the probabilities of alternative tokens at each position.
+
+<Info>
+Official documentation: https://ai.google.dev/gemini-api/docs
+</Info>
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{YOUR_API_KEY}}
+```
+
+## Request Parameters
+
+<ParamField path="model" type="string" required>
+  The ID of the model to use. Supported models:
+  - `gemini-3-flash-preview`
+  - `gemini-2.5-flash-lite`
+  - `gemini-2.5-flash`
+  - `gemini-3.1-pro-preview`
+  - `gemini-3-pro-preview`
+  - `gemini-2.5-pro`
+</ParamField>
+
+<ParamField path="messages" type="array" required>
+  A list of messages comprising the conversation so far. Each message object contains `role` and `content` fields
+</ParamField>
+
+<ParamField path="temperature" type="number">
+  Sampling temperature, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
+  
+  <Note>We recommend altering this or `top_p` but not both</Note>
+</ParamField>
+
+<ParamField path="top_p" type="number">
+  An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
+  
+  <Note>We recommend altering this or `temperature` but not both</Note>
+</ParamField>
+
+<ParamField path="stream" type="boolean">
+  Defaults to false. If set to true, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as data-only server-sent events as they become available, with the stream terminated by a `data: [DONE]` message
+</ParamField>
+
+<ParamField path="max_completion_tokens" type="integer">
+  Defaults to inf. The maximum number of tokens that can be generated in the chat completion. The total length of input tokens and generated tokens is limited by the model's context length
+</ParamField>
+
+<ParamField path="stop" type="string/array">
+  Defaults to null. Up to 4 sequences where the API will stop generating further tokens
+</ParamField>
+
+<ParamField path="presence_penalty" type="number">
+  Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics
+</ParamField>
+
+<ParamField path="frequency_penalty" type="number">
+  Defaults to 0. Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim
+</ParamField>
+
+### Messages Array Structure
+
+Each message object contains the following fields:
+
+<ParamField path="role" type="string" required>
+  The role of the message, options: `system`, `user`, `assistant`
+</ParamField>
+
+<ParamField path="content" type="string/array" required>
+  The content of the message. Can be a string (plain text), or array (multimodal content, supporting text, images, videos)
+</ParamField>
+
+### Multimodal Content Structure
+
+When `content` is an array, it supports the following types of objects:
+
+**Text object:**
+```json
+{
+  "type": "text",
+  "text": "Message text content"
+}
+```
+
+**Image/Video object:**
+```json
+{
+  "type": "image_url",
+  "image_url": {
+    "url": "Image or video URL address"
+  }
+}
+```
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  A unique identifier for the chat completion
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  The object type, always `chat.completion` or `chat.completion.chunk` (streaming)
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  The Unix timestamp of when the chat completion was created
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  The model used for the chat completion
+</ResponseField>
+
+<ResponseField name="choices" type="array">
+  A list of chat completion choices
+</ResponseField>
+
+<ResponseField name="usage" type="object">
+  Usage statistics for the completion request (non-streaming only)
+</ResponseField>
+
+## Multimodal Support
+
+Gemini models support multimodal input, capable of processing text, images, and videos in the same request:
+
+<CardGroup cols={2}>
+  <Card title="Pure Text Conversation" icon="message">
+    Use string directly for `content`
+  </Card>
+  <Card title="Image Analysis" icon="image">
+    Use array for `content`, including `text` and `image_url` objects
+  </Card>
+  <Card title="Video Analysis" icon="video">
+    Use array for `content`, videos also use `image_url` type
+  </Card>
+  <Card title="Mixed Input" icon="layer-group">
+    Can include text, images, and videos in the same `content` array
+  </Card>
+</CardGroup>
+
+<Warning>
+**Important Notes:**
+- Image and video URLs must be publicly accessible
+- Video files also use `image_url` type, not `video_url`
+- Different models may have varying levels of multimodal support, recommend using `gemini-3.1-pro-preview` or higher
+</Warning>
+
+## Best Practices
+
+<Note>
+**Best Practices:**
+1. Requests must use `application/json` format
+2. Recommend adjusting only one of `temperature` or `top_p` parameters
+3. When using JSON mode, explicitly instruct the model to generate JSON in the message
+4. Streaming responses return in Server-Sent Events (SSE) format, ending with `data: [DONE]`
+5. When `finish_reason` is `length`, it indicates generation exceeded `max_completion_tokens` or conversation exceeded maximum context length
+</Note>
+
+<RequestExample>
+
+```bash cURL (Plain Text)
+curl --request POST \
+  --url https://api.globalaiopc.com/v1/chat/completions \
+  --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "gemini-3.1-pro-preview",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are an emotional support assistant"
+      },
+      {
+        "role": "user",
+        "content": "hello world"
+      }
+    ],
+    "temperature": 0.7,
+    "max_completion_tokens": 2000
+  }'
+```
+
+```bash cURL (Image Analysis)
+curl --request POST \
+  --url https://api.globalaiopc.com/v1/chat/completions \
+  --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "gemini-3.1-pro-preview",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are an image analysis expert."
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Please analyze the content of this image"
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "https://example.com/image.jpg"
+            }
+          }
+        ]
+      }
+    ]
+  }'
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.List;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "gemini-3.1-pro-preview",
+    "messages", List.of(
+        Map.of("role", "system", "content", "You are an emotional support assistant"),
+        Map.of("role", "user", "content", "hello world")
+    ),
+    "temperature", 0.7,
+    "max_completion_tokens", 2000
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.globalaiopc.com/v1/chat/completions"))
+    .header("Authorization", "Bearer {{YOUR_API_KEY}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.globalaiopc.com/v1/chat/completions',
+    headers={
+        'Authorization': 'Bearer {{YOUR_API_KEY}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'gemini-3.1-pro-preview',
+        'messages': [
+            {
+                'role': 'system',
+                'content': 'You are an emotional support assistant'
+            },
+            {
+                'role': 'user',
+                'content': 'hello world'
+            }
+        ],
+        'temperature': 0.7,
+        'max_completion_tokens': 2000
+    }
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Non-streaming Response
+{
+  "id": "chatcmpl-abc123",
+  "object": "chat.completion",
+  "created": 1761635478,
+  "model": "gemini-3.1-pro-preview",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Hello! I'm Gemini, nice to serve you. Is there anything I can help you with?"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 25,
+    "completion_tokens": 150,
+    "total_tokens": 175
+  }
+}
+```
+
+```json Streaming Response
+data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1761635478,"model":"gemini-3.1-pro-preview","choices":[{"index":0,"delta":{"role":"assistant","content":"Hello"},"finish_reason":null}]}
+
+data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1761635478,"model":"gemini-3.1-pro-preview","choices":[{"index":0,"delta":{"content":"!"},"finish_reason":null}]}
+
+data: [DONE]
+```
+
+</ResponseExample>

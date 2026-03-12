@@ -1,0 +1,165 @@
+---
+title: "APIMart — OpenAI-Compatible API Gateway"
+description: "Unified OpenAI-compatible endpoint supporting GPT-5, Claude, Gemini, Sora, and VEO"
+---
+
+# APIMart — OpenAI-Compatible API Gateway
+
+OpenAI-compatible API supporting GPT-5, Claude, Gemini. Multi-provider routing, transparent pricing, low latency. Enterprise SLA, SDK support, pay-as-you-go.
+
+Unified OpenAI-compatible endpoint supporting GPT-5, Claude, and Gemini. Migrate from OpenAI in minutes by simply changing your base URL to `https://api.globalaiopc.com/v1` — keep your existing SDKs with no code rewrite. Multi-provider routing ensures low latency and high uptime. Transparent pricing, enterprise SLA, and global CDN acceleration.
+
+## Quick Start
+
+Get started immediately with OpenAI-compatible Chat API supporting GPT-5, Claude Sonnet 4.5, Gemini 2.0. Switch base URL, no code changes required.
+
+### OpenAI-Compatible Endpoints
+
+APIMart provides OpenAI-style endpoints for seamless migration. Just change the base URL and continue using your existing SDKs. All interfaces follow OpenAI standards, extended to support Claude, Gemini, Sora, and VEO models.
+
+## Core API Services
+
+<CardGroup cols={3}>
+  <Card title="Chat Completion API" icon="message" href="/en/api-reference/text/gemini-chat">
+    Support for GPT-5, GPT-4o, Claude Sonnet 4.5, Gemini 2.0 Flash. OpenAI-compatible API with streaming and low latency.
+  </Card>
+  <Card title="Image Generation API" icon="image" href="/en/api-reference/image/navo-banana-create">
+    Support for GPT-4o Image, Gemini 2.5 Flash Image-preview models. OpenAI-style API for seamless integration.
+  </Card>
+  <Card title="Video Generation API" icon="video" href="/en/api-reference/video/sora-create">
+    Support for OpenAI Sora2, Google VEO3 models. Async task management with status tracking and webhooks.
+  </Card>
+</CardGroup>
+
+## Platform Advantages
+
+### Transparent Pricing
+
+Pay-as-you-go, no subscriptions required. Clear per-token pricing for all models, more affordable than official providers while maintaining the same quality and low latency.
+
+- Clear per-token pricing for all models
+- Enterprise volume discounts
+- No hidden fees
+- Pay only for actual usage
+
+### Multi-Provider Routing & Enterprise SLA
+
+Built-in intelligent routing across multiple LLM providers ensures high availability and low latency. When one provider has issues, requests automatically route to backup providers with no service interruption.
+
+<CardGroup cols={2}>
+  <Card title="99.9% Uptime SLA" icon="shield-check">
+    Enterprise-grade reliability with automatic failover. Multi-provider routing ensures your requests always respond with minimal latency.
+  </Card>
+  <Card title="Global CDN Acceleration" icon="globe">
+    Global edge nodes for lowest latency. Optimized routing reduces response times and improves user experience worldwide.
+  </Card>
+  <Card title="Rate Limit Management" icon="gauge">
+    Automatic rate limit handling across providers. Intelligent request distribution prevents throttling and ensures smooth operation.
+  </Card>
+  <Card title="Real-time Status Monitoring" icon="chart-line">
+    Monitor endpoint health and performance. Track async task progress for image and video generation with webhook notifications.
+  </Card>
+</CardGroup>
+
+## SDKs & Code Examples
+
+Official SDK support for Python, Node.js, and Java. All SDKs are OpenAI-compatible, requiring only base URL configuration changes for seamless migration.
+
+<CodeGroup>
+```python Python SDK
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.globalaiopc.com/v1",
+    api_key="your-apimart-key"
+)
+```
+
+```javascript Node.js SDK
+import OpenAI from 'openai';
+
+const client = new OpenAI({
+  baseURL: 'https://api.globalaiopc.com/v1',
+  apiKey: 'your-apimart-key'
+});
+```
+
+```java Java SDK
+import com.openai.OpenAI;
+
+OpenAI client = OpenAI.builder()
+    .baseUrl("https://api.globalaiopc.com/v1")
+    .apiKey("your-apimart-key")
+    .build();
+```
+</CodeGroup>
+
+## Migrating from OpenAI
+
+Switch to APIMart in 5 minutes. No code rewrite required — just change the base URL and API key.
+
+<Steps>
+  <Step title="Get API Key">
+    Sign up for APIMart and get your API key from the console.
+  </Step>
+  <Step title="Update Base URL">
+    Change your OpenAI base URL to the APIMart endpoint. Existing SDK integrations work without modification.
+  </Step>
+  <Step title="Test Endpoints">
+    Run your existing code with the new base URL. All OpenAI-compatible endpoints have identical response formats. Check latency and rate limits in the console.
+  </Step>
+</Steps>
+
+## Models Supported by Unified Endpoint
+
+Access leading LLM providers through one OpenAI-compatible gateway. All models support consistent request/response formats.
+
+### Chat Completion Models
+
+Leading language models for chat, completion, and code tasks:
+
+- **GPT-5**: OpenAI's flagship model with enhanced reasoning capabilities
+- **GPT-4o & GPT-4o Mini**: Multimodal models balancing performance and cost
+- **Claude Sonnet 4.5 & Haiku 4.5**: Anthropic's complex reasoning models
+- **Gemini 2.0 Flash & Flash Thinking**: Google's multimodal models
+
+### Image Generation Models
+
+Generate images from text prompts:
+
+- **GPT-4o Image**: OpenAI's image generation model
+- **Gemini 2.5 Flash Image-preview**: Google's efficient image model
+
+### Video Generation Models
+
+Video generation with async task tracking and webhook callbacks:
+
+- **OpenAI Sora2**: OpenAI's video generation model
+- **Google VEO3**: Google's video generation model
+
+### Speech Models
+
+Speech-to-text and text-to-speech through OpenAI-compatible endpoints:
+
+- **Whisper-1**: OpenAI's transcription model
+- **TTS**: Text-to-speech with multiple voices
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="How do I migrate from OpenAI?">
+    Simply change your base URL to `https://api.globalaiopc.com/v1` and use your APIMart API key. No code changes required, all OpenAI SDKs are compatible.
+  </Accordion>
+  
+  <Accordion title="What does the SLA include?">
+    We provide 99.9% uptime SLA including automatic failover, multi-provider routing, and enterprise-grade support.
+  </Accordion>
+  
+  <Accordion title="How does pricing compare to OpenAI?">
+    We offer transparent per-token pricing, typically more affordable than official providers while maintaining the same quality and performance.
+  </Accordion>
+  
+  <Accordion title="What about latency and performance?">
+    Through global CDN and intelligent routing, we ensure minimal latency. Our multi-provider architecture provides better performance and reliability than single providers.
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,187 @@
+---
+title: "VEO - Query Task"
+description: "Query the status and results of VEO video generation tasks"
+api: "GET https://api.globalaiopc.com/videos/{id}"
+---
+
+# VEO Query Video Task
+
+Use the task ID to query the status and results of VEO video generation tasks.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  Unique identifier for the video generation task, returned from the create task interface
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier for the video generation task
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, always `video.generation`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+  - `completed` - Completed
+  - `failed` - Failed
+</ResponseField>
+
+<ResponseField name="video_url" type="string">
+  Generated video URL, returned when status is `completed`
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when status is `failed`
+</ResponseField>
+
+## Status Flow
+
+<Steps>
+  <Step title="queued">
+    Task created and added to queue, waiting for processing
+  </Step>
+  <Step title="processing">
+    Task is being processed, VEO model is generating the video
+  </Step>
+  <Step title="completed">
+    Task completed, video generated successfully, result available via `video_url`
+  </Step>
+</Steps>
+
+## Polling Recommendations
+
+<Info>
+**Polling Strategy:**
+- Recommended polling interval: 30-60 seconds
+- VEO generation is relatively fast, typically completes in 2-5 minutes
+- Avoid overly frequent requests to prevent rate limiting
+- Stop polling when status is `completed` or `failed`
+</Info>
+
+## Video URL Information
+
+<Warning>
+**Important:**
+- Generated video URLs typically expire after 24 hours
+- Please download and save videos to your storage system promptly
+- URLs will be inaccessible after expiration
+- Video files are typically in MP4 format with fixed 8-second duration
+</Warning>
+
+## Generation Time Estimates
+
+<CardGroup cols={2}>
+  <Card title="Reference Image Mode" icon="images">
+    Estimated generation time: 2-4 minutes
+  </Card>
+  <Card title="First/Last Frame Mode" icon="film">
+    Estimated generation time: 3-5 minutes
+  </Card>
+</CardGroup>
+
+## VEO vs Sora Comparison
+
+| Feature | VEO | Sora |
+|---------|-----|------|
+| Video Duration | Fixed 8 seconds | 10/15/25 seconds optional |
+| Generation Speed | Faster (2-5 minutes) | Slower (3-15 minutes) |
+| Guidance Modes | Reference images + First/last frame | Reference images only |
+| Model Options | veo3.1-fast | sora-2, sora-2-stable, sora-2-pro |
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://api.globalaiopc.com/videos/vgen_abc123def456 \
+  --header 'Authorization: Bearer {{key}}'
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+
+HttpClient client = HttpClient.newHttpClient();
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.globalaiopc.com/videos/vgen_abc123def456"))
+    .header("Authorization", "Bearer {{key}}")
+    .GET()
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.globalaiopc.com/videos/vgen_abc123def456',
+    headers={'Authorization': 'Bearer {{key}}'}
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Processing Status
+{
+  "id": "vgen_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "veo3.1-fast",
+  "status": "processing",
+  "video_url": null,
+  "error": null
+}
+```
+
+```json Completed Status
+{
+  "id": "vgen_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "veo3.1-fast",
+  "status": "completed",
+  "video_url": "https://example.com/video.mp4",
+  "error": null
+}
+```
+
+```json Failed Status
+{
+  "id": "vgen_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "veo3.1-fast",
+  "status": "failed",
+  "video_url": null,
+  "error": "Generation failed: prompt contains prohibited content"
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,241 @@
+---
+title: "Sora - Create Task"
+description: "Create video generation tasks using Sora models with support for various durations and resolutions"
+api: "POST https://api.globalaiopc.com/v1/sora/videos"
+---
+
+# Sora Create Video Task
+
+Create high-quality video generation tasks using Sora's advanced AI models with support for multiple models and duration options.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Request Parameters
+
+<ParamField path="model" type="string" required>
+  Model name, available options:
+  - `sora-2` - Supports 10 or 15 seconds
+  - `sora-2-stable` - Supports 10 or 15 seconds  
+  - `sora-2-pro` - Supports 10s (HD), 15s (HD), or 25s
+</ParamField>
+
+<ParamField path="prompt" type="string" required>
+  Video generation prompt describing the desired video content
+  
+  Example: `"A cat dancing in the rain, cinematic style"`
+</ParamField>
+
+<ParamField path="size" type="string">
+  Video dimensions, defaults to `720x1280`
+  
+  Available options:
+  - `720x1280` - Portrait
+  - `1280x720` - Landscape
+  
+  <Note>Use either this or `aspect_ratio`, not both</Note>
+</ParamField>
+
+<ParamField path="aspect_ratio" type="string">
+  Video aspect ratio
+  
+  Available options:
+  - `16:9` - Landscape
+  - `9:16` - Portrait
+  
+  <Note>Use either this or `size`, not both</Note>
+</ParamField>
+
+<ParamField path="duration" type="integer">
+  Video duration in seconds, supports 10 and 15
+  
+  <Note>Use either this or `seconds`, not both</Note>
+</ParamField>
+
+<ParamField path="seconds" type="integer">
+  Video duration in seconds, supports 10 and 15
+  
+  <Note>Use either this or `duration`, not both</Note>
+</ParamField>
+
+<ParamField path="input_reference" type="array">
+  Reference image array to guide video generation, supports up to 3 images
+  
+  <Note>Use either this or `image_urls`, not both</Note>
+</ParamField>
+
+<ParamField path="image_urls" type="array">
+  Reference image URL array to guide video generation
+  
+  <Note>Use either this or `input_reference`, not both</Note>
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier for the video generation task, used for subsequent status queries
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, always `video.generation`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when status is `failed`
+</ResponseField>
+
+## Model Features
+
+<CardGroup cols={3}>
+  <Card title="sora-2" icon="video">
+    Standard model, supports 10 or 15 second video generation
+  </Card>
+  <Card title="sora-2-stable" icon="shield-check">
+    Stable version model, supports 10 or 15 seconds with more stable output
+  </Card>
+  <Card title="sora-2-pro" icon="crown">
+    Professional model, supports 10s (HD), 15s (HD), or 25s
+  </Card>
+</CardGroup>
+
+## Parameter Selection Rules
+
+<Warning>
+**Mutually Exclusive Parameters:**
+- **Size parameters**: Choose either `size` or `aspect_ratio`
+- **Duration parameters**: Choose either `duration` or `seconds`  
+- **Reference images**: Choose either `input_reference` or `image_urls`
+</Warning>
+
+## Video Duration Support
+
+| Model | Supported Durations |
+|-------|-------------------|
+| sora-2 | 10 seconds, 15 seconds |
+| sora-2-stable | 10 seconds, 15 seconds |
+| sora-2-pro | 10 seconds (HD), 15 seconds (HD), 25 seconds |
+
+<Info>
+**Best Practices:**
+1. Video generation is asynchronous, use the returned `id` to query task status and results
+2. Clearly describe desired visual effects and style in the prompt
+3. Reference images can guide overall style, supports up to 3 images
+4. Choose appropriate aspect ratio to match your use case
+</Info>
+
+<Tip>
+**Prompt Suggestions:**
+- Include specific scene descriptions
+- Add style keywords (e.g., "cinematic", "artistic", "realistic")
+- Describe actions and movement patterns
+- Specify lighting and color preferences
+</Tip>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://api.globalaiopc.com/sora/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "sora-2",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "aspect_ratio": "16:9",
+    "seconds": 10,
+    "input_reference": [
+      "https://example.com/reference1.jpg",
+      "https://example.com/reference2.jpg"
+    ]
+  }'
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.List;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "sora-2",
+    "prompt", "A cat dancing in the rain, cinematic style",
+    "aspect_ratio", "16:9",
+    "seconds", 10,
+    "input_reference", List.of(
+        "https://example.com/reference1.jpg",
+        "https://example.com/reference2.jpg"
+    )
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.globalaiopc.com/sora/videos"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.globalaiopc.com/sora/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'sora-2',
+        'prompt': 'A cat dancing in the rain, cinematic style',
+        'aspect_ratio': '16:9',
+        'seconds': 10,
+        'input_reference': [
+            'https://example.com/reference1.jpg',
+            'https://example.com/reference2.jpg'
+        ]
+    }
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Creation Success
+{
+  "id": "sora_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "sora-2",
+  "status": "queued"
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,180 @@
+---
+title: "Sora - Query Task"
+description: "Query the status and results of Sora video generation tasks"
+api: "GET https://api.globalaiopc.com/v1/videos/{id}"
+---
+
+# Sora Query Video Task
+
+Use the task ID to query the status and results of Sora video generation tasks.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  Unique identifier for the video generation task, returned from the create task interface
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier for the video generation task
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, always `video.generation`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+  - `completed` - Completed
+  - `failed` - Failed
+</ResponseField>
+
+<ResponseField name="video_url" type="string">
+  Generated video URL, returned when status is `completed`
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when status is `failed`
+</ResponseField>
+
+## Status Flow
+
+<Steps>
+  <Step title="queued">
+    Task created and added to queue, waiting for processing
+  </Step>
+  <Step title="processing">
+    Task is being processed, Sora model is generating the video
+  </Step>
+  <Step title="completed">
+    Task completed, video generated successfully, result available via `video_url`
+  </Step>
+</Steps>
+
+## Polling Recommendations
+
+<Info>
+**Polling Strategy:**
+- Recommended polling interval: 30-60 seconds (video generation takes longer)
+- Avoid overly frequent requests to prevent rate limiting
+- Stop polling when status is `completed` or `failed`
+</Info>
+
+## Video URL Information
+
+<Warning>
+**Important:**
+- Generated video URLs typically expire after 24 hours
+- Please download and save videos to your storage system promptly
+- URLs will be inaccessible after expiration
+- Video files are typically in MP4 format
+</Warning>
+
+## Generation Time Estimates
+
+<CardGroup cols={3}>
+  <Card title="10 Second Video" icon="clock">
+    Estimated generation time: 2-5 minutes
+  </Card>
+  <Card title="15 Second Video" icon="clock">
+    Estimated generation time: 3-8 minutes
+  </Card>
+  <Card title="25 Second Video" icon="clock">
+    Estimated generation time: 5-15 minutes (sora-2-pro only)
+  </Card>
+</CardGroup>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://api.globalaiopc.com/v1/videos/sora_abc123def456 \
+  --header 'Authorization: Bearer {{key}}'
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+
+HttpClient client = HttpClient.newHttpClient();
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.globalaiopc.com/v1/videos/sora_abc123def456"))
+    .header("Authorization", "Bearer {{key}}")
+    .GET()
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.globalaiopc.com/v1/videos/sora_abc123def456',
+    headers={'Authorization': 'Bearer {{key}}'}
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Processing Status
+{
+  "id": "sora_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "sora-2",
+  "status": "processing",
+  "video_url": null,
+  "error": null
+}
+```
+
+```json Completed Status
+{
+  "id": "sora_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "sora-2",
+  "status": "completed",
+  "video_url": "https://example.com/video.mp4",
+  "error": null
+}
+```
+
+```json Failed Status
+{
+  "id": "sora_abc123def456",
+  "object": "video.generation",
+  "created": 1761635478,
+  "model": "sora-2",
+  "status": "failed",
+  "video_url": null,
+  "error": "Generation failed: prompt contains prohibited content"
+}
+```
+
+</ResponseExample>

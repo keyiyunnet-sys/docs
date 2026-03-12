@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "我的文档站点",
+  "name": "My Documentation Site",
   "colors": {
     "primary": "#3B82F6",
     "light": "#60A5FA",
@@ -20,45 +20,45 @@
         "tab": "API reference",
         "groups": [
           {
-            "group": "API 介绍",
+            "group": "API Introduction",
             "pages": [
-              "index",
-              "api-reference/introduction"
+              "en/index",
+              "en/api-reference/introduction"
             ]
           },
           {
-            "group": "文字系列 API",
+            "group": "Text Series API",
             "pages": [
-              "api-reference/text/gemini-chat"
+              "en/api-reference/text/gemini-chat"
             ]
           },
           {
-            "group": "图片系列 API",
+            "group": "Image Series API",
             "pages": [
               {
                 "group": "Navo Banana",
                 "pages": [
-                  "api-reference/image/navo-banana-create",
-                  "api-reference/image/navo-banana-query"
+                  "en/api-reference/image/navo-banana-create",
+                  "en/api-reference/image/navo-banana-query"
                 ]
               }
             ]
           },
           {
-            "group": "视频系列 API",
+            "group": "Video Series API",
             "pages": [
               {
                 "group": "Sora",
                 "pages": [
-                  "api-reference/video/sora-create",
-                  "api-reference/video/sora-query"
+                  "en/api-reference/video/sora-create",
+                  "en/api-reference/video/sora-query"
                 ]
               },
               {
                 "group": "VEO",
                 "pages": [
-                  "api-reference/video/veo-create",
-                  "api-reference/video/veo-query"
+                  "en/api-reference/video/veo-create",
+                  "en/api-reference/video/veo-query"
                 ]
               }
             ]
@@ -69,9 +69,9 @@
         "tab": "Guides",
         "groups": [
           {
-            "group": "快速开始",
+            "group": "Quick Start",
             "pages": [
-              "guides/quickstart"
+              "en/guides/quickstart"
             ]
           }
         ]
@@ -122,7 +122,7 @@
     "raiseIssue": true
   },
   "search": {
-    "prompt": "搜索文档...",
+    "prompt": "Search docs...",
     "disabled": true
   },
   "ai": {

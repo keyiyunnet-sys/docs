@@ -1,0 +1,90 @@
+---
+title: "Quick Start"
+description: "Quick start guide for using our API services"
+---
+
+# Quick Start
+
+Welcome to our API services! This guide will help you quickly get started with image and video generation features.
+
+## Step 1: Get API Key
+
+- Visit the API key management page
+- Log in to your account
+- Create a new API key
+- Save your key (the key is only displayed once)
+
+## Step 2: Choose Models
+
+We provide various AI models for your selection:
+
+### Text Generation Models
+- **GPT-4o**: Powerful conversation and text generation capabilities
+- **Claude**: Anthropic's high-performance conversational model
+- **Gemini**: Google's multimodal large language model
+
+### Image Generation Models
+- **GPT-4o-image**: High-quality image generation
+
+### Video Generation Models
+- **Sora2**: Professional video generation
+
+## Step 3: Send Requests
+
+### Text Generation Example
+
+```bash
+curl -X POST https://api.globalaiopc.com/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4o",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hello, please introduce yourself"
+      }
+    ]
+  }'
+```
+
+### Image Generation Example
+
+```bash
+curl -X POST https://api.globalaiopc.com/v1/images/generations \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4o-image",
+    "prompt": "A cute panda",
+    "size": "1:1",
+    "n": 1
+  }'
+```
+
+### Video Generation Example
+
+```bash
+curl -X POST https://api.globalaiopc.com/v1/videos/generations \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "sora-2",
+    "prompt": "Waves crashing on the shore",
+    "duration": 15,
+    "aspect_ratio": "16:9"
+  }'
+```
+
+## Step 4: Query Task Status
+
+Since we use asynchronous processing mode, you need to query the task status to get results:
+
+```bash
+curl -X GET https://api.globalaiopc.com/v1/tasks/YOUR_TASK_ID \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+## Next Steps
+
+Check the API documentation for detailed information about all available API interfaces
