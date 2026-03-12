@@ -86,7 +86,12 @@
     "dark": "/logo/dark.svg"
   },
   "navbar": {
-    "links": [],
+    "links": [
+      {
+        "name": "English",
+        "url": "https://kyy.mintlify.app/en"
+      }
+    ],
     "primary": {
       "type": "button",
       "label": "Dashboard",
