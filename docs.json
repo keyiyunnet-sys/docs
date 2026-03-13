@@ -22,7 +22,6 @@
           {
             "group": "API 介绍",
             "pages": [
-              "index",
               "api-reference/introduction"
             ]
           },
@@ -85,6 +84,12 @@
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
+  "topbarLinks": [
+    {
+      "name": "English",
+      "url": "https://kyy.mintlify.app/en"
+    }
+  ],
   "navbar": {
     "links": [],
     "primary": {
@@ -128,15 +133,5 @@
   "ai": {
     "disabled": true
   },
-  "versions": [
-    {
-      "name": "简体中文",
-      "url": "https://kyy.mintlify.app"
-    },
-    {
-      "name": "English", 
-      "url": "https://kyy.mintlify.app/en"
-    }
-  ],
   "css": ["styles.css"]
 }
