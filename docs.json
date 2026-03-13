@@ -15,49 +15,66 @@
     }
   },
   "navigation": {
-    "tabs": [
+    "languages": [
       {
-        "tab": "API reference",
-        "groups": [
+        "language": "zh",
+        "default": true,
+        "tabs": [
           {
-            "group": "API 介绍",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "文字系列 API",
-            "pages": [
-              "api-reference/text/gemini-chat"
-            ]
-          },
-          {
-            "group": "图片系列 API",
-            "pages": [
+            "tab": "API reference",
+            "groups": [
               {
-                "group": "Navo Banana",
+                "group": "API 介绍",
                 "pages": [
-                  "api-reference/image/navo-banana-create",
-                  "api-reference/image/navo-banana-query"
+                  "api-reference/introduction"
+                ]
+              },
+              {
+                "group": "文字系列 API",
+                "pages": [
+                  "api-reference/text/gemini-chat"
+                ]
+              },
+              {
+                "group": "图片系列 API",
+                "pages": [
+                  {
+                    "group": "Navo Banana",
+                    "pages": [
+                      "api-reference/image/navo-banana-create",
+                      "api-reference/image/navo-banana-query"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "视频系列 API",
+                "pages": [
+                  {
+                    "group": "Sora",
+                    "pages": [
+                      "api-reference/video/sora-create",
+                      "api-reference/video/sora-query"
+                    ]
+                  },
+                  {
+                    "group": "VEO",
+                    "pages": [
+                      "api-reference/video/veo-create",
+                      "api-reference/video/veo-query"
+                    ]
+                  }
                 ]
               }
             ]
           },
           {
-            "group": "视频系列 API",
-            "pages": [
+            "tab": "Guides",
+            "groups": [
               {
-                "group": "Sora",
+                "group": "快速开始",
                 "pages": [
-                  "api-reference/video/sora-create",
-                  "api-reference/video/sora-query"
-                ]
-              },
-              {
-                "group": "VEO",
-                "pages": [
-                  "api-reference/video/veo-create",
-                  "api-reference/video/veo-query"
+                  "guides/quickstart"
                 ]
               }
             ]
@@ -65,12 +82,65 @@
         ]
       },
       {
-        "tab": "Guides",
-        "groups": [
+        "language": "en",
+        "tabs": [
           {
-            "group": "快速开始",
-            "pages": [
-              "guides/quickstart"
+            "tab": "API reference",
+            "groups": [
+              {
+                "group": "API Introduction",
+                "pages": [
+                  "en/api-reference/introduction"
+                ]
+              },
+              {
+                "group": "Text API",
+                "pages": [
+                  "en/api-reference/text/gemini-chat"
+                ]
+              },
+              {
+                "group": "Image API",
+                "pages": [
+                  {
+                    "group": "Navo Banana",
+                    "pages": [
+                      "en/api-reference/image/navo-banana-create",
+                      "en/api-reference/image/navo-banana-query"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Video API",
+                "pages": [
+                  {
+                    "group": "Sora",
+                    "pages": [
+                      "en/api-reference/video/sora-create",
+                      "en/api-reference/video/sora-query"
+                    ]
+                  },
+                  {
+                    "group": "VEO",
+                    "pages": [
+                      "en/api-reference/video/veo-create",
+                      "en/api-reference/video/veo-query"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Guides",
+            "groups": [
+              {
+                "group": "Quick Start",
+                "pages": [
+                  "en/guides/quickstart"
+                ]
+              }
             ]
           }
         ]
@@ -84,12 +154,6 @@
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
-  "topbarLinks": [
-    {
-      "name": "English",
-      "url": "https://kyy.mintlify.app/en"
-    }
-  ],
   "navbar": {
     "links": [],
     "primary": {
