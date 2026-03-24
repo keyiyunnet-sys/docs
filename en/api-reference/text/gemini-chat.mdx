@@ -38,13 +38,13 @@ Authorization: Bearer {{YOUR_API_KEY}}
 
 <ParamField path="temperature" type="number">
   Sampling temperature, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
-  
+
   <Note>We recommend altering this or `top_p` but not both</Note>
 </ParamField>
 
 <ParamField path="top_p" type="number">
   An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
-  
+
   <Note>We recommend altering this or `temperature` but not both</Note>
 </ParamField>
 
@@ -104,28 +104,40 @@ When `content` is an array, it supports the following types of objects:
 
 ## Response Parameters
 
-<ResponseField name="id" type="string">
+<ResponseField name="code" type="string">
+  Response status code, "200" when successful
+</ResponseField>
+
+<ResponseField name="msg" type="string">
+  Response message, "成功" when successful
+</ResponseField>
+
+<ResponseField name="data.content" type="string">
+  AI-generated reply content
+</ResponseField>
+
+<ResponseField name="data.usage.prompt_tokens" type="integer">
+  Number of tokens used in the prompt
+</ResponseField>
+
+<ResponseField name="data.usage.completion_tokens" type="integer">
+  Number of tokens used in the completion
+</ResponseField>
+
+<ResponseField name="data.usage.total_tokens" type="integer">
+  Total tokens (prompt_tokens + completion_tokens)
+</ResponseField>
+
+<ResponseField name="data.model" type="string">
+  The model name used
+</ResponseField>
+
+<ResponseField name="data.id" type="string">
   A unique identifier for the chat completion
 </ResponseField>
 
-<ResponseField name="object" type="string">
-  The object type, always `chat.completion` or `chat.completion.chunk` (streaming)
-</ResponseField>
-
-<ResponseField name="created" type="integer">
-  The Unix timestamp of when the chat completion was created
-</ResponseField>
-
-<ResponseField name="model" type="string">
-  The model used for the chat completion
-</ResponseField>
-
-<ResponseField name="choices" type="array">
-  A list of chat completion choices
-</ResponseField>
-
-<ResponseField name="usage" type="object">
-  Usage statistics for the completion request (non-streaming only)
+<ResponseField name="data.success" type="boolean">
+  Whether the request was successful
 </ResponseField>
 
 ## Multimodal Support
@@ -285,24 +297,18 @@ response = requests.post(
 
 ```json Non-streaming Response
 {
-  "id": "chatcmpl-abc123",
-  "object": "chat.completion",
-  "created": 1761635478,
-  "model": "gemini-3.1-pro-preview",
-  "choices": [
-    {
-      "index": 0,
-      "message": {
-        "role": "assistant",
-        "content": "Hello! I'm Gemini, nice to serve you. Is there anything I can help you with?"
-      },
-      "finish_reason": "stop"
-    }
-  ],
-  "usage": {
-    "prompt_tokens": 25,
-    "completion_tokens": 150,
-    "total_tokens": 175
+  "code": "200",
+  "msg": "成功",
+  "data": {
+    "content": "Hello! I'm Gemini, nice to serve you. Is there anything I can help you with?",
+    "usage": {
+      "prompt_tokens": 25,
+      "completion_tokens": 150,
+      "total_tokens": 175
+    },
+    "model": "gemini-3-pro",
+    "id": "chatcmpl-abc123",
+    "success": true
   }
 }
 ```

@@ -99,28 +99,40 @@ Authorization: Bearer {{YOUR_API_KEY}}
 
 ## 响应参数
 
-<ResponseField name="id" type="string">
-  聊天补全的唯一标识符
+<ResponseField name="code" type="string">
+  响应状态码，成功时为 "200"
 </ResponseField>
 
-<ResponseField name="object" type="string">
-  对象类型，固定为 `chat.completion` 或 `chat.completion.chunk`（流式）
+<ResponseField name="msg" type="string">
+  响应消息，成功时为 "成功"
 </ResponseField>
 
-<ResponseField name="created" type="integer">
-  创建时间戳
+<ResponseField name="data.content" type="string">
+  AI 生成的回复内容
 </ResponseField>
 
-<ResponseField name="model" type="string">
+<ResponseField name="data.usage.prompt_tokens" type="integer">
+  输入提示使用的令牌数
+</ResponseField>
+
+<ResponseField name="data.usage.completion_tokens" type="integer">
+  生成补全使用的令牌数
+</ResponseField>
+
+<ResponseField name="data.usage.total_tokens" type="integer">
+  总令牌数（prompt_tokens + completion_tokens）
+</ResponseField>
+
+<ResponseField name="data.model" type="string">
   使用的模型名称
 </ResponseField>
 
-<ResponseField name="choices" type="array">
-  补全选择列表
+<ResponseField name="data.id" type="string">
+  聊天补全的唯一标识符
 </ResponseField>
 
-<ResponseField name="usage" type="object">
-  令牌使用情况统计（仅非流式响应）
+<ResponseField name="data.success" type="boolean">
+  请求是否成功
 </ResponseField>
 
 ## 多模态支持
@@ -280,24 +292,18 @@ response = requests.post(
 
 ```json 非流式响应
 {
-  "id": "chatcmpl-abc123",
-  "object": "chat.completion",
-  "created": 1761635478,
-  "model": "gemini-3.1-pro-preview",
-  "choices": [
-    {
-      "index": 0,
-      "message": {
-        "role": "assistant",
-        "content": "你好！我是 Gemini，很高兴为你服务。有什么我可以帮助你的吗？1"
-      },
-      "finish_reason": "stop"
-    }
-  ],
-  "usage": {
-    "prompt_tokens": 25,
-    "completion_tokens": 150,
-    "total_tokens": 175
+  "code": "200",
+  "msg": "成功",
+  "data": {
+    "content": "你好！我是 Gemini，很高兴为你服务。有什么我可以帮助你的吗？",
+    "usage": {
+      "prompt_tokens": 25,
+      "completion_tokens": 150,
+      "total_tokens": 175
+    },
+    "model": "gemini-3-pro",
+    "id": "chatcmpl-abc123",
+    "success": true
   }
 }
 ```
