@@ -1,7 +1,7 @@
 ---
 title: "VEO - 查询任务"
 description: "查询 VEO 视频生成任务的状态和结果"
-api: "GET https://api.globalaiopc.com/videos/{id}"
+api: "GET https://zcbservice.aizfw.cn/kyyAiPower/v1/result/{id}"
 ---
 
 # VEO 查询视频任务
@@ -114,7 +114,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL
 curl --request GET \
-  --url https://api.globalaiopc.com/videos/vgen_abc123def456 \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/result/vgen_abc123def456 \
   --header 'Authorization: Bearer {{key}}'
 ```
 
@@ -127,7 +127,7 @@ import java.net.URI;
 HttpClient client = HttpClient.newHttpClient();
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://api.globalaiopc.com/videos/vgen_abc123def456"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/v1/result/vgen_abc123def456"))
     .header("Authorization", "Bearer {{key}}")
     .GET()
     .build();
@@ -139,7 +139,7 @@ HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.o
 import requests
 
 response = requests.get(
-    'https://api.globalaiopc.com/videos/vgen_abc123def456',
+    'https://zcbservice.aizfw.cn/kyyAiPower/v1/result/vgen_abc123def456',
     headers={'Authorization': 'Bearer {{key}}'}
 )
 ```
