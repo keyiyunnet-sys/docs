@@ -1,7 +1,7 @@
 ---
 title: "Sora - 创建任务"
 description: "使用 Sora 模型创建视频生成任务，支持多种时长和分辨率"
-api: "POST https://api.globalaiopc.com/v1/sora/videos"
+api: "POST  https://zcbservice.aizfw.cn/kyyAiPower/v1/sora/videos"
 ---
 
 # Sora 创建视频任务
@@ -20,58 +20,60 @@ Authorization: Bearer {{key}}
 
 <ParamField path="model" type="string" required>
   模型名称，可选值：
-  - `sora-2` - 支持 10 或 15 秒
-  - `sora-2-stable` - 支持 10 或 15 秒  
-  - `sora-2-pro` - 支持 10 秒 (HD)、15 秒 (HD) 或 25 秒
+  - `sora2` - 支持 10 或 15 秒
+  - `sora2Stable` - 支持 10 或 15 秒
+  - `sora2Pro` - 支持 10 秒 (HD)、 25 秒
+  - `openAiSora2` - 支持4、8、12
+  - `openAiSora2Stable` - 支持4、8、12
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
   视频生成提示词，描述所需的视频内容
-  
+
   示例：`"A cat dancing in the rain, cinematic style"`
 </ParamField>
 
 <ParamField path="size" type="string">
   视频尺寸，默认为 `720x1280`
-  
+
   可选值：
   - `720x1280` - 竖屏
   - `1280x720` - 横屏
-  
+
   <Note>与 `aspect_ratio` 二选一使用</Note>
 </ParamField>
 
 <ParamField path="aspect_ratio" type="string">
   视频宽高比
-  
+
   可选值：
   - `16:9` - 横屏
   - `9:16` - 竖屏
-  
+
   <Note>与 `size` 二选一使用</Note>
 </ParamField>
 
 <ParamField path="duration" type="integer">
   视频时长（秒），支持 10 和 15
-  
+
   <Note>与 `seconds` 二选一使用</Note>
 </ParamField>
 
 <ParamField path="seconds" type="integer">
   视频时长（秒），支持 10 和 15
-  
+
   <Note>与 `duration` 二选一使用</Note>
 </ParamField>
 
 <ParamField path="input_reference" type="array">
   参考图片数组，用于指导视频生成，最多支持 3 张图片
-  
+
   <Note>与 `image_urls` 二选一使用</Note>
 </ParamField>
 
 <ParamField path="image_urls" type="array">
   参考图片URL数组，用于指导视频生成
-  
+
   <Note>与 `input_reference` 二选一使用</Note>
 </ParamField>
 
@@ -122,7 +124,7 @@ Authorization: Bearer {{key}}
 <Warning>
 **参数互斥规则：**
 - **尺寸参数**：`size` 和 `aspect_ratio` 二选一
-- **时长参数**：`duration` 和 `seconds` 二选一  
+- **时长参数**：`duration` 和 `seconds` 二选一
 - **参考图片**：`input_reference` 和 `image_urls` 二选一
 </Warning>
 
@@ -154,7 +156,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL
 curl --request POST \
-  --url https://api.globalaiopc.com/sora/videos \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/sora/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -206,7 +208,7 @@ HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.o
 import requests
 
 response = requests.post(
-    'https://api.globalaiopc.com/sora/videos',
+    'https://zcbservice.aizfw.cn/kyyAiPower/v1/sora/videos',
     headers={
         'Authorization': 'Bearer {{key}}',
         'Content-Type': 'application/json'

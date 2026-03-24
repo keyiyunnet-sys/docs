@@ -1,7 +1,7 @@
 ---
 title: "Sora - 查询任务"
 description: "查询 Sora 视频生成任务的状态和结果"
-api: "GET https://api.globalaiopc.com/v1/videos/{id}"
+api: "GET https://zcbservice.aizfw.cn/kyyAiPower/v1/result/{id}"
 ---
 
 # Sora 查询视频任务
@@ -107,7 +107,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL
 curl --request GET \
-  --url https://api.globalaiopc.com/v1/videos/sora_abc123def456 \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/result/sora_abc123def456 \
   --header 'Authorization: Bearer {{key}}'
 ```
 
@@ -132,7 +132,7 @@ HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.o
 import requests
 
 response = requests.get(
-    'https://api.globalaiopc.com/v1/videos/sora_abc123def456',
+    'https://zcbservice.aizfw.cn/kyyAiPower/v1/result/sora_abc123def456',
     headers={'Authorization': 'Bearer {{key}}'}
 )
 ```

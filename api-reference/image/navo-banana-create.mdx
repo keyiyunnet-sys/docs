@@ -1,7 +1,7 @@
 ---
 title: "Navo Banana - 创建任务"
 description: "创建图片生成任务，支持多种模型和分辨率选项"
-api: "POST https://api.globalaiopc.com/v1/image/banana/"
+api: "POST https://zcbservice.aizfw.cn/kyyAiPower/v1/banana/images"
 ---
 
 # 创建图片生成任务
@@ -27,22 +27,22 @@ Authorization: Bearer {{key}}
 
 <ParamField path="prompt" type="string" required>
   图片生成提示词
-  
+
   示例：`"一只可爱的橙色猫咪坐在窗台上看着外面的风景"`
 </ParamField>
 
 <ParamField path="resolution" type="string">
   分辨率设置，仅 `NanoBanana2` 和 `NanoBanana-pro` 支持
-  
+
   可选值：
   - `1k` - 1K 分辨率
-  - `2k` - 2K 分辨率  
+  - `2k` - 2K 分辨率
   - `4k` - 4K 分辨率
 </ParamField>
 
 <ParamField path="size" type="string">
   宽高比设置
-  
+
   可选值：
   - `1:1` - 正方形
   - `16:9` - 横屏宽屏
@@ -123,7 +123,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL
 curl --request POST \
-  --url https://api.globalaiopc.com/v1/image/banana/ \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/banana/images \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{

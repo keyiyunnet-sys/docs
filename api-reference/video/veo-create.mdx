@@ -1,7 +1,7 @@
 ---
 title: "VEO - 创建任务"
 description: "使用 VEO 模型创建视频生成任务，支持参考图片和首尾帧引导"
-api: "POST https://api.globalaiopc.com/v1/veo/videos/"
+api: "POST https://zcbservice.aizfw.cn/kyyAiPower/v1/veo/videos"
 ---
 
 # VEO 创建视频任务
@@ -20,46 +20,46 @@ Authorization: Bearer {{key}}
 
 <ParamField path="model" type="string">
   模型名称，默认为 `veo3.1-fast`
-  
+
   可选值：
   - `veo3.1-fast` - 快速生成模型
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
   视频生成提示词，描述所需的视频内容
-  
+
   示例：`"A cat dancing in the rain, cinematic style"`
 </ParamField>
 
 <ParamField path="size" type="string">
   视频尺寸，默认为 `1280x720`
-  
+
   可选值：
   - `1280x720` - 横屏
   - `720x1280` - 竖屏
-  
+
   <Note>与 `aspect_ratio` 二选一使用</Note>
 </ParamField>
 
 <ParamField path="aspect_ratio" type="string">
   视频宽高比
-  
+
   可选值：
   - `16:9` - 横屏
   - `9:16` - 竖屏
-  
+
   <Note>与 `size` 二选一使用</Note>
 </ParamField>
 
 <ParamField path="duration" type="integer">
   视频时长（秒），支持 8，默认为 8
-  
+
   <Note>与 `seconds` 二选一使用</Note>
 </ParamField>
 
 <ParamField path="seconds" type="integer">
   视频时长（秒），支持 8，默认为 8
-  
+
   <Note>与 `duration` 二选一使用</Note>
 </ParamField>
 
@@ -67,13 +67,13 @@ Authorization: Bearer {{key}}
 
 <ParamField path="input_reference" type="array">
   参考图片数组，用于指导视频生成，最多支持 3 张图片
-  
+
   <Warning>与首尾帧模式互斥，与 `image_urls` 二选一</Warning>
 </ParamField>
 
 <ParamField path="image_urls" type="array">
   参考图片URL数组，用于指导视频生成，最多支持 3 张图片
-  
+
   <Warning>与首尾帧模式互斥，与 `input_reference` 二选一</Warning>
 </ParamField>
 
@@ -81,13 +81,13 @@ Authorization: Bearer {{key}}
 
 <ParamField path="first_image" type="string">
   首帧图片 URL，用于指定视频的开始帧
-  
+
   <Warning>与参考图片模式互斥</Warning>
 </ParamField>
 
 <ParamField path="last_image" type="string">
   尾帧图片 URL，用于指定视频的结束帧
-  
+
   <Warning>需要同时提供 `first_image`，与参考图片模式互斥</Warning>
 </ParamField>
 
@@ -141,7 +141,7 @@ VEO 支持两种互斥的图片引导模式：
 <Warning>
 **参数互斥规则：**
 - **尺寸参数**：`size` 和 `aspect_ratio` 二选一
-- **时长参数**：`duration` 和 `seconds` 二选一  
+- **时长参数**：`duration` 和 `seconds` 二选一
 - **参考图片**：`input_reference` 和 `image_urls` 二选一
 - **引导模式**：参考图片模式 OR 首尾帧模式，不能同时使用
 </Warning>
@@ -183,7 +183,7 @@ VEO 支持两种互斥的图片引导模式：
 
 ```bash cURL (参考图片)
 curl --request POST \
-  --url https://api.globalaiopc.com/veo/videos \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/veo/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -200,7 +200,7 @@ curl --request POST \
 
 ```bash cURL (首尾帧)
 curl --request POST \
-  --url https://api.globalaiopc.com/veo/videos \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/veo/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -237,7 +237,7 @@ Map<String, Object> requestBody = Map.of(
 );
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://api.globalaiopc.com/veo/videos"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/v1/veo/videos"))
     .header("Authorization", "Bearer {{key}}")
     .header("Content-Type", "application/json")
     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
@@ -250,7 +250,7 @@ HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.o
 import requests
 
 response = requests.post(
-    'https://api.globalaiopc.com/veo/videos',
+    'https://zcbservice.aizfw.cn/kyyAiPower/v1/veo/videos',
     headers={
         'Authorization': 'Bearer {{key}}',
         'Content-Type': 'application/json'
