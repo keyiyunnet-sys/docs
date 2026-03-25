@@ -1,0 +1,262 @@
+---
+title: "Seedance - Query Task"
+description: "Query Seedance video generation task status and results"
+api: "GET https://zcbservice.aizfw.cn/kyyAiPower/v1/result/{id}"
+---
+
+# Seedance Query Video Task
+
+Use task ID to query Seedance video generation task status and results.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{YOUR_API_KEY}}
+```
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  Unique identifier of the video generation task, returned from create task API
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier of the video generation task
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, fixed as `video`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+  - `completed` - Completed
+  - `failed` - Failed
+  - `cancelled` - Cancelled
+</ResponseField>
+
+<ResponseField name="video_url" type="string">
+  Generated video URL, returned when status is `completed`
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when status is `failed`
+</ResponseField>
+
+## Status Flow
+
+<Steps>
+  <Step title="queued">
+    Task created and added to queue, waiting for processing
+  </Step>
+  <Step title="processing">
+    Task is being processed, Seedance model is generating video
+  </Step>
+  <Step title="completed">
+    Task completed, video generated successfully, retrieve via `video_url`
+  </Step>
+</Steps>
+
+## Polling Recommendations
+
+<Info>
+**Polling Strategy:**
+- Recommended polling interval: 30-60 seconds
+- Offline service (flex): 60-120 seconds
+- Avoid too frequent requests to prevent rate limiting
+- Stop polling when status is `completed`, `failed`, or `cancelled`
+</Info>
+
+## Video URL Information
+
+<Warning>
+**Important Notes:**
+- Task IDs and generated videos are stored for 7 days
+- Please download and save videos to your storage system promptly
+- Task records and videos will be deleted after 7 days
+- Video files are typically in MP4 format
+</Warning>
+
+## Estimated Generation Time
+
+### Seedance 1.5 Series
+
+<CardGroup cols={2}>
+  <Card title="720p Video" icon="video">
+    Standard definition
+    
+    Estimated time: 2-5 minutes
+  </Card>
+  <Card title="1080p Video" icon="video">
+    High definition
+    
+    Estimated time: 3-8 minutes
+  </Card>
+</CardGroup>
+
+### Seedance 2.0 Series
+
+<CardGroup cols={3}>
+  <Card title="1-5 seconds" icon="clock">
+    Estimated time: 1-3 minutes
+  </Card>
+  <Card title="6-10 seconds" icon="clock">
+    Estimated time: 2-5 minutes
+  </Card>
+  <Card title="11-15 seconds" icon="clock">
+    Estimated time: 3-8 minutes
+  </Card>
+</CardGroup>
+
+## Service Tier Impact
+
+| Service Tier | Price | Generation Time | Use Case |
+|--------------|-------|-----------------|----------|
+| default (online) | Standard price | Faster | Scenarios requiring quick generation |
+| flex (offline) | 50% of standard price | Slower (about 2-3x time) | Batch generation not time-sensitive |
+
+<Tip>
+**Cost Optimization Tips:**
+1. Use offline service (flex) for batch tasks to save 50% cost
+2. Choose appropriate resolution based on actual needs, avoid excessive pursuit of high definition
+</Tip>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/result/video_abc123def456 \
+  --header 'Authorization: Bearer {{YOUR_API_KEY}}'
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+
+HttpClient client = HttpClient.newHttpClient();
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/v1/result/video_abc123def456"))
+    .header("Authorization", "Bearer {{YOUR_API_KEY}}")
+    .GET()
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://zcbservice.aizfw.cn/kyyAiPower/v1/result/video_abc123def456',
+    headers={'Authorization': 'Bearer {{YOUR_API_KEY}}'}
+)
+```
+
+```python Python (Polling Example)
+import requests
+import time
+
+def wait_for_video(task_id, api_key, max_wait=600, interval=30):
+    """
+    Poll and wait for video generation completion
+    
+    Args:
+        task_id: Task ID
+        api_key: API key
+        max_wait: Maximum wait time (seconds)
+        interval: Polling interval (seconds)
+    
+    Returns:
+        Video URL or None
+    """
+    url = f'https://zcbservice.aizfw.cn/kyyAiPower/v1/result/{task_id}'
+    headers = {'Authorization': f'Bearer {api_key}'}
+    
+    start_time = time.time()
+    
+    while time.time() - start_time < max_wait:
+        response = requests.get(url, headers=headers)
+        data = response.json()
+        
+        status = data.get('status')
+        
+        if status == 'completed':
+            return data.get('video_url')
+        elif status == 'failed':
+            print(f"Generation failed: {data.get('error')}")
+            return None
+        elif status == 'cancelled':
+            print("Task cancelled")
+            return None
+        
+        print(f"Current status: {status}, waiting...")
+        
+        time.sleep(interval)
+    
+    print("Wait timeout")
+    return None
+
+# Usage example
+video_url = wait_for_video('video_abc123def456', 'your_api_key')
+if video_url:
+    print(f"Video generated successfully: {video_url}")
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Processing Status
+{
+  "id": "video_abc123def456",
+  "object": "video",
+  "created": 1761635478,
+  "model": "seedance_1_5_pro_720p",
+  "status": "processing",
+  "video_url": null,
+  "error": null
+}
+```
+
+```json Completed Status
+{
+  "id": "video_abc123def456",
+  "object": "video",
+  "created": 1761635478,
+  "model": "seedance_1_5_pro_720p",
+  "status": "completed",
+  "video_url": "https://example.com/video.mp4",
+  "error": null
+}
+```
+
+```json Failed Status
+{
+  "id": "video_abc123def456",
+  "object": "video",
+  "created": 1761635478,
+  "model": "seedance_1_5_pro_720p",
+  "status": "failed",
+  "video_url": null,
+  "error": "Generation failed: prompt contains prohibited content"
+}
+```
+
+</ResponseExample>

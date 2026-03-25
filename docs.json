@@ -63,6 +63,13 @@
                       "api-reference/video/veo-create",
                       "api-reference/video/veo-query"
                     ]
+                  },
+                  {
+                    "group": "Seedance",
+                    "pages": [
+                      "api-reference/video/seedance-create",
+                      "api-reference/video/seedance-query"
+                    ]
                   }
                 ]
               }
@@ -126,6 +133,13 @@
                     "pages": [
                       "en/api-reference/video/veo-create",
                       "en/api-reference/video/veo-query"
+                    ]
+                  },
+                  {
+                    "group": "Seedance",
+                    "pages": [
+                      "en/api-reference/video/seedance-create",
+                      "en/api-reference/video/seedance-query"
                     ]
                   }
                 ]
