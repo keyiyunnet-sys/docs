@@ -1,7 +1,7 @@
 ---
 title: "Navo Banana - Query Task"
 description: "Query the status and results of image generation tasks"
-api: "GET https://api.globalaiopc.com/v1/image/{id}"
+api: "GET https://zcbservice.aizfw.cn/kyyAiPower/v1/result/{id}"
 ---
 
 # Query Image Generation Task
@@ -92,7 +92,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL
 curl --request GET \
-  --url https://api.globalaiopc.com/v1/image/abc123def456 \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/result/abc123def456 \
   --header 'Authorization: Bearer {{key}}'
 ```
 
@@ -105,7 +105,7 @@ import java.net.URI;
 HttpClient client = HttpClient.newHttpClient();
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://api.globalaiopc.com/v1/image/abc123def456"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/v1/result/abc123def456"))
     .header("Authorization", "Bearer {{key}}")
     .GET()
     .build();
@@ -117,7 +117,7 @@ HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.o
 import requests
 
 response = requests.get(
-    'https://api.globalaiopc.com/v1/image/abc123def456',
+    'https://zcbservice.aizfw.cn/kyyAiPower/v1/result/abc123def456',
     headers={'Authorization': 'Bearer {{key}}'}
 )
 ```
