@@ -20,9 +20,9 @@ Authorization: Bearer {{key}}
 
 <ParamField path="model" type="string" required>
   模型名称，可选值：
-  - `NanoBanana` - 基础模型
-  - `NanoBanana2` - 增强模型，支持分辨率设置
-  - `NanoBanana-pro` - 专业版模型，支持分辨率设置
+  - `nano-banana-fast`
+  - `nano-banana-pro`
+  - `nano-banana-2`
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -32,7 +32,7 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="resolution" type="string">
-  分辨率设置，仅 `NanoBanana2` 和 `NanoBanana-pro` 支持
+  分辨率设置，仅 `nano-banana-2` 和 `nano-banana-pro` 支持
 
   可选值：
   - `1k` - 1K 分辨率
@@ -91,13 +91,13 @@ Authorization: Bearer {{key}}
 ## 模型特性
 
 <CardGroup cols={3}>
-  <Card title="NanoBanana" icon="image">
+  <Card title="nano-banana-fast" icon="image">
     基础模型，快速生成，适合一般用途
   </Card>
-  <Card title="NanoBanana2" icon="sparkles">
+  <Card title="nano-banana-2" icon="sparkles">
     增强模型，支持分辨率设置，质量更高
   </Card>
-  <Card title="NanoBanana-pro" icon="crown">
+  <Card title="nano-banana-pro" icon="crown">
     专业版模型，最高质量，支持 4K 分辨率
   </Card>
 </CardGroup>
@@ -107,7 +107,7 @@ Authorization: Bearer {{key}}
 <Warning>
 **重要提示：**
 - 图片生成为异步处理，需要通过返回的 `id` 查询任务状态和结果
-- `resolution` 参数仅在使用 `NanoBanana2` 或 `NanoBanana-pro` 模型时有效
+- `resolution` 参数仅在使用 `nano-banana-2` 或 `nano-banana-pro` 模型时有效
 - 建议轮询间隔为 2-5 秒，避免频繁请求
 </Warning>
 
@@ -127,7 +127,7 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "NanoBanana2",
+    "model": "nano-banana-2",
     "prompt": "一只可爱的橙色猫咪坐在窗台上看着外面的风景",
     "resolution": "2k",
     "size": "16:9",
@@ -148,7 +148,7 @@ HttpClient client = HttpClient.newHttpClient();
 ObjectMapper mapper = new ObjectMapper();
 
 Map<String, Object> requestBody = Map.of(
-    "model", "NanoBanana2",
+    "model", "nano-banana-2",
     "prompt", "一只可爱的橙色猫咪坐在窗台上看着外面的风景",
     "resolution", "2k",
     "size", "16:9",
@@ -175,7 +175,7 @@ response = requests.post(
         'Content-Type': 'application/json'
     },
     json={
-        'model': 'NanoBanana2',
+        'model': 'nano-banana-2',
         'prompt': '一只可爱的橙色猫咪坐在窗台上看着外面的风景',
         'resolution': '2k',
         'size': '16:9',
@@ -191,7 +191,7 @@ response = requests.post(
 ```json 创建成功
 {
   "id": "abc123def456",
-  "object": "navobanana",
+  "object": "image",
   "created": 1761635478,
   "model": "navobanana",
   "status": "queued"
