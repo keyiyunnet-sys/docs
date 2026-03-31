@@ -1,7 +1,7 @@
 ---
 title: "Asset Detail"
 description: "Get detailed information of a single asset"
-api: "GET https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{assetId}"
+api: "GET https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/{assetId}"
 ---
 
 # KyyVideo2 Asset Detail
@@ -104,7 +104,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL
 curl --request GET \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/asset-20260330142158-q75m8 \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/asset-20260330142158-q75m8 \
   --header 'Authorization: Bearer {{key}}'
 ```
 
@@ -114,7 +114,7 @@ import requests
 # Query asset details
 asset_id = "asset-20260330142158-q75m8"
 response = requests.get(
-    f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+    f'https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/{asset_id}',
     headers={'Authorization': 'Bearer {{key}}'}
 )
 
@@ -137,7 +137,7 @@ def wait_for_asset_ready(asset_id, max_wait=300, interval=5):
 
     while time.time() - start_time < max_wait:
         response = requests.get(
-            f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+            f'https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/{asset_id}',
             headers={'Authorization': 'Bearer {{key}}'}
         )
 
@@ -172,7 +172,7 @@ HttpClient client = HttpClient.newHttpClient();
 String assetId = "asset-20260330142158-q75m8";
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/" + assetId))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/" + assetId))
     .header("Authorization", "Bearer {{key}}")
     .GET()
     .build();
@@ -185,7 +185,7 @@ System.out.println(response.body());
 // Query asset details
 const assetId = 'asset-20260330142158-q75m8';
 const response = await fetch(
-  `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+  `https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/${assetId}`,
   {
     headers: {
       'Authorization': 'Bearer {{key}}'
@@ -210,7 +210,7 @@ async function waitForAssetReady(assetId, maxWait = 300000, interval = 5000) {
 
   while (Date.now() - startTime < maxWait) {
     const response = await fetch(
-      `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+      `https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/${assetId}`,
       {
         headers: { 'Authorization': 'Bearer {{key}}' }
       }

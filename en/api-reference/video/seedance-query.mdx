@@ -1,7 +1,7 @@
 ---
 title: "Seedance - Query Task"
 description: "Query Seedance video generation task status and results"
-api: "GET https://zcbservice.aizfw.cn/kyyAiPower/v1/result/{id}"
+api: "GET https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/{id}"
 ---
 
 # Seedance Query Video Task
@@ -98,12 +98,12 @@ Authorization: Bearer {{YOUR_API_KEY}}
 <CardGroup cols={2}>
   <Card title="720p Video" icon="video">
     Standard definition
-    
+
     Estimated time: 2-5 minutes
   </Card>
   <Card title="1080p Video" icon="video">
     High definition
-    
+
     Estimated time: 3-8 minutes
   </Card>
 </CardGroup>
@@ -139,7 +139,7 @@ Authorization: Bearer {{YOUR_API_KEY}}
 
 ```bash cURL
 curl --request GET \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/result/video_abc123def456 \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_abc123def456 \
   --header 'Authorization: Bearer {{YOUR_API_KEY}}'
 ```
 
@@ -152,7 +152,7 @@ import java.net.URI;
 HttpClient client = HttpClient.newHttpClient();
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/v1/result/video_abc123def456"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_abc123def456"))
     .header("Authorization", "Bearer {{YOUR_API_KEY}}")
     .GET()
     .build();
@@ -164,7 +164,7 @@ HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.o
 import requests
 
 response = requests.get(
-    'https://zcbservice.aizfw.cn/kyyAiPower/v1/result/video_abc123def456',
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_abc123def456',
     headers={'Authorization': 'Bearer {{YOUR_API_KEY}}'}
 )
 ```
@@ -176,27 +176,27 @@ import time
 def wait_for_video(task_id, api_key, max_wait=600, interval=30):
     """
     Poll and wait for video generation completion
-    
+
     Args:
         task_id: Task ID
         api_key: API key
         max_wait: Maximum wait time (seconds)
         interval: Polling interval (seconds)
-    
+
     Returns:
         Video URL or None
     """
-    url = f'https://zcbservice.aizfw.cn/kyyAiPower/v1/result/{task_id}'
+    url = f'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/{task_id}'
     headers = {'Authorization': f'Bearer {api_key}'}
-    
+
     start_time = time.time()
-    
+
     while time.time() - start_time < max_wait:
         response = requests.get(url, headers=headers)
         data = response.json()
-        
+
         status = data.get('status')
-        
+
         if status == 'completed':
             return data.get('video_url')
         elif status == 'failed':
@@ -205,11 +205,11 @@ def wait_for_video(task_id, api_key, max_wait=600, interval=30):
         elif status == 'cancelled':
             print("Task cancelled")
             return None
-        
+
         print(f"Current status: {status}, waiting...")
-        
+
         time.sleep(interval)
-    
+
     print("Wait timeout")
     return None
 

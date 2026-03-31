@@ -1,7 +1,7 @@
 ---
 title: "KyyVideo2 - 创建任务"
 description: "使用 KyyVideo2 模型创建视频生成任务，支持标准、快速、Pro 等多种模型"
-api: "POST https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos"
 ---
 
 # KyyVideo2 创建视频任务
@@ -38,29 +38,29 @@ Authorization: Bearer {{key}}
 
 <ParamField path="first_image" type="string">
   首帧图 URL，用于图生视频场景
-  
+
   **使用场景：**
   - 单独使用：图生视频-首帧场景
   - 搭配 `last_image`：首尾帧场景
-  
+
   **格式要求：**
   - 格式：jpeg、png、webp、bmp、tiff、gif
   - 宽高比（宽/高）：0.4 ~ 2.5
   - 尺寸：300-6000 px
   - 值类型：公网 URL 或素材 ID（asset://素材ID）
-  
+
   <Warning>与 `referenceImages`/`referenceVideos`/`referenceAudios` 互斥</Warning>
 </ParamField>
 
 <ParamField path="last_image" type="string">
   尾帧图 URL，用于首尾帧场景
-  
+
   **格式要求：**
   - 格式：jpeg、png、webp、bmp、tiff、gif
   - 宽高比（宽/高）：0.4 ~ 2.5
   - 尺寸：300-6000 px
   - 值类型：公网 URL 或素材 ID（asset://素材ID）
-  
+
   <Note>必须搭配 `first_image` 使用</Note>
 </ParamField>
 
@@ -79,50 +79,50 @@ Authorization: Bearer {{key}}
 
 <ParamField path="generateAudio" type="boolean">
   是否生成同步音频，默认 `true`
-  
+
   - `true`：输出视频包含同步音频
   - `false`：输出视频为无声视频
 </ParamField>
 
 <ParamField path="referenceAudios" type="array">
   多模态参考音频列表
-  
+
   **格式要求：**
   - 格式：wav、mp3
   - 时长：单个音频 2-15 秒，最多 3 段，总时长 ≤ 15 秒
   - 大小：单个 ≤ 15 MB
   - 值类型：公网 URL 或素材 ID（asset://素材ID）
-  
+
   <Warning>与 `first_image`/`last_image` 互斥</Warning>
 </ParamField>
 
 <ParamField path="referenceImages" type="array">
   多模态参考图片列表
-  
+
   **格式要求：**
   - 数量：1-9 张
   - 格式：jpeg、png、webp、bmp、tiff、gif
   - 宽高比（宽/高）：0.4 ~ 2.5
   - 尺寸：300-6000 px
   - 值类型：公网 URL 或素材 ID（asset://素材ID）
-  
+
   <Note>涉及人脸或虚拟人像需先上传素材库审核</Note>
-  
+
   <Warning>与 `first_image`/`last_image` 互斥</Warning>
 </ParamField>
 
 <ParamField path="referenceVideos" type="array">
   多模态参考视频列表
-  
+
   **格式要求：**
   - 分辨率：480p、720p
   - 时长：单个视频 2-15 秒，最多 3 个，总时长 ≤ 15 秒
   - 宽高比（宽/高）：0.4 ~ 2.5
   - 尺寸：300-6000 px
   - 值类型：公网 URL 或素材 ID（asset://素材ID）
-  
+
   <Note>系统会自动选择最优后端模型</Note>
-  
+
   <Warning>与 `first_image`/`last_image` 互斥</Warning>
 </ParamField>
 
@@ -211,7 +211,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL - 文生视频
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -225,7 +225,7 @@ curl --request POST \
 
 ```bash cURL - 图生视频（首帧）
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -239,7 +239,7 @@ curl --request POST \
 
 ```bash cURL - 首尾帧场景
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -254,7 +254,7 @@ curl --request POST \
 
 ```bash cURL - 多模态参考
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -277,7 +277,7 @@ import requests
 
 # 文生视频
 response = requests.post(
-    'https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos',
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos',
     headers={
         'Authorization': 'Bearer {{key}}',
         'Content-Type': 'application/json'
@@ -314,7 +314,7 @@ Map<String, Object> requestBody = Map.of(
 );
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos"))
     .header("Authorization", "Bearer {{key}}")
     .header("Content-Type", "application/json")
     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))

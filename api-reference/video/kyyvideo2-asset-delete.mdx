@@ -1,7 +1,7 @@
 ---
 title: "删除素材"
 description: "删除指定素材，删除后不可恢复，请谨慎操作"
-api: "DELETE https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{assetId}"
+api: "DELETE https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/{assetId}"
 ---
 
 # KyyVideo2 删除素材
@@ -103,7 +103,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL
 curl --request DELETE \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/asset-20260330142158-q75m8 \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/asset-20260330142158-q75m8 \
   --header 'Authorization: Bearer {{key}}'
 ```
 
@@ -113,7 +113,7 @@ import requests
 # 删除素材
 asset_id = "asset-20260330142158-q75m8"
 response = requests.delete(
-    f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+    f'https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/{asset_id}',
     headers={'Authorization': 'Bearer {{key}}'}
 )
 
@@ -128,7 +128,7 @@ def safe_delete_asset(asset_id):
     """安全删除素材：先查询确认，再执行删除"""
     # 1. 查询素材详情
     detail_response = requests.get(
-        f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+        f'https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/{asset_id}',
         headers={'Authorization': 'Bearer {{key}}'}
     )
 
@@ -147,7 +147,7 @@ def safe_delete_asset(asset_id):
 
     # 3. 执行删除
     delete_response = requests.delete(
-        f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+        f'https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/{asset_id}',
         headers={'Authorization': 'Bearer {{key}}'}
     )
 
@@ -168,7 +168,7 @@ def batch_delete_assets(asset_ids):
     results = []
     for asset_id in asset_ids:
         response = requests.delete(
-            f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+            f'https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/{asset_id}',
             headers={'Authorization': 'Bearer {{key}}'}
         )
         result = response.json()
@@ -200,7 +200,7 @@ HttpClient client = HttpClient.newHttpClient();
 String assetId = "asset-20260330142158-q75m8";
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/" + assetId))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/" + assetId))
     .header("Authorization", "Bearer {{key}}")
     .DELETE()
     .build();
@@ -213,7 +213,7 @@ System.out.println(response.body());
 // 删除素材
 const assetId = 'asset-20260330142158-q75m8';
 const response = await fetch(
-  `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+  `https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/${assetId}`,
   {
     method: 'DELETE',
     headers: {
@@ -233,7 +233,7 @@ if (result.code === "0") {
 async function safeDeleteAsset(assetId) {
   // 1. 查询素材详情
   const detailResponse = await fetch(
-    `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+    `https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/${assetId}`,
     {
       headers: { 'Authorization': 'Bearer {{key}}' }
     }
@@ -255,7 +255,7 @@ async function safeDeleteAsset(assetId) {
 
   // 3. 执行删除
   const deleteResponse = await fetch(
-    `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+    `https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/${assetId}`,
     {
       method: 'DELETE',
       headers: { 'Authorization': 'Bearer {{key}}' }
@@ -280,7 +280,7 @@ async function batchDeleteAssets(assetIds) {
   const results = [];
   for (const assetId of assetIds) {
     const response = await fetch(
-      `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+      `https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/${assetId}`,
       {
         method: 'DELETE',
         headers: { 'Authorization': 'Bearer {{key}}' }

@@ -1,7 +1,7 @@
 ---
 title: "上传素材"
 description: "上传图片、视频、音频等素材到 KyyVideo2 素材库"
-api: "POST https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload"
 ---
 
 # KyyVideo2 上传素材
@@ -125,7 +125,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL - 上传图片
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -137,7 +137,7 @@ curl --request POST \
 
 ```bash cURL - 上传视频
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -149,7 +149,7 @@ curl --request POST \
 
 ```bash cURL - 上传音频
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -164,7 +164,7 @@ import requests
 
 # 上传图片素材
 response = requests.post(
-    'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload',
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload',
     headers={
         'Authorization': 'Bearer {{key}}',
         'Content-Type': 'application/json'
@@ -182,7 +182,7 @@ print(f"素材上传成功，ID: {asset_id}")
 
 # 使用素材 ID 创建视频
 video_response = requests.post(
-    'https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos',
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos',
     headers={
         'Authorization': 'Bearer {{key}}',
         'Content-Type': 'application/json'
@@ -215,7 +215,7 @@ Map<String, Object> requestBody = Map.of(
 );
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload"))
     .header("Authorization", "Bearer {{key}}")
     .header("Content-Type", "application/json")
     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
@@ -228,7 +228,7 @@ System.out.println(response.body());
 ```javascript JavaScript
 // 上传图片素材
 const uploadResponse = await fetch(
-  'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload',
+  'https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload',
   {
     method: 'POST',
     headers: {
@@ -249,7 +249,7 @@ console.log(`素材上传成功，ID: ${assetId}`);
 
 // 使用素材 ID 创建视频
 const videoResponse = await fetch(
-  'https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos',
+  'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos',
   {
     method: 'POST',
     headers: {

@@ -1,7 +1,7 @@
 ---
 title: "Seedance - Create Task"
 description: "Create video generation tasks using Volcano Engine Seedance model, supporting text-to-video and image-to-video"
-api: "POST https://zcbservice.aizfw.cn/kyyAiPower/v1/seedance/videos"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/seedance/videos"
 ---
 
 # Seedance Create Video Task
@@ -205,7 +205,7 @@ Authorization: Bearer {{YOUR_API_KEY}}
 
     ```bash Text-to-Video
     curl --request POST \
-    --url https://zcbservice.aizfw.cn/kyyAiPower/v1/seedance/videos \
+    --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/seedance/videos \
     --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
     --header 'Content-Type: application/json' \
     --data '{
@@ -224,7 +224,7 @@ Authorization: Bearer {{YOUR_API_KEY}}
 
     ```bash Image-to-Video (First Frame)
     curl --request POST \
-    --url https://zcbservice.aizfw.cn/kyyAiPower/v1/seedance/videos \
+    --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/seedance/videos \
     --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
     --header 'Content-Type: application/json' \
     --data '{
@@ -249,7 +249,7 @@ Authorization: Bearer {{YOUR_API_KEY}}
 
     ```bash Image-to-Video (First & Last Frames)
     curl --request POST \
-    --url https://zcbservice.aizfw.cn/kyyAiPower/v1/seedance/videos \
+    --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/seedance/videos \
     --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
     --header 'Content-Type: application/json' \
     --data '{
@@ -280,7 +280,7 @@ Authorization: Bearer {{YOUR_API_KEY}}
 
     ```bash Image-to-Video (Reference Images)
     curl --request POST \
-    --url https://zcbservice.aizfw.cn/kyyAiPower/v1/seedance/videos \
+    --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/seedance/videos \
     --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
     --header 'Content-Type: application/json' \
     --data '{
@@ -336,7 +336,7 @@ Authorization: Bearer {{YOUR_API_KEY}}
     );
 
     HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/v1/seedance/videos"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/seedance/videos"))
     .header("Authorization", "Bearer {{YOUR_API_KEY}}")
     .header("Content-Type", "application/json")
     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
@@ -349,7 +349,7 @@ Authorization: Bearer {{YOUR_API_KEY}}
     import requests
 
     response = requests.post(
-    'https://zcbservice.aizfw.cn/kyyAiPower/v1/seedance/videos',
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/seedance/videos',
     headers={
         'Authorization': 'Bearer {{YOUR_API_KEY}}',
         'Content-Type': 'application/json'

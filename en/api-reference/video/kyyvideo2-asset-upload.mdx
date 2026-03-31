@@ -1,7 +1,7 @@
 ---
 title: "Upload Asset"
 description: "Upload images, videos, audio and other assets to KyyVideo2 asset library"
-api: "POST https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload"
 ---
 
 # KyyVideo2 Upload Asset
@@ -125,7 +125,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL - Upload Image
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -137,7 +137,7 @@ curl --request POST \
 
 ```bash cURL - Upload Video
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -149,7 +149,7 @@ curl --request POST \
 
 ```bash cURL - Upload Audio
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -164,7 +164,7 @@ import requests
 
 # Upload image asset
 response = requests.post(
-    'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload',
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload',
     headers={
         'Authorization': 'Bearer {{key}}',
         'Content-Type': 'application/json'
@@ -182,7 +182,7 @@ print(f"Asset uploaded successfully, ID: {asset_id}")
 
 # Use asset ID to create video
 video_response = requests.post(
-    'https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos',
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos',
     headers={
         'Authorization': 'Bearer {{key}}',
         'Content-Type': 'application/json'
@@ -215,7 +215,7 @@ Map<String, Object> requestBody = Map.of(
 );
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload"))
     .header("Authorization", "Bearer {{key}}")
     .header("Content-Type", "application/json")
     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
@@ -228,7 +228,7 @@ System.out.println(response.body());
 ```javascript JavaScript
 // Upload image asset
 const uploadResponse = await fetch(
-  'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload',
+  'https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload',
   {
     method: 'POST',
     headers: {
@@ -249,7 +249,7 @@ console.log(`Asset uploaded successfully, ID: ${assetId}`);
 
 // Use asset ID to create video
 const videoResponse = await fetch(
-  'https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos',
+  'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos',
   {
     method: 'POST',
     headers: {

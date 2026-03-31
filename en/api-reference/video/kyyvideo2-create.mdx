@@ -1,7 +1,7 @@
 ---
 title: "KyyVideo2 - Create Task"
 description: "Create video generation tasks using KyyVideo2 models with support for standard, fast, and Pro variants"
-api: "POST https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos"
 ---
 
 # KyyVideo2 Create Video Task
@@ -38,29 +38,29 @@ Authorization: Bearer {{key}}
 
 <ParamField path="first_image" type="string">
   First frame image URL for image-to-video scenarios
-  
+
   **Use Cases:**
   - Standalone: Image-to-video with first frame
   - Combined with `last_image`: First and last frame scenario
-  
+
   **Format Requirements:**
   - Format: jpeg, png, webp, bmp, tiff, gif
   - Aspect ratio (width/height): 0.4 ~ 2.5
   - Size: 300-6000 px
   - Value type: Public URL or asset ID (asset://assetID)
-  
+
   <Warning>Mutually exclusive with `referenceImages`/`referenceVideos`/`referenceAudios`</Warning>
 </ParamField>
 
 <ParamField path="last_image" type="string">
   Last frame image URL for first and last frame scenario
-  
+
   **Format Requirements:**
   - Format: jpeg, png, webp, bmp, tiff, gif
   - Aspect ratio (width/height): 0.4 ~ 2.5
   - Size: 300-6000 px
   - Value type: Public URL or asset ID (asset://assetID)
-  
+
   <Note>Must be used together with `first_image`</Note>
 </ParamField>
 
@@ -79,50 +79,50 @@ Authorization: Bearer {{key}}
 
 <ParamField path="generateAudio" type="boolean">
   Whether to generate synchronized audio, default `true`
-  
+
   - `true`: Output video includes synchronized audio
   - `false`: Output video is silent
 </ParamField>
 
 <ParamField path="referenceAudios" type="array">
   Multimodal reference audio list
-  
+
   **Format Requirements:**
   - Format: wav, mp3
   - Duration: Single audio 2-15 seconds, max 3 segments, total duration ≤ 15 seconds
   - Size: Single ≤ 15 MB
   - Value type: Public URL or asset ID (asset://assetID)
-  
+
   <Warning>Mutually exclusive with `first_image`/`last_image`</Warning>
 </ParamField>
 
 <ParamField path="referenceImages" type="array">
   Multimodal reference image list
-  
+
   **Format Requirements:**
   - Quantity: 1-9 images
   - Format: jpeg, png, webp, bmp, tiff, gif
   - Aspect ratio (width/height): 0.4 ~ 2.5
   - Size: 300-6000 px
   - Value type: Public URL or asset ID (asset://assetID)
-  
+
   <Note>Images involving faces or virtual avatars must be uploaded to the asset library for review first</Note>
-  
+
   <Warning>Mutually exclusive with `first_image`/`last_image`</Warning>
 </ParamField>
 
 <ParamField path="referenceVideos" type="array">
   Multimodal reference video list
-  
+
   **Format Requirements:**
   - Resolution: 480p, 720p
   - Duration: Single video 2-15 seconds, max 3 videos, total duration ≤ 15 seconds
   - Aspect ratio (width/height): 0.4 ~ 2.5
   - Size: 300-6000 px
   - Value type: Public URL or asset ID (asset://assetID)
-  
+
   <Note>System automatically selects the optimal backend model</Note>
-  
+
   <Warning>Mutually exclusive with `first_image`/`last_image`</Warning>
 </ParamField>
 
@@ -211,7 +211,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL - Text to Video
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -225,7 +225,7 @@ curl --request POST \
 
 ```bash cURL - Image to Video (First Frame)
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -239,7 +239,7 @@ curl --request POST \
 
 ```bash cURL - First and Last Frame
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -254,7 +254,7 @@ curl --request POST \
 
 ```bash cURL - Multimodal Reference
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -277,7 +277,7 @@ import requests
 
 # Text to Video
 response = requests.post(
-    'https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos',
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos',
     headers={
         'Authorization': 'Bearer {{key}}',
         'Content-Type': 'application/json'
@@ -314,7 +314,7 @@ Map<String, Object> requestBody = Map.of(
 );
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos"))
     .header("Authorization", "Bearer {{key}}")
     .header("Content-Type", "application/json")
     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))

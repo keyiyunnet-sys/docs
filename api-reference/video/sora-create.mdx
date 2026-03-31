@@ -1,7 +1,7 @@
 ---
 title: "Sora - 创建任务"
 description: "使用 Sora 模型创建视频生成任务，支持多种时长和分辨率"
-api: "POST  https://zcbservice.aizfw.cn/kyyAiPower/v1/sora/videos"
+api: "POST  https://zcbservice.aizfw.cn/kyyReactApiServer/v1/sora/videos"
 ---
 
 # Sora 创建视频任务
@@ -156,7 +156,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/sora/videos \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/sora/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -208,7 +208,7 @@ HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.o
 import requests
 
 response = requests.post(
-    'https://zcbservice.aizfw.cn/kyyAiPower/v1/sora/videos',
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/sora/videos',
     headers={
         'Authorization': 'Bearer {{key}}',
         'Content-Type': 'application/json'
