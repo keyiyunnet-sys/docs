@@ -53,32 +53,32 @@
                   {
                     "group": "Sora",
                     "pages": [
-                      "api-reference/video/sora-create",
-                      "api-reference/video/sora-query"
+                      "api-reference/video/sora/sora-create",
+                      "api-reference/video/sora/sora-query"
                     ]
                   },
                   {
                     "group": "VEO",
                     "pages": [
-                      "api-reference/video/veo-create",
-                      "api-reference/video/veo-query"
+                      "api-reference/video/veo/veo-create",
+                      "api-reference/video/veo/veo-query"
                     ]
                   },
                   {
                     "group": "Seedance",
                     "pages": [
-                      "api-reference/video/seedance-create",
-                      "api-reference/video/seedance-query"
+                      "api-reference/video/seedance/seedance-create",
+                      "api-reference/video/seedance/seedance-query"
                     ]
                   },
                   {
                     "group": "KyyVideo2",
                     "pages": [
-                      "api-reference/video/kyyvideo2-asset-upload",
-                      "api-reference/video/kyyvideo2-asset-detail",
-                      "api-reference/video/kyyvideo2-asset-delete",
-                      "api-reference/video/kyyvideo2-create",
-                      "api-reference/video/kyyvideo2-query"
+                      "api-reference/video/kyyvideo2/kyyvideo2-asset-upload",
+                      "api-reference/video/kyyvideo2/kyyvideo2-asset-detail",
+                      "api-reference/video/kyyvideo2/kyyvideo2-asset-delete",
+                      "api-reference/video/kyyvideo2/kyyvideo2-create",
+                      "api-reference/video/kyyvideo2/kyyvideo2-query"
                     ]
                   }
                 ]
@@ -134,32 +134,32 @@
                   {
                     "group": "Sora",
                     "pages": [
-                      "en/api-reference/video/sora-create",
-                      "en/api-reference/video/sora-query"
+                      "en/api-reference/video/sora/sora-create",
+                      "en/api-reference/video/sora/sora-query"
                     ]
                   },
                   {
                     "group": "VEO",
                     "pages": [
-                      "en/api-reference/video/veo-create",
-                      "en/api-reference/video/veo-query"
+                      "en/api-reference/video/veo/veo-create",
+                      "en/api-reference/video/veo/veo-query"
                     ]
                   },
                   {
                     "group": "Seedance",
                     "pages": [
-                      "en/api-reference/video/seedance-create",
-                      "en/api-reference/video/seedance-query"
+                      "en/api-reference/video/seedance/seedance-create",
+                      "en/api-reference/video/seedance/seedance-query"
                     ]
                   },
                   {
                     "group": "KyyVideo2",
                     "pages": [
-                      "en/api-reference/video/kyyvideo2-asset-upload",
-                      "en/api-reference/video/kyyvideo2-asset-detail",
-                      "en/api-reference/video/kyyvideo2-asset-delete",
-                      "en/api-reference/video/kyyvideo2-create",
-                      "en/api-reference/video/kyyvideo2-query"
+                      "en/api-reference/video/kyyvideo2/kyyvideo2-asset-upload",
+                      "en/api-reference/video/kyyvideo2/kyyvideo2-asset-detail",
+                      "en/api-reference/video/kyyvideo2/kyyvideo2-asset-delete",
+                      "en/api-reference/video/kyyvideo2/kyyvideo2-create",
+                      "en/api-reference/video/kyyvideo2/kyyvideo2-query"
                     ]
                   }
                 ]
