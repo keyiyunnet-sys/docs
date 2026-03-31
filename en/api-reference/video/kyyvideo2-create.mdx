@@ -1,0 +1,353 @@
+---
+title: "KyyVideo2 - Create Task"
+description: "Create video generation tasks using KyyVideo2 models with support for standard, fast, and Pro variants"
+api: "POST https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos"
+---
+
+# KyyVideo2 Create Video Task
+
+Create high-quality video generation tasks using KyyVideo2's advanced AI models with support for multiple model options and multimodal reference inputs.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Request Parameters
+
+<ParamField path="model" type="string" required>
+  Model name, available options:
+  - `kyyvideo2` - Standard model (supports reference videos)
+  - `kyyvideo2_fast` - Fast model (supports reference videos)
+  - `kyyvideo2_pro` - Pro model (no reference videos support)
+  - `kyyvideo2_fast_pro` - Fast Pro model (no reference videos support)
+</ParamField>
+
+<ParamField path="prompt" type="string" required>
+  Video generation prompt describing the desired video content
+
+  Example: `"A cat dancing in the rain, cinematic style"`
+</ParamField>
+
+<ParamField path="duration" type="integer">
+  Video duration in seconds, default 5 seconds, range 4-15 seconds
+</ParamField>
+
+<ParamField path="first_image" type="string">
+  First frame image URL for image-to-video scenarios
+  
+  **Use Cases:**
+  - Standalone: Image-to-video with first frame
+  - Combined with `last_image`: First and last frame scenario
+  
+  **Format Requirements:**
+  - Format: jpeg, png, webp, bmp, tiff, gif
+  - Aspect ratio (width/height): 0.4 ~ 2.5
+  - Size: 300-6000 px
+  - Value type: Public URL or asset ID (asset://assetID)
+  
+  <Warning>Mutually exclusive with `referenceImages`/`referenceVideos`/`referenceAudios`</Warning>
+</ParamField>
+
+<ParamField path="last_image" type="string">
+  Last frame image URL for first and last frame scenario
+  
+  **Format Requirements:**
+  - Format: jpeg, png, webp, bmp, tiff, gif
+  - Aspect ratio (width/height): 0.4 ~ 2.5
+  - Size: 300-6000 px
+  - Value type: Public URL or asset ID (asset://assetID)
+  
+  <Note>Must be used together with `first_image`</Note>
+</ParamField>
+
+<ParamField path="aspect_ratio" type="string">
+  Output video aspect ratio, default `16:9`
+
+  Available options:
+  - `16:9` - Landscape
+  - `4:3` - Standard
+  - `1:1` - Square
+  - `3:4` - Portrait
+  - `9:16` - Portrait
+  - `21:9` - Ultra-wide
+  - `adaptive` - Adaptive
+</ParamField>
+
+<ParamField path="generateAudio" type="boolean">
+  Whether to generate synchronized audio, default `true`
+  
+  - `true`: Output video includes synchronized audio
+  - `false`: Output video is silent
+</ParamField>
+
+<ParamField path="referenceAudios" type="array">
+  Multimodal reference audio list
+  
+  **Format Requirements:**
+  - Format: wav, mp3
+  - Duration: Single audio 2-15 seconds, max 3 segments, total duration ≤ 15 seconds
+  - Size: Single ≤ 15 MB
+  - Value type: Public URL or asset ID (asset://assetID)
+  
+  <Warning>Mutually exclusive with `first_image`/`last_image`</Warning>
+</ParamField>
+
+<ParamField path="referenceImages" type="array">
+  Multimodal reference image list
+  
+  **Format Requirements:**
+  - Quantity: 1-9 images
+  - Format: jpeg, png, webp, bmp, tiff, gif
+  - Aspect ratio (width/height): 0.4 ~ 2.5
+  - Size: 300-6000 px
+  - Value type: Public URL or asset ID (asset://assetID)
+  
+  <Note>Images involving faces or virtual avatars must be uploaded to the asset library for review first</Note>
+  
+  <Warning>Mutually exclusive with `first_image`/`last_image`</Warning>
+</ParamField>
+
+<ParamField path="referenceVideos" type="array">
+  Multimodal reference video list
+  
+  **Format Requirements:**
+  - Resolution: 480p, 720p
+  - Duration: Single video 2-15 seconds, max 3 videos, total duration ≤ 15 seconds
+  - Aspect ratio (width/height): 0.4 ~ 2.5
+  - Size: 300-6000 px
+  - Value type: Public URL or asset ID (asset://assetID)
+  
+  <Note>System automatically selects the optimal backend model</Note>
+  
+  <Warning>Mutually exclusive with `first_image`/`last_image`</Warning>
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier for the video generation task, used for subsequent status queries
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, always `video`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+  - `completed` - Completed
+  - `failed` - Failed
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when status is `failed`
+</ResponseField>
+
+## Model Features
+
+<CardGroup cols={2}>
+  <Card title="kyyvideo2" icon="video">
+    Standard model, supports reference videos, suitable for regular video generation
+  </Card>
+  <Card title="kyyvideo2_fast" icon="bolt">
+    Fast model, supports reference videos, faster generation speed
+  </Card>
+  <Card title="kyyvideo2_pro" icon="crown">
+    Pro model, no reference videos support, higher quality
+  </Card>
+  <Card title="kyyvideo2_fast_pro" icon="rocket">
+    Fast Pro model, no reference videos support, balances speed and quality
+  </Card>
+</CardGroup>
+
+## Parameter Selection Rules
+
+<Warning>
+**Mutually Exclusive Parameters:**
+- **First/Last Frame Scenario**: When using `first_image` and `last_image`, cannot use `referenceImages`, `referenceVideos`, `referenceAudios`
+- **Multimodal Reference**: When using `referenceImages`, `referenceVideos`, `referenceAudios`, cannot use `first_image`, `last_image`
+</Warning>
+
+## Model Feature Comparison
+
+| Model | Reference Video Support | Generation Speed | Video Quality |
+|-------|------------------------|------------------|---------------|
+| kyyvideo2 | ✅ Supported | Standard | Standard |
+| kyyvideo2_fast | ✅ Supported | Fast | Standard |
+| kyyvideo2_pro | ❌ Not Supported | Standard | High Quality |
+| kyyvideo2_fast_pro | ❌ Not Supported | Fast | High Quality |
+
+<Info>
+**Best Practices:**
+1. Video generation is asynchronous, use the returned `id` to query task status and results
+2. Clearly describe desired visual effects and style in the prompt
+3. Choose the appropriate model based on needs: select standard or fast models when reference videos are needed, choose Pro models for quality
+4. Reference images involving faces must be uploaded to the asset library for review first
+5. Set reasonable video duration (4-15 seconds), shorter duration generates faster
+</Info>
+
+<Tip>
+**Prompt Suggestions:**
+- Include specific scene descriptions
+- Add style keywords (e.g., "cinematic style", "artistic style", "realistic style")
+- Describe actions and movement patterns
+- Specify lighting and color preferences
+</Tip>
+
+<RequestExample>
+
+```bash cURL - Text to Video
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "kyyvideo2",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "duration": 10,
+    "aspect_ratio": "16:9",
+    "generateAudio": true
+  }'
+```
+
+```bash cURL - Image to Video (First Frame)
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "kyyvideo2_fast",
+    "prompt": "A cat gracefully dancing in the rain",
+    "duration": 8,
+    "first_image": "https://example.com/cat.jpg",
+    "aspect_ratio": "16:9"
+  }'
+```
+
+```bash cURL - First and Last Frame
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "kyyvideo2_pro",
+    "prompt": "City transformation from day to night",
+    "duration": 12,
+    "first_image": "https://example.com/day.jpg",
+    "last_image": "https://example.com/night.jpg",
+    "aspect_ratio": "16:9"
+  }'
+```
+
+```bash cURL - Multimodal Reference
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "kyyvideo2",
+    "prompt": "Waves crashing on the shore with wave sounds",
+    "duration": 10,
+    "referenceImages": [
+      "https://example.com/beach1.jpg",
+      "https://example.com/beach2.jpg"
+    ],
+    "referenceAudios": [
+      "https://example.com/wave_sound.mp3"
+    ],
+    "aspect_ratio": "16:9"
+  }'
+```
+
+```python Python
+import requests
+
+# Text to Video
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'kyyvideo2',
+        'prompt': 'A cat dancing in the rain, cinematic style',
+        'duration': 10,
+        'aspect_ratio': '16:9',
+        'generateAudio': True
+    }
+)
+
+print(response.json())
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "kyyvideo2",
+    "prompt", "A cat dancing in the rain, cinematic style",
+    "duration", 10,
+    "aspect_ratio", "16:9",
+    "generateAudio", true
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Creation Success
+{
+  "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "video",
+  "created": 1774836724,
+  "model": "kyyvideo2_fast",
+  "status": "queued",
+  "error": null
+}
+```
+
+```json Creation Failed
+{
+  "id": null,
+  "object": "error",
+  "created": 1774836724,
+  "model": null,
+  "status": "failed",
+  "error": "Parameter validation failed: first_image and referenceImages cannot be used together"
+}
+```
+
+</ResponseExample>

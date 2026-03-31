@@ -1,0 +1,394 @@
+---
+title: "Asset List"
+description: "Query paginated asset list for current user with support for filtering by resource type and status"
+api: "POST https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/list"
+---
+
+# KyyVideo2 Asset List
+
+Query paginated asset list for the current user's asset group with support for filtering by resource type and status.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Request Parameters
+
+<ParamField path="page" type="integer">
+  Current page number, default 1
+</ParamField>
+
+<ParamField path="pageSize" type="integer">
+  Number of items per page, default 10
+</ParamField>
+
+<ParamField path="status" type="array">
+  Asset status filter array
+
+  Available options:
+  - Empty array `[]` - Query all statuses
+  - `["Active"]` - Asset uploaded successfully, ready to use
+  - `["Processing"]` - Asset is being processed
+  - `["Failed"]` - Asset upload failed
+  - `["Active", "Processing"]` - Query multiple statuses
+</ParamField>
+
+<ParamField path="assetType" type="array">
+  Asset type filter array
+
+  Available options:
+  - Empty array `[]` - Query all types
+  - `["Image"]` - Query images only
+  - `["Video"]` - Query videos only
+  - `["Audio"]` - Query audio only
+  - `["Document"]` - Query documents only
+  - `["Image", "Video"]` - Query multiple types
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="code" type="integer">
+  Response status code
+  - `0` - Success
+  - Other values - Failure
+</ResponseField>
+
+<ResponseField name="msg" type="string">
+  Response message, `null` on success, error message on failure
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Paginated data object
+
+  <Expandable title="data object properties">
+    <ResponseField name="records" type="array">
+      Asset records array
+
+      <Expandable title="records array element properties">
+        <ResponseField name="assetId" type="string">
+          Asset ID, format: `asset-{timestamp}-{random}`
+        </ResponseField>
+
+        <ResponseField name="name" type="string">
+          Asset name
+        </ResponseField>
+
+        <ResponseField name="assetType" type="string">
+          Asset type: Image, Video, Audio, Document
+        </ResponseField>
+
+        <ResponseField name="url" type="string">
+          Asset URL address
+        </ResponseField>
+
+        <ResponseField name="status" type="string">
+          Asset status
+          - `Active` - Asset uploaded successfully, ready to use
+          - `Processing` - Asset is being processed
+          - `Failed` - Asset upload failed
+        </ResponseField>
+
+        <ResponseField name="createTime" type="string">
+          Creation time, format: `YYYY-MM-DD HH:mm:ss`
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="total" type="integer">
+      Total number of records
+    </ResponseField>
+
+    <ResponseField name="size" type="integer">
+      Number of items per page
+    </ResponseField>
+
+    <ResponseField name="current" type="integer">
+      Current page number
+    </ResponseField>
+
+    <ResponseField name="pages" type="integer">
+      Total number of pages
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Asset Status Description
+
+<CardGroup cols={3}>
+  <Card title="Active" icon="check-circle">
+    Asset uploaded successfully, ready to use
+  </Card>
+  <Card title="Processing" icon="spinner">
+    Asset is being processed, please check later
+  </Card>
+  <Card title="Failed" icon="circle-xmark">
+    Asset upload failed, needs to be re-uploaded
+  </Card>
+</CardGroup>
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Query All Assets" icon="list">
+    Get all assets without any filter conditions
+  </Card>
+  <Card title="Filter by Type" icon="filter">
+    Filter specific types of assets using assetType parameter
+  </Card>
+  <Card title="Filter by Status" icon="filter-circle-dollar">
+    Filter specific status assets using status parameter
+  </Card>
+  <Card title="Paginated Browsing" icon="book">
+    Use page and pageSize parameters for paginated queries
+  </Card>
+</CardGroup>
+
+<Info>
+**Pagination Notes:**
+- Default display is 10 records per page
+- Calculate total pages using `total` and `pages`
+- Use `current` to know the current page number
+- Adjust `pageSize` based on actual needs
+</Info>
+
+<Tip>
+**Best Practices:**
+- Regularly query asset list to understand uploaded assets
+- Use type filtering to quickly find needed assets
+- Save `assetId` of frequently used assets to avoid duplicate uploads
+- Use `createTime` to understand asset upload time
+</Tip>
+
+<RequestExample>
+
+```bash cURL - Query All Assets
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/list \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "page": 1,
+    "pageSize": 10,
+    "status": [],
+    "assetType": []
+  }'
+```
+
+```bash cURL - Query Image Assets
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/list \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "page": 1,
+    "pageSize": 20,
+    "status": [],
+    "assetType": ["Image"]
+  }'
+```
+
+```bash cURL - Query Video and Audio
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/list \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "page": 1,
+    "pageSize": 10,
+    "status": [],
+    "assetType": ["Video", "Audio"]
+  }'
+```
+
+```bash cURL - Query Active Assets
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/list \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "page": 1,
+    "pageSize": 10,
+    "status": ["Active"],
+    "assetType": []
+  }'
+```
+
+```python Python
+import requests
+
+# Query all assets
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/list',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'page': 1,
+        'pageSize': 10,
+        'status': [],
+        'assetType': []
+    }
+)
+
+result = response.json()
+assets = result['data']['records']
+
+print(f"Total {result['data']['total']} assets")
+for asset in assets:
+    print(f"Asset ID: {asset['assetId']}, Name: {asset['name']}, Type: {asset['assetType']}")
+
+# Query image assets
+image_response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/list',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'page': 1,
+        'pageSize': 20,
+        'status': [],
+        'assetType': ['Image']
+    }
+)
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.List;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "page", 1,
+    "pageSize", 10,
+    "status", List.of(),
+    "assetType", List.of()
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/list"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());
+```
+
+```javascript JavaScript
+// Query all assets
+const response = await fetch(
+  'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/list',
+  {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer {{key}}',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      page: 1,
+      pageSize: 10,
+      status: [],
+      assetType: []
+    })
+  }
+);
+
+const result = await response.json();
+const assets = result.data.records;
+
+console.log(`Total ${result.data.total} assets`);
+assets.forEach(asset => {
+  console.log(`Asset ID: ${asset.assetId}, Name: ${asset.name}, Type: ${asset.assetType}`);
+});
+
+// Query image assets
+const imageResponse = await fetch(
+  'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/list',
+  {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer {{key}}',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      page: 1,
+      pageSize: 20,
+      status: [],
+      assetType: ['Image']
+    })
+  }
+);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Query Success
+{
+  "code": 0,
+  "msg": null,
+  "data": {
+    "records": [
+      {
+        "name": "Video 1",
+        "assetId": "asset-20260337092722-zv650",
+        "status": "Active",
+        "assetType": "Video",
+        "url": "https://example.com/video1.mp4",
+        "createTime": "2026-03-30 09:27:23"
+      },
+      {
+        "name": "Cat Image",
+        "assetId": "asset-20260339142158-q75m3",
+        "status": "Active",
+        "assetType": "Image",
+        "url": "https://example.com/cat.jpg",
+        "createTime": "2026-03-30 14:21:58"
+      }
+    ],
+    "total": 2,
+    "size": 10,
+    "current": 1,
+    "pages": 1
+  }
+}
+```
+
+```json Empty List
+{
+  "code": 0,
+  "msg": null,
+  "data": {
+    "records": [],
+    "total": 0,
+    "size": 10,
+    "current": 1,
+    "pages": 0
+  }
+}
+```
+
+```json Query Failed
+{
+  "code": 1001,
+  "msg": "Query failed",
+  "data": null
+}
+```
+
+</ResponseExample>

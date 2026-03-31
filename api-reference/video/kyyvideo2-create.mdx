@@ -1,0 +1,353 @@
+---
+title: "KyyVideo2 - 创建任务"
+description: "使用 KyyVideo2 模型创建视频生成任务，支持标准、快速、Pro 等多种模型"
+api: "POST https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos"
+---
+
+# KyyVideo2 创建视频任务
+
+使用 KyyVideo2 的先进 AI 模型创建高质量视频生成任务，支持多种模型选项和多模态参考输入。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## 请求参数
+
+<ParamField path="model" type="string" required>
+  模型名称，可选值：
+  - `kyyvideo2` - 标准模型（支持参考视频）
+  - `kyyvideo2_fast` - 快速模型（支持参考视频）
+  - `kyyvideo2_pro` - Pro 模型（不支持参考视频）
+  - `kyyvideo2_fast_pro` - Fast Pro 模型（不支持参考视频）
+</ParamField>
+
+<ParamField path="prompt" type="string" required>
+  视频生成提示词，描述所需的视频内容
+
+  示例：`"一只猫在雨中跳舞，电影风格"`
+</ParamField>
+
+<ParamField path="duration" type="integer">
+  视频时长（秒），默认 5 秒，范围 4-15 秒
+</ParamField>
+
+<ParamField path="first_image" type="string">
+  首帧图 URL，用于图生视频场景
+  
+  **使用场景：**
+  - 单独使用：图生视频-首帧场景
+  - 搭配 `last_image`：首尾帧场景
+  
+  **格式要求：**
+  - 格式：jpeg、png、webp、bmp、tiff、gif
+  - 宽高比（宽/高）：0.4 ~ 2.5
+  - 尺寸：300-6000 px
+  - 值类型：公网 URL 或素材 ID（asset://素材ID）
+  
+  <Warning>与 `referenceImages`/`referenceVideos`/`referenceAudios` 互斥</Warning>
+</ParamField>
+
+<ParamField path="last_image" type="string">
+  尾帧图 URL，用于首尾帧场景
+  
+  **格式要求：**
+  - 格式：jpeg、png、webp、bmp、tiff、gif
+  - 宽高比（宽/高）：0.4 ~ 2.5
+  - 尺寸：300-6000 px
+  - 值类型：公网 URL 或素材 ID（asset://素材ID）
+  
+  <Note>必须搭配 `first_image` 使用</Note>
+</ParamField>
+
+<ParamField path="aspect_ratio" type="string">
+  输出视频宽高比，默认 `16:9`
+
+  可选值：
+  - `16:9` - 横屏
+  - `4:3` - 标准
+  - `1:1` - 正方形
+  - `3:4` - 竖屏
+  - `9:16` - 竖屏
+  - `21:9` - 超宽屏
+  - `adaptive` - 自适应
+</ParamField>
+
+<ParamField path="generateAudio" type="boolean">
+  是否生成同步音频，默认 `true`
+  
+  - `true`：输出视频包含同步音频
+  - `false`：输出视频为无声视频
+</ParamField>
+
+<ParamField path="referenceAudios" type="array">
+  多模态参考音频列表
+  
+  **格式要求：**
+  - 格式：wav、mp3
+  - 时长：单个音频 2-15 秒，最多 3 段，总时长 ≤ 15 秒
+  - 大小：单个 ≤ 15 MB
+  - 值类型：公网 URL 或素材 ID（asset://素材ID）
+  
+  <Warning>与 `first_image`/`last_image` 互斥</Warning>
+</ParamField>
+
+<ParamField path="referenceImages" type="array">
+  多模态参考图片列表
+  
+  **格式要求：**
+  - 数量：1-9 张
+  - 格式：jpeg、png、webp、bmp、tiff、gif
+  - 宽高比（宽/高）：0.4 ~ 2.5
+  - 尺寸：300-6000 px
+  - 值类型：公网 URL 或素材 ID（asset://素材ID）
+  
+  <Note>涉及人脸或虚拟人像需先上传素材库审核</Note>
+  
+  <Warning>与 `first_image`/`last_image` 互斥</Warning>
+</ParamField>
+
+<ParamField path="referenceVideos" type="array">
+  多模态参考视频列表
+  
+  **格式要求：**
+  - 分辨率：480p、720p
+  - 时长：单个视频 2-15 秒，最多 3 个，总时长 ≤ 15 秒
+  - 宽高比（宽/高）：0.4 ~ 2.5
+  - 尺寸：300-6000 px
+  - 值类型：公网 URL 或素材 ID（asset://素材ID）
+  
+  <Note>系统会自动选择最优后端模型</Note>
+  
+  <Warning>与 `first_image`/`last_image` 互斥</Warning>
+</ParamField>
+
+## 响应参数
+
+<ResponseField name="id" type="string">
+  视频生成任务的唯一标识符，用于后续查询任务状态
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  对象类型，固定为 `video`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  任务创建时间戳
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  使用的模型名称
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  任务状态：
+  - `queued` - 排队中
+  - `processing` - 处理中
+  - `completed` - 已完成
+  - `failed` - 失败
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  错误信息，当 status 为 `failed` 时返回
+</ResponseField>
+
+## 模型特性
+
+<CardGroup cols={2}>
+  <Card title="kyyvideo2" icon="video">
+    标准模型，支持参考视频，适合常规视频生成
+  </Card>
+  <Card title="kyyvideo2_fast" icon="bolt">
+    快速模型，支持参考视频，生成速度更快
+  </Card>
+  <Card title="kyyvideo2_pro" icon="crown">
+    Pro 模型，不支持参考视频，质量更高
+  </Card>
+  <Card title="kyyvideo2_fast_pro" icon="rocket">
+    Fast Pro 模型，不支持参考视频，速度与质量兼顾
+  </Card>
+</CardGroup>
+
+## 参数选择规则
+
+<Warning>
+**参数互斥规则：**
+- **首尾帧场景**：使用 `first_image` 和 `last_image` 时，不能使用 `referenceImages`、`referenceVideos`、`referenceAudios`
+- **多模态参考**：使用 `referenceImages`、`referenceVideos`、`referenceAudios` 时，不能使用 `first_image`、`last_image`
+</Warning>
+
+## 模型功能对比
+
+| 模型 | 参考视频支持 | 生成速度 | 视频质量 |
+|------|------------|---------|---------|
+| kyyvideo2 | ✅ 支持 | 标准 | 标准 |
+| kyyvideo2_fast | ✅ 支持 | 快速 | 标准 |
+| kyyvideo2_pro | ❌ 不支持 | 标准 | 高质量 |
+| kyyvideo2_fast_pro | ❌ 不支持 | 快速 | 高质量 |
+
+<Info>
+**最佳实践：**
+1. 视频生成为异步处理，需要通过返回的 `id` 查询任务状态和结果
+2. 在提示词中明确描述所需的视觉效果和风格
+3. 根据需求选择合适的模型：需要参考视频时选择标准或快速模型，追求质量时选择 Pro 模型
+4. 参考图片涉及人脸时，需先上传素材库进行审核
+5. 合理设置视频时长（4-15 秒），时长越短生成越快
+</Info>
+
+<Tip>
+**提示词建议：**
+- 包含具体的场景描述
+- 添加风格关键词（如 "电影风格"、"艺术风格"、"写实风格"）
+- 描述动作和运动方式
+- 指定光照和色彩偏好
+</Tip>
+
+<RequestExample>
+
+```bash cURL - 文生视频
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "kyyvideo2",
+    "prompt": "一只猫在雨中跳舞，电影风格",
+    "duration": 10,
+    "aspect_ratio": "16:9",
+    "generateAudio": true
+  }'
+```
+
+```bash cURL - 图生视频（首帧）
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "kyyvideo2_fast",
+    "prompt": "猫咪在雨中优雅地跳舞",
+    "duration": 8,
+    "first_image": "https://example.com/cat.jpg",
+    "aspect_ratio": "16:9"
+  }'
+```
+
+```bash cURL - 首尾帧场景
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "kyyvideo2_pro",
+    "prompt": "从白天到夜晚的城市变化",
+    "duration": 12,
+    "first_image": "https://example.com/day.jpg",
+    "last_image": "https://example.com/night.jpg",
+    "aspect_ratio": "16:9"
+  }'
+```
+
+```bash cURL - 多模态参考
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "kyyvideo2",
+    "prompt": "海浪拍打着海岸，配合海浪声",
+    "duration": 10,
+    "referenceImages": [
+      "https://example.com/beach1.jpg",
+      "https://example.com/beach2.jpg"
+    ],
+    "referenceAudios": [
+      "https://example.com/wave_sound.mp3"
+    ],
+    "aspect_ratio": "16:9"
+  }'
+```
+
+```python Python
+import requests
+
+# 文生视频
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'kyyvideo2',
+        'prompt': '一只猫在雨中跳舞，电影风格',
+        'duration': 10,
+        'aspect_ratio': '16:9',
+        'generateAudio': True
+    }
+)
+
+print(response.json())
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "kyyvideo2",
+    "prompt", "一只猫在雨中跳舞，电影风格",
+    "duration", 10,
+    "aspect_ratio", "16:9",
+    "generateAudio", true
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 创建成功
+{
+  "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "video",
+  "created": 1774836724,
+  "model": "kyyvideo2_fast",
+  "status": "queued",
+  "error": null
+}
+```
+
+```json 创建失败
+{
+  "id": null,
+  "object": "error",
+  "created": 1774836724,
+  "model": null,
+  "status": "failed",
+  "error": "参数验证失败：first_image 和 referenceImages 不能同时使用"
+}
+```
+
+</ResponseExample>

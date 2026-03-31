@@ -1,0 +1,329 @@
+---
+title: "Delete Asset"
+description: "Delete specified asset, cannot be recovered after deletion, please operate with caution"
+api: "DELETE https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{assetId}"
+---
+
+# KyyVideo2 Delete Asset
+
+Delete specified asset. Cannot be recovered after deletion, please operate with caution.
+
+<Warning>
+**Important Notice:**
+- Assets cannot be recovered after deletion
+- Confirm the asset is no longer in use before deletion
+- Recommend backing up important assets before deletion
+</Warning>
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Path Parameters
+
+<ParamField path="assetId" type="string" required>
+  Asset ID to delete
+
+  Example: `asset-20260330142158-q75m8`
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="code" type="string">
+  Response status code
+  - `"0"` - Deletion successful
+  - Other values - Deletion failed
+</ResponseField>
+
+<ResponseField name="msg" type="string">
+  Response message
+  - Returns `"删除成功"` (Deletion successful) on success
+  - Returns specific error message on failure
+</ResponseField>
+
+<ResponseField name="data" type="null">
+  Data field, returns `null` for deletion operation
+</ResponseField>
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Clean Unused Assets" icon="trash">
+    Delete assets that are no longer needed to free up storage space
+  </Card>
+  <Card title="Asset Management" icon="folder-minus">
+    Manage asset library and keep asset list clean
+  </Card>
+  <Card title="Clean Failed Assets" icon="circle-xmark">
+    Delete failed or incorrect assets
+  </Card>
+  <Card title="Privacy Protection" icon="shield">
+    Delete assets containing sensitive information
+  </Card>
+</CardGroup>
+
+## Pre-deletion Checklist
+
+<Steps>
+  <Step title="Confirm Asset Information">
+    Use asset detail API to confirm the asset information to be deleted
+  </Step>
+  <Step title="Check Usage">
+    Confirm the asset is not being used by ongoing video generation tasks
+  </Step>
+  <Step title="Execute Deletion">
+    Call delete API to delete the asset
+  </Step>
+  <Step title="Verify Result">
+    Verify asset has been deleted through asset list or detail API
+  </Step>
+</Steps>
+
+<Info>
+**Deletion Notes:**
+- Deletion is permanent and cannot be undone
+- Deleting assets does not affect already generated videos
+- After deletion, the asset ID can no longer be used
+- Recommend regularly cleaning up unneeded assets
+</Info>
+
+<Tip>
+**Best Practices:**
+- Query asset details before deletion to confirm target asset
+- For important assets, download backup before deletion
+- For batch deletion, delete one by one and check results
+- Record deleted asset IDs to avoid misuse
+</Tip>
+
+<RequestExample>
+
+```bash cURL
+curl --request DELETE \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/asset-20260330142158-q75m8 \
+  --header 'Authorization: Bearer {{key}}'
+```
+
+```python Python
+import requests
+
+# Delete asset
+asset_id = "asset-20260330142158-q75m8"
+response = requests.delete(
+    f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+    headers={'Authorization': 'Bearer {{key}}'}
+)
+
+result = response.json()
+if result['code'] == "0":
+    print(f"Deletion successful: {result['msg']}")
+else:
+    print(f"Deletion failed: {result['msg']}")
+
+# Safe delete: query first, then delete
+def safe_delete_asset(asset_id):
+    """Safe delete asset: query and confirm first, then execute deletion"""
+    # 1. Query asset details
+    detail_response = requests.get(
+        f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+        headers={'Authorization': 'Bearer {{key}}'}
+    )
+
+    detail_result = detail_response.json()
+    if detail_result['code'] != 0:
+        print(f"Asset does not exist or no access: {asset_id}")
+        return False
+
+    # 2. Display asset information for confirmation
+    asset = detail_result['data']
+    print(f"Preparing to delete asset:")
+    print(f"  Name: {asset['name']}")
+    print(f"  Type: {asset['assetType']}")
+    print(f"  Status: {asset['status']}")
+    print(f"  Created: {asset['createTime']}")
+
+    # 3. Execute deletion
+    delete_response = requests.delete(
+        f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+        headers={'Authorization': 'Bearer {{key}}'}
+    )
+
+    delete_result = delete_response.json()
+    if delete_result['code'] == "0":
+        print(f"✓ Deletion successful")
+        return True
+    else:
+        print(f"✗ Deletion failed: {delete_result['msg']}")
+        return False
+
+# Usage example
+safe_delete_asset("asset-20260330142158-q75m8")
+
+# Batch delete assets
+def batch_delete_assets(asset_ids):
+    """Batch delete assets"""
+    results = []
+    for asset_id in asset_ids:
+        response = requests.delete(
+            f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+            headers={'Authorization': 'Bearer {{key}}'}
+        )
+        result = response.json()
+        results.append({
+            'asset_id': asset_id,
+            'success': result['code'] == "0",
+            'message': result['msg']
+        })
+        print(f"{asset_id}: {result['msg']}")
+
+    return results
+
+# Batch deletion example
+asset_ids = [
+    "asset-20260330142158-q75m8",
+    "asset-20260330142159-abc12",
+    "asset-20260330142160-xyz34"
+]
+batch_delete_assets(asset_ids)
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+
+HttpClient client = HttpClient.newHttpClient();
+String assetId = "asset-20260330142158-q75m8";
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/" + assetId))
+    .header("Authorization", "Bearer {{key}}")
+    .DELETE()
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());
+```
+
+```javascript JavaScript
+// Delete asset
+const assetId = 'asset-20260330142158-q75m8';
+const response = await fetch(
+  `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+  {
+    method: 'DELETE',
+    headers: {
+      'Authorization': 'Bearer {{key}}'
+    }
+  }
+);
+
+const result = await response.json();
+if (result.code === "0") {
+  console.log(`Deletion successful: ${result.msg}`);
+} else {
+  console.log(`Deletion failed: ${result.msg}`);
+}
+
+// Safe delete: query first, then delete
+async function safeDeleteAsset(assetId) {
+  // 1. Query asset details
+  const detailResponse = await fetch(
+    `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+    {
+      headers: { 'Authorization': 'Bearer {{key}}' }
+    }
+  );
+
+  const detailResult = await detailResponse.json();
+  if (detailResult.code !== 0) {
+    console.log(`Asset does not exist or no access: ${assetId}`);
+    return false;
+  }
+
+  // 2. Display asset information
+  const asset = detailResult.data;
+  console.log('Preparing to delete asset:');
+  console.log(`  Name: ${asset.name}`);
+  console.log(`  Type: ${asset.assetType}`);
+  console.log(`  Status: ${asset.status}`);
+  console.log(`  Created: ${asset.createTime}`);
+
+  // 3. Execute deletion
+  const deleteResponse = await fetch(
+    `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+    {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer {{key}}' }
+    }
+  );
+
+  const deleteResult = await deleteResponse.json();
+  if (deleteResult.code === "0") {
+    console.log('✓ Deletion successful');
+    return true;
+  } else {
+    console.log(`✗ Deletion failed: ${deleteResult.msg}`);
+    return false;
+  }
+}
+
+// Usage example
+await safeDeleteAsset('asset-20260330142158-q75m8');
+
+// Batch delete assets
+async function batchDeleteAssets(assetIds) {
+  const results = [];
+  for (const assetId of assetIds) {
+    const response = await fetch(
+      `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+      {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer {{key}}' }
+      }
+    );
+    const result = await response.json();
+    results.push({
+      assetId,
+      success: result.code === "0",
+      message: result.msg
+    });
+    console.log(`${assetId}: ${result.msg}`);
+  }
+  return results;
+}
+
+// Batch deletion example
+const assetIds = [
+  'asset-20260330142158-q75m8',
+  'asset-20260330142159-abc12',
+  'asset-20260330142160-xyz34'
+];
+await batchDeleteAssets(assetIds);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Deletion Successful
+{
+  "code": "0",
+  "msg": "删除成功",
+  "data": null
+}
+```
+
+```json Asset Not Found
+{
+  "code": "-1",
+  "msg": "素材不存在",
+  "data": null
+}
+```
+
+</ResponseExample>

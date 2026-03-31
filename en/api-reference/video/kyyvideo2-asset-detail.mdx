@@ -1,0 +1,301 @@
+---
+title: "Asset Detail"
+description: "Get detailed information of a single asset"
+api: "GET https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{assetId}"
+---
+
+# KyyVideo2 Asset Detail
+
+Get detailed information of a single asset, including asset name, type, status, URL, etc.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Path Parameters
+
+<ParamField path="assetId" type="string" required>
+  Asset ID, obtained from upload asset API or asset list API
+
+  Example: `asset-20260330142158-q75m8`
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="code" type="integer">
+  Response status code
+  - `0` - Success
+  - Other values - Failure
+</ResponseField>
+
+<ResponseField name="msg" type="string">
+  Response message, `null` on success, error message on failure
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Asset detail information object
+
+  <Expandable title="data object properties">
+    <ResponseField name="assetId" type="string">
+      Asset ID, format: `asset-{timestamp}-{random}`
+    </ResponseField>
+
+    <ResponseField name="name" type="string">
+      Asset name
+    </ResponseField>
+
+    <ResponseField name="assetType" type="string">
+      Asset type: Image, Video, Audio, Document
+    </ResponseField>
+
+    <ResponseField name="url" type="string">
+      Asset URL address
+    </ResponseField>
+
+    <ResponseField name="status" type="string">
+      Asset status
+      - `Active` - Asset uploaded successfully, ready to use
+      - `Processing` - Asset is being processed
+      - `Failed` - Asset upload failed
+    </ResponseField>
+
+    <ResponseField name="createTime" type="string">
+      Creation time, format: `YYYY-MM-DD HH:mm:ss`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="View Asset Details" icon="info-circle">
+    Get complete asset information including status and URL
+  </Card>
+  <Card title="Verify Asset Status" icon="check">
+    Check if asset has been processed and is ready to use
+  </Card>
+  <Card title="Get Asset URL" icon="link">
+    Retrieve the access address of the asset
+  </Card>
+  <Card title="Asset Management" icon="folder-open">
+    View detailed asset properties and creation time
+  </Card>
+</CardGroup>
+
+<Info>
+**Usage Recommendations:**
+- After uploading an asset, use this API to query asset processing status
+- Before using an asset, it's recommended to query and confirm status is `Active`
+- Use this API to get the latest asset URL
+</Info>
+
+<Tip>
+**Best Practices:**
+- After asset upload, poll this API until status becomes `Active`
+- Save asset IDs to avoid duplicate uploads of the same asset
+- Regularly check asset status to ensure availability
+</Tip>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/asset-20260330142158-q75m8 \
+  --header 'Authorization: Bearer {{key}}'
+```
+
+```python Python
+import requests
+
+# Query asset details
+asset_id = "asset-20260330142158-q75m8"
+response = requests.get(
+    f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+    headers={'Authorization': 'Bearer {{key}}'}
+)
+
+result = response.json()
+if result['code'] == 0:
+    asset = result['data']
+    print(f"Asset Name: {asset['name']}")
+    print(f"Asset Type: {asset['assetType']}")
+    print(f"Asset Status: {asset['status']}")
+    print(f"Asset URL: {asset['url']}")
+else:
+    print(f"Query failed: {result['msg']}")
+
+# Poll and wait for asset processing to complete
+import time
+
+def wait_for_asset_ready(asset_id, max_wait=300, interval=5):
+    """Wait for asset processing to complete"""
+    start_time = time.time()
+
+    while time.time() - start_time < max_wait:
+        response = requests.get(
+            f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+            headers={'Authorization': 'Bearer {{key}}'}
+        )
+
+        result = response.json()
+        if result['code'] == 0:
+            status = result['data']['status']
+            print(f"Current status: {status}")
+
+            if status == 'Active':
+                print("Asset is ready!")
+                return result['data']
+            elif status == 'Failed':
+                print("Asset processing failed")
+                return None
+
+        time.sleep(interval)
+
+    print("Wait timeout")
+    return None
+
+# Usage example
+asset_data = wait_for_asset_ready("asset-20260330142158-q75m8")
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+
+HttpClient client = HttpClient.newHttpClient();
+String assetId = "asset-20260330142158-q75m8";
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/" + assetId))
+    .header("Authorization", "Bearer {{key}}")
+    .GET()
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());
+```
+
+```javascript JavaScript
+// Query asset details
+const assetId = 'asset-20260330142158-q75m8';
+const response = await fetch(
+  `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+  {
+    headers: {
+      'Authorization': 'Bearer {{key}}'
+    }
+  }
+);
+
+const result = await response.json();
+if (result.code === 0) {
+  const asset = result.data;
+  console.log(`Asset Name: ${asset.name}`);
+  console.log(`Asset Type: ${asset.assetType}`);
+  console.log(`Asset Status: ${asset.status}`);
+  console.log(`Asset URL: ${asset.url}`);
+} else {
+  console.log(`Query failed: ${result.msg}`);
+}
+
+// Poll and wait for asset processing to complete
+async function waitForAssetReady(assetId, maxWait = 300000, interval = 5000) {
+  const startTime = Date.now();
+
+  while (Date.now() - startTime < maxWait) {
+    const response = await fetch(
+      `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+      {
+        headers: { 'Authorization': 'Bearer {{key}}' }
+      }
+    );
+
+    const result = await response.json();
+    if (result.code === 0) {
+      const status = result.data.status;
+      console.log(`Current status: ${status}`);
+
+      if (status === 'Active') {
+        console.log('Asset is ready!');
+        return result.data;
+      } else if (status === 'Failed') {
+        console.log('Asset processing failed');
+        return null;
+      }
+    }
+
+    await new Promise(resolve => setTimeout(resolve, interval));
+  }
+
+  console.log('Wait timeout');
+  return null;
+}
+
+// Usage example
+const assetData = await waitForAssetReady('asset-20260330142158-q75m8');
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Query Success - Active
+{
+  "code": 0,
+  "msg": null,
+  "data": {
+    "name": "Cat Image",
+    "assetId": "asset-20260330142158-q75m8",
+    "status": "Active",
+    "assetType": "Image",
+    "url": "https://example.com/cat.jpg",
+    "createTime": "2026-03-30 14:21:58"
+  }
+}
+```
+
+```json Query Success - Processing
+{
+  "code": 0,
+  "msg": null,
+  "data": {
+    "name": "Reference Video",
+    "assetId": "asset-20260330142158-q75m8",
+    "status": "Processing",
+    "assetType": "Video",
+    "url": "https://example.com/video.mp4",
+    "createTime": "2026-03-30 14:21:58"
+  }
+}
+```
+
+```json Query Success - Failed
+{
+  "code": 0,
+  "msg": null,
+  "data": {
+    "name": "Background Music",
+    "assetId": "asset-20260330142158-q75m8",
+    "status": "Failed",
+    "assetType": "Audio",
+    "url": "https://example.com/audio.mp3",
+    "createTime": "2026-03-30 14:21:58"
+  }
+}
+```
+
+```json Asset Not Found
+{
+  "code": -1,
+  "msg": "Asset not found",
+  "data": null
+}
+```
+
+</ResponseExample>

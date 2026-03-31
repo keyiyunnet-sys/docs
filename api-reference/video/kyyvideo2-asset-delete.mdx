@@ -1,0 +1,329 @@
+---
+title: "删除素材"
+description: "删除指定素材，删除后不可恢复，请谨慎操作"
+api: "DELETE https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{assetId}"
+---
+
+# KyyVideo2 删除素材
+
+删除指定素材。删除后不可恢复，请谨慎操作。
+
+<Warning>
+**重要提示：**
+- 素材删除后无法恢复
+- 删除前请确认该素材不再被使用
+- 建议在删除前先备份重要素材
+</Warning>
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## 路径参数
+
+<ParamField path="assetId" type="string" required>
+  要删除的素材 ID
+
+  示例：`asset-20260330142158-q75m8`
+</ParamField>
+
+## 响应参数
+
+<ResponseField name="code" type="string">
+  响应状态码
+  - `"0"` - 删除成功
+  - 其他值 - 删除失败
+</ResponseField>
+
+<ResponseField name="msg" type="string">
+  响应消息
+  - 成功时返回 `"删除成功"`
+  - 失败时返回具体错误信息
+</ResponseField>
+
+<ResponseField name="data" type="null">
+  数据字段，删除操作返回 `null`
+</ResponseField>
+
+## 使用场景
+
+<CardGroup cols={2}>
+  <Card title="清理无用素材" icon="trash">
+    删除不再需要的素材，释放存储空间
+  </Card>
+  <Card title="素材管理" icon="folder-minus">
+    管理素材库，保持素材列表整洁
+  </Card>
+  <Card title="错误素材清理" icon="circle-xmark">
+    删除上传失败或错误的素材
+  </Card>
+  <Card title="隐私保护" icon="shield">
+    删除包含敏感信息的素材
+  </Card>
+</CardGroup>
+
+## 删除前检查
+
+<Steps>
+  <Step title="确认素材信息">
+    使用素材详情接口确认要删除的素材信息
+  </Step>
+  <Step title="检查使用情况">
+    确认该素材未被正在进行的视频生成任务使用
+  </Step>
+  <Step title="执行删除">
+    调用删除接口，删除素材
+  </Step>
+  <Step title="验证结果">
+    通过素材列表或详情接口验证素材已被删除
+  </Step>
+</Steps>
+
+<Info>
+**删除说明：**
+- 删除操作是永久性的，无法撤销
+- 删除素材不会影响已生成的视频
+- 删除后，该素材 ID 将无法再使用
+- 建议定期清理不需要的素材
+</Info>
+
+<Tip>
+**最佳实践：**
+- 删除前先查询素材详情，确认是否为目标素材
+- 对于重要素材，建议先下载备份再删除
+- 批量删除时，建议逐个删除并检查结果
+- 记录已删除的素材 ID，避免误用
+</Tip>
+
+<RequestExample>
+
+```bash cURL
+curl --request DELETE \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/asset-20260330142158-q75m8 \
+  --header 'Authorization: Bearer {{key}}'
+```
+
+```python Python
+import requests
+
+# 删除素材
+asset_id = "asset-20260330142158-q75m8"
+response = requests.delete(
+    f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+    headers={'Authorization': 'Bearer {{key}}'}
+)
+
+result = response.json()
+if result['code'] == "0":
+    print(f"删除成功: {result['msg']}")
+else:
+    print(f"删除失败: {result['msg']}")
+
+# 安全删除：先查询再删除
+def safe_delete_asset(asset_id):
+    """安全删除素材：先查询确认，再执行删除"""
+    # 1. 查询素材详情
+    detail_response = requests.get(
+        f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+        headers={'Authorization': 'Bearer {{key}}'}
+    )
+
+    detail_result = detail_response.json()
+    if detail_result['code'] != 0:
+        print(f"素材不存在或无权访问: {asset_id}")
+        return False
+
+    # 2. 显示素材信息，确认删除
+    asset = detail_result['data']
+    print(f"准备删除素材:")
+    print(f"  名称: {asset['name']}")
+    print(f"  类型: {asset['assetType']}")
+    print(f"  状态: {asset['status']}")
+    print(f"  创建时间: {asset['createTime']}")
+
+    # 3. 执行删除
+    delete_response = requests.delete(
+        f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+        headers={'Authorization': 'Bearer {{key}}'}
+    )
+
+    delete_result = delete_response.json()
+    if delete_result['code'] == "0":
+        print(f"✓ 删除成功")
+        return True
+    else:
+        print(f"✗ 删除失败: {delete_result['msg']}")
+        return False
+
+# 使用示例
+safe_delete_asset("asset-20260330142158-q75m8")
+
+# 批量删除素材
+def batch_delete_assets(asset_ids):
+    """批量删除素材"""
+    results = []
+    for asset_id in asset_ids:
+        response = requests.delete(
+            f'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/{asset_id}',
+            headers={'Authorization': 'Bearer {{key}}'}
+        )
+        result = response.json()
+        results.append({
+            'asset_id': asset_id,
+            'success': result['code'] == "0",
+            'message': result['msg']
+        })
+        print(f"{asset_id}: {result['msg']}")
+
+    return results
+
+# 批量删除示例
+asset_ids = [
+    "asset-20260330142158-q75m8",
+    "asset-20260330142159-abc12",
+    "asset-20260330142160-xyz34"
+]
+batch_delete_assets(asset_ids)
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+
+HttpClient client = HttpClient.newHttpClient();
+String assetId = "asset-20260330142158-q75m8";
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/" + assetId))
+    .header("Authorization", "Bearer {{key}}")
+    .DELETE()
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());
+```
+
+```javascript JavaScript
+// 删除素材
+const assetId = 'asset-20260330142158-q75m8';
+const response = await fetch(
+  `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+  {
+    method: 'DELETE',
+    headers: {
+      'Authorization': 'Bearer {{key}}'
+    }
+  }
+);
+
+const result = await response.json();
+if (result.code === "0") {
+  console.log(`删除成功: ${result.msg}`);
+} else {
+  console.log(`删除失败: ${result.msg}`);
+}
+
+// 安全删除：先查询再删除
+async function safeDeleteAsset(assetId) {
+  // 1. 查询素材详情
+  const detailResponse = await fetch(
+    `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+    {
+      headers: { 'Authorization': 'Bearer {{key}}' }
+    }
+  );
+
+  const detailResult = await detailResponse.json();
+  if (detailResult.code !== 0) {
+    console.log(`素材不存在或无权访问: ${assetId}`);
+    return false;
+  }
+
+  // 2. 显示素材信息
+  const asset = detailResult.data;
+  console.log('准备删除素材:');
+  console.log(`  名称: ${asset.name}`);
+  console.log(`  类型: ${asset.assetType}`);
+  console.log(`  状态: ${asset.status}`);
+  console.log(`  创建时间: ${asset.createTime}`);
+
+  // 3. 执行删除
+  const deleteResponse = await fetch(
+    `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+    {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer {{key}}' }
+    }
+  );
+
+  const deleteResult = await deleteResponse.json();
+  if (deleteResult.code === "0") {
+    console.log('✓ 删除成功');
+    return true;
+  } else {
+    console.log(`✗ 删除失败: ${deleteResult.msg}`);
+    return false;
+  }
+}
+
+// 使用示例
+await safeDeleteAsset('asset-20260330142158-q75m8');
+
+// 批量删除素材
+async function batchDeleteAssets(assetIds) {
+  const results = [];
+  for (const assetId of assetIds) {
+    const response = await fetch(
+      `https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/${assetId}`,
+      {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer {{key}}' }
+      }
+    );
+    const result = await response.json();
+    results.push({
+      assetId,
+      success: result.code === "0",
+      message: result.msg
+    });
+    console.log(`${assetId}: ${result.msg}`);
+  }
+  return results;
+}
+
+// 批量删除示例
+const assetIds = [
+  'asset-20260330142158-q75m8',
+  'asset-20260330142159-abc12',
+  'asset-20260330142160-xyz34'
+];
+await batchDeleteAssets(assetIds);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 删除成功
+{
+  "code": "0",
+  "msg": "删除成功",
+  "data": null
+}
+```
+
+```json 素材不存在
+{
+  "code": "-1",
+  "msg": "素材不存在",
+  "data": null
+}
+```
+
+</ResponseExample>

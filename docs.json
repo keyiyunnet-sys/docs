@@ -70,6 +70,16 @@
                       "api-reference/video/seedance-create",
                       "api-reference/video/seedance-query"
                     ]
+                  },
+                  {
+                    "group": "KyyVideo2",
+                    "pages": [
+                      "api-reference/video/kyyvideo2-asset-upload",
+                      "api-reference/video/kyyvideo2-asset-detail",
+                      "api-reference/video/kyyvideo2-asset-delete",
+                      "api-reference/video/kyyvideo2-create",
+                      "api-reference/video/kyyvideo2-query"
+                    ]
                   }
                 ]
               }
@@ -140,6 +150,16 @@
                     "pages": [
                       "en/api-reference/video/seedance-create",
                       "en/api-reference/video/seedance-query"
+                    ]
+                  },
+                  {
+                    "group": "KyyVideo2",
+                    "pages": [
+                      "en/api-reference/video/kyyvideo2-asset-upload",
+                      "en/api-reference/video/kyyvideo2-asset-detail",
+                      "en/api-reference/video/kyyvideo2-asset-delete",
+                      "en/api-reference/video/kyyvideo2-create",
+                      "en/api-reference/video/kyyvideo2-query"
                     ]
                   }
                 ]

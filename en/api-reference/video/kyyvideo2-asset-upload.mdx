@@ -1,0 +1,300 @@
+---
+title: "Upload Asset"
+description: "Upload images, videos, audio and other assets to KyyVideo2 asset library"
+api: "POST https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload"
+---
+
+# KyyVideo2 Upload Asset
+
+Upload assets to the KyyVideo2 asset library and obtain asset IDs for use in video generation tasks.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Request Parameters
+
+<ParamField path="assetType" type="string" required>
+  Asset type, first letter must be capitalized
+
+  Available options:
+  - `Image` - Image
+  - `Video` - Video
+  - `Audio` - Audio
+  - `Document` - Document
+
+  <Note>First letter must be capitalized</Note>
+</ParamField>
+
+<ParamField path="url" type="string" required>
+  Public URL of the asset
+
+  Example: `https://example.com/image.jpg`
+</ParamField>
+
+<ParamField path="name" type="string">
+  Asset name for identification and management
+
+  Example: `Cat Image`
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="code" type="integer">
+  Response status code
+  - `0` - Success
+  - Other values - Failure
+</ResponseField>
+
+<ResponseField name="msg" type="string">
+  Response message, `null` on success, error message on failure
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Response data object
+
+  <Expandable title="data object properties">
+    <ResponseField name="assetId" type="string">
+      Asset ID, format: `asset-{timestamp}-{random}`
+
+      Used to reference this asset in video generation tasks, format: `asset://{assetId}`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Asset Type Description
+
+<CardGroup cols={2}>
+  <Card title="Image" icon="image">
+    Supported formats: jpeg, png, webp, bmp, tiff, gif
+
+    Used for `referenceImages`, `first_image`, `last_image` parameters
+  </Card>
+  <Card title="Video" icon="video">
+    Supported resolutions: 480p, 720p
+
+    Used for `referenceVideos` parameter
+  </Card>
+  <Card title="Audio" icon="music">
+    Supported formats: wav, mp3
+
+    Used for `referenceAudios` parameter
+  </Card>
+  <Card title="Document" icon="file">
+    Document type assets
+
+    Used for other scenarios
+  </Card>
+</CardGroup>
+
+## Usage Flow
+
+<Steps>
+  <Step title="Upload Asset">
+    Call the upload API to obtain `assetId`
+  </Step>
+  <Step title="Asset Review">
+    Assets involving faces or virtual avatars need to wait for review approval
+  </Step>
+  <Step title="Use Asset">
+    Reference the asset in video generation tasks using `asset://{assetId}` format
+  </Step>
+</Steps>
+
+<Info>
+**Advantages of Using Asset IDs:**
+1. Assets are reviewed and comply with platform standards
+2. Assets are stored on the platform for faster access
+3. Avoid issues caused by external URL expiration
+4. Can reuse uploaded assets multiple times
+</Info>
+
+<Tip>
+**Best Practices:**
+- Set meaningful names for assets for easier management
+- Upload images involving faces in advance and wait for review
+- Save the `assetId` for reuse in multiple video generation tasks
+- Ensure asset URLs are accessible during upload
+</Tip>
+
+<RequestExample>
+
+```bash cURL - Upload Image
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "assetType": "Image",
+    "url": "https://example.com/cat.jpg",
+    "name": "Cat Image"
+  }'
+```
+
+```bash cURL - Upload Video
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "assetType": "Video",
+    "url": "https://example.com/reference.mp4",
+    "name": "Reference Video"
+  }'
+```
+
+```bash cURL - Upload Audio
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "assetType": "Audio",
+    "url": "https://example.com/sound.mp3",
+    "name": "Background Music"
+  }'
+```
+
+```python Python
+import requests
+
+# Upload image asset
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'assetType': 'Image',
+        'url': 'https://example.com/cat.jpg',
+        'name': 'Cat Image'
+    }
+)
+
+result = response.json()
+asset_id = result['data']['assetId']
+print(f"Asset uploaded successfully, ID: {asset_id}")
+
+# Use asset ID to create video
+video_response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'kyyvideo2',
+        'prompt': 'A cat dancing in the rain',
+        'duration': 10,
+        'first_image': f'asset://{asset_id}',  # Use asset ID
+        'aspect_ratio': '16:9'
+    }
+)
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "assetType", "Image",
+    "url", "https://example.com/cat.jpg",
+    "name", "Cat Image"
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());
+```
+
+```javascript JavaScript
+// Upload image asset
+const uploadResponse = await fetch(
+  'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload',
+  {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer {{key}}',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      assetType: 'Image',
+      url: 'https://example.com/cat.jpg',
+      name: 'Cat Image'
+    })
+  }
+);
+
+const result = await uploadResponse.json();
+const assetId = result.data.assetId;
+console.log(`Asset uploaded successfully, ID: ${assetId}`);
+
+// Use asset ID to create video
+const videoResponse = await fetch(
+  'https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos',
+  {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer {{key}}',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: 'kyyvideo2',
+      prompt: 'A cat dancing in the rain',
+      duration: 10,
+      first_image: `asset://${assetId}`,  // Use asset ID
+      aspect_ratio: '16:9'
+    })
+  }
+);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Upload Success
+{
+  "code": 0,
+  "msg": null,
+  "data": {
+    "assetId": "asset-20260330142158-q75m8"
+  }
+}
+```
+
+```json Upload Failed
+{
+  "code": 1001,
+  "msg": "Asset URL is not accessible",
+  "data": null
+}
+```
+
+```json Parameter Error
+{
+  "code": 1002,
+  "msg": "Invalid assetType parameter, must be Image/Video/Audio/Document",
+  "data": null
+}
+```
+
+</ResponseExample>

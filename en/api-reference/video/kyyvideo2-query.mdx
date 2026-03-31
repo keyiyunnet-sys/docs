@@ -1,0 +1,301 @@
+---
+title: "KyyVideo2 - Query Task"
+description: "Query the status and results of KyyVideo2 video generation tasks"
+api: "GET https://zcbservice.aizfw.cn/kyyAiPower/v1/result/{id}"
+---
+
+# KyyVideo2 Query Video Task
+
+Use the task ID to query the status and results of KyyVideo2 video generation tasks.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  Unique identifier for the video generation task, returned from the create task API
+  
+  Example: `video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd`
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier for the video generation task
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, always `video`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used (kyyvideo2, kyyvideo2_fast, kyyvideo2_pro, kyyvideo2_fast_pro)
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+  - `completed` - Completed
+  - `failed` - Failed
+</ResponseField>
+
+<ResponseField name="video_url" type="string">
+  Generated video URL, returned when status is `completed`
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when status is `failed`
+</ResponseField>
+
+## Status Flow
+
+<Steps>
+  <Step title="queued">
+    Task created and added to queue, waiting for processing
+  </Step>
+  <Step title="processing">
+    Task is being processed, KyyVideo2 model is generating the video
+  </Step>
+  <Step title="completed">
+    Task completed, video generated successfully, available via `video_url`
+  </Step>
+</Steps>
+
+## Polling Recommendations
+
+<Info>
+**Polling Strategy:**
+- Recommended polling interval: 20-40 seconds
+- Fast models (kyyvideo2_fast, kyyvideo2_fast_pro) generate faster, can use shorter polling intervals
+- Avoid overly frequent requests to prevent rate limiting
+- Stop polling when status is `completed` or `failed`
+</Info>
+
+## Video URL Information
+
+<Warning>
+**Important Notes:**
+- Generated video URLs are typically valid for 24 hours
+- Download and save videos to your storage system promptly
+- Videos cannot be accessed after URL expiration
+- Video files are typically in MP4 format
+- Depending on the `generateAudio` parameter, videos may or may not contain audio
+</Warning>
+
+## Generation Time Estimates
+
+<CardGroup cols={2}>
+  <Card title="Standard Models" icon="clock">
+    kyyvideo2 / kyyvideo2_pro
+    
+    Estimated generation time: 2-5 minutes
+  </Card>
+  <Card title="Fast Models" icon="bolt">
+    kyyvideo2_fast / kyyvideo2_fast_pro
+    
+    Estimated generation time: 1-3 minutes
+  </Card>
+</CardGroup>
+
+<Note>
+**Factors Affecting Generation Time:**
+- Video duration: Longer duration requires more generation time
+- Model type: Fast models generate faster
+- Reference materials: Using multimodal references (images, videos, audio) may increase processing time
+- System load: Peak times may require longer queue times
+</Note>
+
+## Model Generation Speed Comparison
+
+| Model | Average Generation Time | Use Case |
+|-------|------------------------|----------|
+| kyyvideo2 | 2-5 minutes | Standard quality, supports reference videos |
+| kyyvideo2_fast | 1-3 minutes | Fast generation, supports reference videos |
+| kyyvideo2_pro | 3-6 minutes | High quality output |
+| kyyvideo2_fast_pro | 2-4 minutes | High quality fast generation |
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/v1/result/video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd \
+  --header 'Authorization: Bearer {{key}}'
+```
+
+```python Python
+import requests
+import time
+
+# Create task
+create_response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'kyyvideo2_fast',
+        'prompt': 'A cat dancing in the rain, cinematic style',
+        'duration': 10,
+        'aspect_ratio': '16:9'
+    }
+)
+
+task_id = create_response.json()['id']
+print(f"Task created, ID: {task_id}")
+
+# Poll task status
+while True:
+    query_response = requests.get(
+        f'https://zcbservice.aizfw.cn/kyyAiPower/v1/result/{task_id}',
+        headers={'Authorization': 'Bearer {{key}}'}
+    )
+    
+    result = query_response.json()
+    status = result['status']
+    
+    print(f"Current status: {status}")
+    
+    if status == 'completed':
+        print(f"Video generation successful!")
+        print(f"Video URL: {result['video_url']}")
+        break
+    elif status == 'failed':
+        print(f"Video generation failed: {result['error']}")
+        break
+    
+    # Wait 30 seconds before next query
+    time.sleep(30)
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+
+HttpClient client = HttpClient.newHttpClient();
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/v1/result/video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd"))
+    .header("Authorization", "Bearer {{key}}")
+    .GET()
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());
+```
+
+```javascript JavaScript
+// Create task
+const createResponse = await fetch('https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer {{key}}',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    model: 'kyyvideo2_fast',
+    prompt: 'A cat dancing in the rain, cinematic style',
+    duration: 10,
+    aspect_ratio: '16:9'
+  })
+});
+
+const { id: taskId } = await createResponse.json();
+console.log(`Task created, ID: ${taskId}`);
+
+// Poll task status
+async function pollTaskStatus(taskId) {
+  while (true) {
+    const queryResponse = await fetch(
+      `https://zcbservice.aizfw.cn/kyyAiPower/v1/result/${taskId}`,
+      {
+        headers: { 'Authorization': 'Bearer {{key}}' }
+      }
+    );
+    
+    const result = await queryResponse.json();
+    console.log(`Current status: ${result.status}`);
+    
+    if (result.status === 'completed') {
+      console.log('Video generation successful!');
+      console.log(`Video URL: ${result.video_url}`);
+      return result;
+    } else if (result.status === 'failed') {
+      console.log(`Video generation failed: ${result.error}`);
+      throw new Error(result.error);
+    }
+    
+    // Wait 30 seconds before next query
+    await new Promise(resolve => setTimeout(resolve, 30000));
+  }
+}
+
+await pollTaskStatus(taskId);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Queued Status
+{
+  "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "video",
+  "created": 1774836724,
+  "model": "kyyvideo2_fast",
+  "status": "queued",
+  "video_url": null,
+  "error": null
+}
+```
+
+```json Processing Status
+{
+  "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "video",
+  "created": 1774836724,
+  "model": "kyyvideo2_fast",
+  "status": "processing",
+  "video_url": null,
+  "error": null
+}
+```
+
+```json Completed Status
+{
+  "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "video",
+  "created": 1774836724,
+  "model": "kyyvideo2_fast",
+  "status": "completed",
+  "video_url": "https://example.com/generated_video.mp4",
+  "error": null
+}
+```
+
+```json Failed Status
+{
+  "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "video",
+  "created": 1774836724,
+  "model": "kyyvideo2_fast",
+  "status": "failed",
+  "video_url": null,
+  "error": "Generation failed: Prompt contains prohibited content"
+}
+```
+
+</ResponseExample>

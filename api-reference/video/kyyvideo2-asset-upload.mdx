@@ -1,0 +1,300 @@
+---
+title: "上传素材"
+description: "上传图片、视频、音频等素材到 KyyVideo2 素材库"
+api: "POST https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload"
+---
+
+# KyyVideo2 上传素材
+
+上传素材到 KyyVideo2 素材库，获取素材 ID 用于视频生成任务。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## 请求参数
+
+<ParamField path="assetType" type="string" required>
+  素材类型，首字母大写
+
+  可选值：
+  - `Image` - 图片
+  - `Video` - 视频
+  - `Audio` - 音频
+  - `Document` - 文档
+
+  <Note>注意首字母必须大写</Note>
+</ParamField>
+
+<ParamField path="url" type="string" required>
+  素材的公网 URL 地址
+
+  示例：`https://example.com/image.jpg`
+</ParamField>
+
+<ParamField path="name" type="string">
+  素材名称，用于标识和管理素材
+
+  示例：`猫咪图片`
+</ParamField>
+
+## 响应参数
+
+<ResponseField name="code" type="integer">
+  响应状态码
+  - `0` - 成功
+  - 其他值 - 失败
+</ResponseField>
+
+<ResponseField name="msg" type="string">
+  响应消息，成功时为 `null`，失败时返回错误信息
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  响应数据对象
+
+  <Expandable title="data 对象属性">
+    <ResponseField name="assetId" type="string">
+      素材 ID，格式为 `asset-{timestamp}-{random}`
+
+      用于在视频生成任务中引用此素材，格式：`asset://{assetId}`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## 素材类型说明
+
+<CardGroup cols={2}>
+  <Card title="Image（图片）" icon="image">
+    支持格式：jpeg、png、webp、bmp、tiff、gif
+
+    用于 `referenceImages`、`first_image`、`last_image` 参数
+  </Card>
+  <Card title="Video（视频）" icon="video">
+    支持分辨率：480p、720p
+
+    用于 `referenceVideos` 参数
+  </Card>
+  <Card title="Audio（音频）" icon="music">
+    支持格式：wav、mp3
+
+    用于 `referenceAudios` 参数
+  </Card>
+  <Card title="Document（文档）" icon="file">
+    文档类型素材
+
+    用于其他场景
+  </Card>
+</CardGroup>
+
+## 使用流程
+
+<Steps>
+  <Step title="上传素材">
+    调用上传接口，获取 `assetId`
+  </Step>
+  <Step title="素材审核">
+    涉及人脸或虚拟人像的素材需要等待审核通过
+  </Step>
+  <Step title="使用素材">
+    在视频生成任务中使用 `asset://{assetId}` 格式引用素材
+  </Step>
+</Steps>
+
+<Info>
+**使用素材 ID 的优势：**
+1. 素材经过审核，符合平台规范
+2. 素材存储在平台，访问速度更快
+3. 避免外部 URL 失效导致的问题
+4. 可以重复使用已上传的素材
+</Info>
+
+<Tip>
+**最佳实践：**
+- 为素材设置有意义的名称，便于管理
+- 涉及人脸的图片建议提前上传并等待审核
+- 保存好 `assetId`，可以在多个视频生成任务中重复使用
+- 确保素材 URL 在上传时可访问
+</Tip>
+
+<RequestExample>
+
+```bash cURL - 上传图片
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "assetType": "Image",
+    "url": "https://example.com/cat.jpg",
+    "name": "猫咪图片"
+  }'
+```
+
+```bash cURL - 上传视频
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "assetType": "Video",
+    "url": "https://example.com/reference.mp4",
+    "name": "参考视频"
+  }'
+```
+
+```bash cURL - 上传音频
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "assetType": "Audio",
+    "url": "https://example.com/sound.mp3",
+    "name": "背景音乐"
+  }'
+```
+
+```python Python
+import requests
+
+# 上传图片素材
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'assetType': 'Image',
+        'url': 'https://example.com/cat.jpg',
+        'name': '猫咪图片'
+    }
+)
+
+result = response.json()
+asset_id = result['data']['assetId']
+print(f"素材上传成功，ID: {asset_id}")
+
+# 使用素材 ID 创建视频
+video_response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'kyyvideo2',
+        'prompt': '猫咪在雨中跳舞',
+        'duration': 10,
+        'first_image': f'asset://{asset_id}',  # 使用素材 ID
+        'aspect_ratio': '16:9'
+    }
+)
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "assetType", "Image",
+    "url", "https://example.com/cat.jpg",
+    "name", "猫咪图片"
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());
+```
+
+```javascript JavaScript
+// 上传图片素材
+const uploadResponse = await fetch(
+  'https://zcbservice.aizfw.cn/kyyAiPower/kyyVideo2/asset/upload',
+  {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer {{key}}',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      assetType: 'Image',
+      url: 'https://example.com/cat.jpg',
+      name: '猫咪图片'
+    })
+  }
+);
+
+const result = await uploadResponse.json();
+const assetId = result.data.assetId;
+console.log(`素材上传成功，ID: ${assetId}`);
+
+// 使用素材 ID 创建视频
+const videoResponse = await fetch(
+  'https://zcbservice.aizfw.cn/kyyAiPower/v1/kyyvideo2/videos',
+  {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer {{key}}',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: 'kyyvideo2',
+      prompt: '猫咪在雨中跳舞',
+      duration: 10,
+      first_image: `asset://${assetId}`,  // 使用素材 ID
+      aspect_ratio: '16:9'
+    })
+  }
+);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 上传成功
+{
+  "code": 0,
+  "msg": null,
+  "data": {
+    "assetId": "asset-20260330142158-q75m8"
+  }
+}
+```
+
+```json 上传失败
+{
+  "code": 1001,
+  "msg": "素材 URL 无法访问",
+  "data": null
+}
+```
+
+```json 参数错误
+{
+  "code": 1002,
+  "msg": "assetType 参数错误，必须为 Image/Video/Audio/Document",
+  "data": null
+}
+```
+
+</ResponseExample>
