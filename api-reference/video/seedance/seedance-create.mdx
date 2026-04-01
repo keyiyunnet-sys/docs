@@ -38,26 +38,6 @@ Authorization: Bearer {{YOUR_API_KEY}}
     </Card>
 </CardGroup>
 
-### 即梦 2.0 系列（按次计费）
-
-<CardGroup cols={3}>
-    <Card title="1-5秒" icon="clock">
-        `seedance_2_0_4s_5s`
-
-        支持图生视频、文生视频
-    </Card>
-    <Card title="6-10秒" icon="clock">
-        `seedance_2_0_6s_10s`
-
-        支持图生视频、文生视频
-    </Card>
-    <Card title="11-15秒" icon="clock">
-        `seedance_2_0_11s_15s`
-
-        支持图生视频、文生视频
-    </Card>
-</CardGroup>
-
 ## 请求参数
 
 <ParamField path="model" type="string" required>
@@ -147,7 +127,7 @@ Authorization: Bearer {{YOUR_API_KEY}}
 ## 响应参数
 
 <ResponseField name="id" type="string">
-    视频生成任务 ID，保存 7 天，用于后续查询任务状态
+    视频生成任务 ID，保存 1 天，用于后续查询任务状态
 </ResponseField>
 
 <ResponseField name="object" type="string">
@@ -191,7 +171,7 @@ Authorization: Bearer {{YOUR_API_KEY}}
     **重要限制：**
     - 图片场景互斥：首帧、首尾帧、参考图三种场景不可混用
     - 有声视频功能仅支持 Seedance 1.5 pro 系列
-    - 任务 ID 保存 7 天，请及时保存生成的视频
+    - 任务 ID 保存 1 天，请及时保存生成的视频
 </Warning>
 
 <Info>

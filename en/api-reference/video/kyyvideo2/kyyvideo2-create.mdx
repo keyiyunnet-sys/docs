@@ -20,10 +20,10 @@ Authorization: Bearer {{key}}
 
 <ParamField path="model" type="string" required>
   Model name, available options:
-  - `kyyvideo2` - Standard model (supports reference videos)
-  - `kyyvideo2_fast` - Fast model (supports reference videos)
-  - `kyyvideo2_pro` - Pro model (no reference videos support)
-  - `kyyvideo2_fast_pro` - Fast Pro model (no reference videos support)
+  - `kyyvideo2` - Standard model (only supports generation with reference videos)
+  - `kyyvideo2_fast` - Fast model (only supports generation with reference videos)
+  - `kyyvideo2_pro` - Pro model (optional reference videos)
+  - `kyyvideo2_fast_pro` - Fast Pro model (optional reference videos)
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -160,16 +160,16 @@ Authorization: Bearer {{key}}
 
 <CardGroup cols={2}>
   <Card title="kyyvideo2" icon="video">
-    Standard model, supports reference videos, suitable for regular video generation
+    Standard model, only supports generation with reference videos
   </Card>
   <Card title="kyyvideo2_fast" icon="bolt">
-    Fast model, supports reference videos, faster generation speed
+    Fast model, only supports generation with reference videos, faster generation speed
   </Card>
   <Card title="kyyvideo2_pro" icon="crown">
-    Pro model, no reference videos support, higher quality
+    Pro model, optional reference videos, higher quality
   </Card>
   <Card title="kyyvideo2_fast_pro" icon="rocket">
-    Fast Pro model, no reference videos support, balances speed and quality
+    Fast Pro model, optional reference videos, balances speed and quality
   </Card>
 </CardGroup>
 
@@ -185,10 +185,10 @@ Authorization: Bearer {{key}}
 
 | Model | Reference Video Support | Generation Speed | Video Quality |
 |-------|------------------------|------------------|---------------|
-| kyyvideo2 | ✅ Supported | Standard | Standard |
-| kyyvideo2_fast | ✅ Supported | Fast | Standard |
-| kyyvideo2_pro | ❌ Not Supported | Standard | High Quality |
-| kyyvideo2_fast_pro | ❌ Not Supported | Fast | High Quality |
+| kyyvideo2 | ✅ Only with reference videos | Standard | Standard |
+| kyyvideo2_fast | ✅ Only with reference videos | Fast | Standard |
+| kyyvideo2_pro | ⭕ Optional reference videos | Standard | High Quality |
+| kyyvideo2_fast_pro | ⭕ Optional reference videos | Fast | High Quality |
 
 <Info>
 **Best Practices:**

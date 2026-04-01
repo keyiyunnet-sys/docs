@@ -20,9 +20,9 @@ Authorization: Bearer {{key}}
 
 <ParamField path="model" type="string" required>
   Model name, available options:
-  - `sora-2` - Supports 10 or 15 seconds
-  - `sora-2-stable` - Supports 10 or 15 seconds  
-  - `sora-2-pro` - Supports 10s (HD), 15s (HD), or 25s
+  - `sora2Stable` - Supports 10 or 15 seconds
+  - `openAiSora2` - Supports 4, 8, 12 seconds
+  - `openAiSora2Stable` - Supports 4, 8, 12 seconds
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -106,14 +106,14 @@ Authorization: Bearer {{key}}
 ## Model Features
 
 <CardGroup cols={3}>
-  <Card title="sora-2" icon="video">
-    Standard model, supports 10 or 15 second video generation
-  </Card>
-  <Card title="sora-2-stable" icon="shield-check">
+  <Card title="sora2Stable" icon="shield-check">
     Stable version model, supports 10 or 15 seconds with more stable output
   </Card>
-  <Card title="sora-2-pro" icon="crown">
-    Professional model, supports 10s (HD), 15s (HD), or 25s
+  <Card title="openAiSora2" icon="video">
+    OpenAI Sora2 model, supports 4, 8, 12 second video generation
+  </Card>
+  <Card title="openAiSora2Stable" icon="check-circle">
+    OpenAI Sora2 stable version, supports 4, 8, 12 seconds with more stable output
   </Card>
 </CardGroup>
 
@@ -130,9 +130,9 @@ Authorization: Bearer {{key}}
 
 | Model | Supported Durations |
 |-------|-------------------|
-| sora-2 | 10 seconds, 15 seconds |
-| sora-2-stable | 10 seconds, 15 seconds |
-| sora-2-pro | 10 seconds (HD), 15 seconds (HD), 25 seconds |
+| sora2Stable | 10 seconds, 15 seconds |
+| openAiSora2 | 4 seconds, 8 seconds, 12 seconds |
+| openAiSora2Stable | 4 seconds, 8 seconds, 12 seconds |
 
 <Info>
 **Best Practices:**

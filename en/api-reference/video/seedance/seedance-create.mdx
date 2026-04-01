@@ -38,26 +38,6 @@ Authorization: Bearer {{YOUR_API_KEY}}
     </Card>
 </CardGroup>
 
-### Seedance 2.0 Series (Billed per Task)
-
-<CardGroup cols={3}>
-    <Card title="1-5 seconds" icon="clock">
-        `seedance_2_0_4s_5s`
-
-        Supports image-to-video, text-to-video
-    </Card>
-    <Card title="6-10 seconds" icon="clock">
-        `seedance_2_0_6s_10s`
-
-        Supports image-to-video, text-to-video
-    </Card>
-    <Card title="11-15 seconds" icon="clock">
-        `seedance_2_0_11s_15s`
-
-        Supports image-to-video, text-to-video
-    </Card>
-</CardGroup>
-
 ## Request Parameters
 
 <ParamField path="model" type="string" required>
@@ -147,7 +127,7 @@ Authorization: Bearer {{YOUR_API_KEY}}
 ## Response Parameters
 
 <ResponseField name="id" type="string">
-    Video generation task ID, stored for 7 days, used for querying task status
+    Video generation task ID, stored for 1 day, used for querying task status
 </ResponseField>
 
 <ResponseField name="object" type="string">
@@ -191,7 +171,7 @@ Authorization: Bearer {{YOUR_API_KEY}}
     **Important Limitations:**
     - Image scenarios are mutually exclusive: first frame, first and last frames, and reference images cannot be mixed
     - Audio generation is only supported by Seedance 1.5 pro series
-    - Task IDs are stored for 7 days, please save generated videos promptly
+    - Task IDs are stored for 1 day, please save generated videos promptly
 </Warning>
 
 <Info>

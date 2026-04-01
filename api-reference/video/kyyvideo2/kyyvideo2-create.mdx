@@ -20,10 +20,10 @@ Authorization: Bearer {{key}}
 
 <ParamField path="model" type="string" required>
   模型名称，可选值：
-  - `kyyvideo2` - 标准模型（支持参考视频）
-  - `kyyvideo2_fast` - 快速模型（支持参考视频）
-  - `kyyvideo2_pro` - Pro 模型（不支持参考视频）
-  - `kyyvideo2_fast_pro` - Fast Pro 模型（不支持参考视频）
+  - `kyyvideo2` - 标准模型（仅支持带参考视频生成）
+  - `kyyvideo2_fast` - 快速模型（仅支持带参考视频生成）
+  - `kyyvideo2_pro` - Pro 模型（可选参考视频）
+  - `kyyvideo2_fast_pro` - Fast Pro 模型（可选参考视频）
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -160,16 +160,16 @@ Authorization: Bearer {{key}}
 
 <CardGroup cols={2}>
   <Card title="kyyvideo2" icon="video">
-    标准模型，支持参考视频，适合常规视频生成
+    标准模型，仅支持带参考视频生成
   </Card>
   <Card title="kyyvideo2_fast" icon="bolt">
-    快速模型，支持参考视频，生成速度更快
+    快速模型，仅支持带参考视频生成，生成速度更快
   </Card>
   <Card title="kyyvideo2_pro" icon="crown">
-    Pro 模型，不支持参考视频，质量更高
+    Pro 模型，可选参考视频，质量更高
   </Card>
   <Card title="kyyvideo2_fast_pro" icon="rocket">
-    Fast Pro 模型，不支持参考视频，速度与质量兼顾
+    Fast Pro 模型，可选参考视频，速度与质量兼顾
   </Card>
 </CardGroup>
 
@@ -185,10 +185,10 @@ Authorization: Bearer {{key}}
 
 | 模型 | 参考视频支持 | 生成速度 | 视频质量 |
 |------|------------|---------|---------|
-| kyyvideo2 | ✅ 支持 | 标准 | 标准 |
-| kyyvideo2_fast | ✅ 支持 | 快速 | 标准 |
-| kyyvideo2_pro | ❌ 不支持 | 标准 | 高质量 |
-| kyyvideo2_fast_pro | ❌ 不支持 | 快速 | 高质量 |
+| kyyvideo2 | ✅ 仅支持带参考视频 | 标准 | 标准 |
+| kyyvideo2_fast | ✅ 仅支持带参考视频 | 快速 | 标准 |
+| kyyvideo2_pro | ⭕ 可选参考视频 | 标准 | 高质量 |
+| kyyvideo2_fast_pro | ⭕ 可选参考视频 | 快速 | 高质量 |
 
 <Info>
 **最佳实践：**

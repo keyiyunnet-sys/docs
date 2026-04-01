@@ -20,11 +20,9 @@ Authorization: Bearer {{key}}
 
 <ParamField path="model" type="string" required>
   模型名称，可选值：
-  - `sora2` - 支持 10 或 15 秒
   - `sora2Stable` - 支持 10 或 15 秒
-  - `sora2Pro` - 支持 10 秒 (HD)、 25 秒
-  - `openAiSora2` - 支持4、8、12
-  - `openAiSora2Stable` - 支持4、8、12
+  - `openAiSora2` - 支持 4、8、12 秒
+  - `openAiSora2Stable` - 支持 4、8、12 秒
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -108,14 +106,14 @@ Authorization: Bearer {{key}}
 ## 模型特性
 
 <CardGroup cols={3}>
-  <Card title="sora-2" icon="video">
-    标准模型，支持 10 或 15 秒视频生成
-  </Card>
-  <Card title="sora-2-stable" icon="shield-check">
+  <Card title="sora2Stable" icon="shield-check">
     稳定版模型，支持 10 或 15 秒，更稳定的输出
   </Card>
-  <Card title="sora-2-pro" icon="crown">
-    专业版模型，支持 10s (HD)、15s (HD) 或 25s
+  <Card title="openAiSora2" icon="video">
+    OpenAI Sora2 模型，支持 4、8、12 秒视频生成
+  </Card>
+  <Card title="openAiSora2Stable" icon="check-circle">
+    OpenAI Sora2 稳定版，支持 4、8、12 秒，更稳定的输出
   </Card>
 </CardGroup>
 
@@ -132,9 +130,9 @@ Authorization: Bearer {{key}}
 
 | 模型 | 支持时长 |
 |------|----------|
-| sora-2 | 10 秒、15 秒 |
-| sora-2-stable | 10 秒、15 秒 |
-| sora-2-pro | 10 秒 (HD)、15 秒 (HD)、25 秒 |
+| sora2Stable | 10 秒、15 秒 |
+| openAiSora2 | 4 秒、8 秒、12 秒 |
+| openAiSora2Stable | 4 秒、8 秒、12 秒 |
 
 <Info>
 **最佳实践：**
