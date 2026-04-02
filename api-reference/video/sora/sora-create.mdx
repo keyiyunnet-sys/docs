@@ -64,7 +64,7 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="input_reference" type="array">
-  参考图片数组，用于指导视频生成，最多支持 3 张图片
+  参考图片数组，用于指导视频生成，最多支持 1 张图片
 
   <Note>与 `image_urls` 二选一使用</Note>
 </ParamField>
@@ -138,7 +138,7 @@ Authorization: Bearer {{key}}
 **最佳实践：**
 1. 视频生成为异步处理，需要通过返回的 `id` 查询任务状态和结果
 2. 在提示词中明确描述所需的视觉效果和风格
-3. 参考图片可以指导整体风格，最多支持 3 张
+3. 参考图片可以指导整体风格，最多支持 1 张
 4. 选择合适的宽高比以匹配你的使用场景
 </Info>
 
@@ -163,8 +163,7 @@ curl --request POST \
     "aspect_ratio": "16:9",
     "seconds": 10,
     "input_reference": [
-      "https://example.com/reference1.jpg",
-      "https://example.com/reference2.jpg"
+      "https://example.com/reference1.jpg"
     ]
   }'
 ```
@@ -187,8 +186,7 @@ Map<String, Object> requestBody = Map.of(
     "aspect_ratio", "16:9",
     "seconds", 10,
     "input_reference", List.of(
-        "https://example.com/reference1.jpg",
-        "https://example.com/reference2.jpg"
+        "https://example.com/reference1.jpg"
     )
 );
 
@@ -217,8 +215,7 @@ response = requests.post(
         'aspect_ratio': '16:9',
         'seconds': 10,
         'input_reference': [
-            'https://example.com/reference1.jpg',
-            'https://example.com/reference2.jpg'
+            'https://example.com/reference1.jpg'
         ]
     }
 )

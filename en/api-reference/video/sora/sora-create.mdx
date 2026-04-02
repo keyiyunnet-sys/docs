@@ -27,51 +27,51 @@ Authorization: Bearer {{key}}
 
 <ParamField path="prompt" type="string" required>
   Video generation prompt describing the desired video content
-  
+
   Example: `"A cat dancing in the rain, cinematic style"`
 </ParamField>
 
 <ParamField path="size" type="string">
   Video dimensions, defaults to `720x1280`
-  
+
   Available options:
   - `720x1280` - Portrait
   - `1280x720` - Landscape
-  
+
   <Note>Use either this or `aspect_ratio`, not both</Note>
 </ParamField>
 
 <ParamField path="aspect_ratio" type="string">
   Video aspect ratio
-  
+
   Available options:
   - `16:9` - Landscape
   - `9:16` - Portrait
-  
+
   <Note>Use either this or `size`, not both</Note>
 </ParamField>
 
 <ParamField path="duration" type="integer">
   Video duration in seconds, supports 10 and 15
-  
+
   <Note>Use either this or `seconds`, not both</Note>
 </ParamField>
 
 <ParamField path="seconds" type="integer">
   Video duration in seconds, supports 10 and 15
-  
+
   <Note>Use either this or `duration`, not both</Note>
 </ParamField>
 
 <ParamField path="input_reference" type="array">
-  Reference image array to guide video generation, supports up to 3 images
-  
+  Reference image array to guide video generation, supports up to 1 images
+
   <Note>Use either this or `image_urls`, not both</Note>
 </ParamField>
 
 <ParamField path="image_urls" type="array">
   Reference image URL array to guide video generation
-  
+
   <Note>Use either this or `input_reference`, not both</Note>
 </ParamField>
 
@@ -122,7 +122,7 @@ Authorization: Bearer {{key}}
 <Warning>
 **Mutually Exclusive Parameters:**
 - **Size parameters**: Choose either `size` or `aspect_ratio`
-- **Duration parameters**: Choose either `duration` or `seconds`  
+- **Duration parameters**: Choose either `duration` or `seconds`
 - **Reference images**: Choose either `input_reference` or `image_urls`
 </Warning>
 
@@ -138,7 +138,7 @@ Authorization: Bearer {{key}}
 **Best Practices:**
 1. Video generation is asynchronous, use the returned `id` to query task status and results
 2. Clearly describe desired visual effects and style in the prompt
-3. Reference images can guide overall style, supports up to 3 images
+3. Reference images can guide overall style, supports up to 1 images
 4. Choose appropriate aspect ratio to match your use case
 </Info>
 
@@ -163,9 +163,7 @@ curl --request POST \
     "aspect_ratio": "16:9",
     "seconds": 10,
     "input_reference": [
-      "https://example.com/reference1.jpg",
-      "https://example.com/reference2.jpg"
-    ]
+      "https://example.com/reference1.jpg"
   }'
 ```
 
@@ -187,8 +185,7 @@ Map<String, Object> requestBody = Map.of(
     "aspect_ratio", "16:9",
     "seconds", 10,
     "input_reference", List.of(
-        "https://example.com/reference1.jpg",
-        "https://example.com/reference2.jpg"
+        "https://example.com/reference1.jpg"
     )
 );
 
@@ -217,8 +214,7 @@ response = requests.post(
         'aspect_ratio': '16:9',
         'seconds': 10,
         'input_reference': [
-            'https://example.com/reference1.jpg',
-            'https://example.com/reference2.jpg'
+            'https://example.com/reference1.jpg'
         ]
     }
 )
