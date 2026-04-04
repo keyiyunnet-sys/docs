@@ -16,13 +16,23 @@ All requests require a Bearer token in the request header:
 Authorization: Bearer {{key}}
 ```
 
+## Model Overview
+
+Supported models:
+
+- `veo3_1_fast_stable` (Stable version, 720p only)
+- `veo_3_1_fast` (Fast version, supports 720p/1080p/4k, lower quality and prompt control but faster speed, suitable for rapid iteration and quick results)
+- `veo_3_1_pro` (High-quality version, supports 720p/1080p/4k, slower generation speed but higher quality and prompt control, suitable for premium quality, professional creation, advertising and experimental short films)
+
 ## Request Parameters
 
 <ParamField path="model" type="string">
-  Model name, defaults to `veo3.1-fast`
+  Model name, defaults to `veo3_1_fast`
   
   Available options:
-  - `veo3.1-fast` - Fast generation model
+  - `veo3_1_fast_stable` - Stable version, 720p only
+  - `veo_3_1_fast` - Fast version, 720p/1080p/4k
+  - `veo_3_1_pro` - High-quality version, 720p/1080p/4k
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -31,64 +41,68 @@ Authorization: Bearer {{key}}
   Example: `"A cat dancing in the rain, cinematic style"`
 </ParamField>
 
-<ParamField path="size" type="string">
-  Video dimensions, defaults to `1280x720`
-  
-  Available options:
-  - `1280x720` - Landscape
-  - `720x1280` - Portrait
-  
-  <Note>Use either this or `aspect_ratio`, not both</Note>
+<ParamField path="resolution" type="string">
+  Output resolution, defaults to `720p`
+
+  Supported values:
+  - `720p` - Default, supported by all Veo3.1 models
+  - `1080p` - Only supported by veo_3_1_fast, veo_3_1_pro
+  - `4K` - Only supported by veo3_1, veo_3_1_fast, veo_3_1_pro
+
+  <Note>Case insensitive: supports 720p/720P/4K/4k and other formats</Note>
+  <Warning>veo3_1_fast_stable only supports 720p</Warning>
 </ParamField>
 
 <ParamField path="aspect_ratio" type="string">
-  Video aspect ratio
-  
-  Available options:
+  Output video aspect ratio (pure ratio), defaults to `16:9`
+
+  Supported values:
   - `16:9` - Landscape
   - `9:16` - Portrait
-  
-  <Note>Use either this or `size`, not both</Note>
-</ParamField>
 
-<ParamField path="duration" type="integer">
-  Video duration in seconds, supports 8, defaults to 8
-  
-  <Note>Use either this or `seconds`, not both</Note>
-</ParamField>
-
-<ParamField path="seconds" type="integer">
-  Video duration in seconds, supports 8, defaults to 8
-  
-  <Note>Use either this or `duration`, not both</Note>
+  <Note>Resolution is specified separately via the resolution field, ratio does not support -1080p/-4K suffixes</Note>
 </ParamField>
 
 ### Reference Image Mode
 
 <ParamField path="input_reference" type="array">
-  Reference image array to guide video generation, supports up to 3 images
+  Reference image URLs, supports up to three images separated by commas [,]
+
+  Supported models: veo3_1_fast_stable, veo_3_1_fast
   
-  <Warning>Mutually exclusive with first/last frame mode, choose either this or `image_urls`</Warning>
+  <Warning>Cannot be used with first/last frame mode. veo_3_1_pro does not support reference image mode</Warning>
+  <Warning>Choose either this or `image_urls`</Warning>
 </ParamField>
 
 <ParamField path="image_urls" type="array">
-  Reference image URL array to guide video generation, supports up to 3 images
+  Reference image URLs, supports up to three images separated by commas [,]
+
+  Supported models: veo3_1_fast_stable, veo_3_1_fast
   
-  <Warning>Mutually exclusive with first/last frame mode, choose either this or `input_reference`</Warning>
+  <Warning>Cannot be used with first/last frame mode. veo_3_1_pro does not support reference image mode</Warning>
+  <Warning>Choose either this or `input_reference`</Warning>
 </ParamField>
 
 ### First/Last Frame Mode
 
 <ParamField path="first_image" type="string">
-  First frame image URL to specify the video's starting frame
-  
+  First frame image URL
+
+  Supported by all Veo3.1 models
+
+  Usage modes:
+  - Used alone: Image-to-video mode
+  - Used with last_image: Frame-to-video mode (only some models support last frame)
+
   <Warning>Mutually exclusive with reference image mode</Warning>
 </ParamField>
 
 <ParamField path="last_image" type="string">
-  Last frame image URL to specify the video's ending frame
-  
-  <Warning>Requires `first_image` to be provided, mutually exclusive with reference image mode</Warning>
+  Last frame image URL, must be used with first_image (frame-to-video mode)
+
+  Supported models: veo3_1_fast_stable, veo_3_1_fast, veo_3_1_pro
+
+  <Warning>Must be used with `first_image`, mutually exclusive with reference image mode</Warning>
 </ParamField>
 
 ## Response Parameters
@@ -140,23 +154,22 @@ VEO supports two mutually exclusive image guidance modes:
 
 <Warning>
 **Mutually Exclusive Parameters:**
-- **Size parameters**: Choose either `size` or `aspect_ratio`
-- **Duration parameters**: Choose either `duration` or `seconds`  
 - **Reference images**: Choose either `input_reference` or `image_urls`
 - **Guidance modes**: Reference image mode OR first/last frame mode, cannot use both
+- **Model limitations**: veo_3_1_pro does not support reference image mode, veo3_1_fast_stable only supports 720p
 </Warning>
 
 ## VEO Features
 
 <CardGroup cols={2}>
-  <Card title="Fixed Duration" icon="clock">
-    VEO model generates fixed 8-second videos
+  <Card title="Multi-Resolution Support" icon="display">
+    Supports 720p, 1080p, 4K multiple resolution outputs
   </Card>
   <Card title="Dual Guidance Modes" icon="layer-group">
     Supports both reference image and first/last frame guidance
   </Card>
-  <Card title="High Quality Output" icon="sparkles">
-    veo3.1-fast model provides high-quality video generation
+  <Card title="Multiple Model Options" icon="sparkles">
+    Provides stable, fast, and high-quality versions
   </Card>
   <Card title="Flexible Control" icon="sliders">
     First/last frame mode provides precise start and end control
@@ -167,16 +180,21 @@ VEO supports two mutually exclusive image guidance modes:
 **Best Practices:**
 1. Video generation is asynchronous, use the returned `id` to query task status and results
 2. Clearly describe desired visual effects and style in the prompt
-3. Choose appropriate guidance mode:
-   - Reference image mode: Suitable for style guidance
-   - First/last frame mode: Suitable for precise start and end control
-4. If using first/last frame mode, always provide the first frame image
+3. Choose appropriate model:
+   - veo3_1_fast_stable: Stability priority, 720p only
+   - veo_3_1_fast: Rapid iteration, supports multiple resolutions
+   - veo_3_1_pro: Premium quality, professional creation
+4. Choose appropriate guidance mode:
+   - Reference image mode: Suitable for style guidance (veo3_1_fast_stable, veo_3_1_fast)
+   - First/last frame mode: Suitable for precise start and end control (all models)
+5. Select appropriate resolution based on model capabilities
 </Info>
 
 <Tip>
 **Guidance Mode Selection:**
-- **Reference Image Mode**: Use when you want overall style consistency but allow creative variation
-- **First/Last Frame Mode**: Use when you need precise control over video start and end frames
+- **Reference Image Mode**: Use when you want overall style consistency but allow creative variation (only veo3_1_fast_stable, veo_3_1_fast support)
+- **First/Last Frame Mode**: Use when you need precise control over video start and end frames (all models support)
+- **Resolution Selection**: Choose based on model capabilities and requirements, veo3_1_fast_stable only supports 720p
 </Tip>
 
 <RequestExample>
@@ -187,10 +205,10 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "veo3.1-fast",
+    "model": "veo_3_1_fast",
     "prompt": "A cat dancing in the rain, cinematic style",
     "aspect_ratio": "16:9",
-    "seconds": 8,
+    "resolution": "1080p",
     "input_reference": [
       "https://example.com/reference1.jpg",
       "https://example.com/reference2.jpg"
@@ -204,10 +222,10 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "veo3.1-fast",
+    "model": "veo_3_1_pro",
     "prompt": "A cat dancing in the rain, cinematic style",
     "aspect_ratio": "16:9",
-    "seconds": 8,
+    "resolution": "4K",
     "first_image": "https://example.com/first-frame.jpg",
     "last_image": "https://example.com/last-frame.jpg"
   }'
@@ -226,10 +244,10 @@ HttpClient client = HttpClient.newHttpClient();
 ObjectMapper mapper = new ObjectMapper();
 
 Map<String, Object> requestBody = Map.of(
-    "model", "veo3.1-fast",
+    "model", "veo_3_1_fast",
     "prompt", "A cat dancing in the rain, cinematic style",
     "aspect_ratio", "16:9",
-    "seconds", 8,
+    "resolution", "1080p",
     "input_reference", List.of(
         "https://example.com/reference1.jpg",
         "https://example.com/reference2.jpg"
@@ -256,10 +274,10 @@ response = requests.post(
         'Content-Type': 'application/json'
     },
     json={
-        'model': 'veo3.1-fast',
+        'model': 'veo_3_1_pro',
         'prompt': 'A cat dancing in the rain, cinematic style',
         'aspect_ratio': '16:9',
-        'seconds': 8,
+        'resolution': '4K',
         'first_image': 'https://example.com/first-frame.jpg',
         'last_image': 'https://example.com/last-frame.jpg'
     }
@@ -275,7 +293,7 @@ response = requests.post(
   "id": "vgen_abc123def456",
   "object": "video.generation",
   "created": 1761635478,
-  "model": "veo3.1-fast",
+  "model": "veo_3_1_fast",
   "status": "queued"
 }
 ```

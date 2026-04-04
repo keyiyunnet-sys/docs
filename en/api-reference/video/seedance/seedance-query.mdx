@@ -53,6 +53,10 @@ Authorization: Bearer {{YOUR_API_KEY}}
   Generated video URL, returned when status is `completed`
 </ResponseField>
 
+<ResponseField name="actualDuration" type="number">
+  Actual video output duration in seconds, returned when status is `completed`
+</ResponseField>
+
 <ResponseField name="error" type="string">
   Error message, returned when status is `failed`
 </ResponseField>
@@ -222,6 +226,7 @@ if video_url:
   "model": "seedance_1_5_pro_720p",
   "status": "completed",
   "video_url": "https://example.com/video.mp4",
+  "actualDuration": 5.0,
   "error": null
 }
 ```

@@ -54,6 +54,14 @@ Authorization: Bearer {{key}}
   Generated video URL, returned when status is `completed`
 </ResponseField>
 
+<ResponseField name="actualDuration" type="number">
+  Actual video output duration in seconds, returned when status is `completed`
+</ResponseField>
+
+<ResponseField name="totalTokens" type="integer">
+  Total tokens consumed, returned when status is `completed`
+</ResponseField>
+
 <ResponseField name="error" type="string">
   Error message, returned when status is `failed`
 </ResponseField>
@@ -282,6 +290,8 @@ await pollTaskStatus(taskId);
   "model": "kyyvideo2_fast",
   "status": "completed",
   "video_url": "https://example.com/generated_video.mp4",
+  "actualDuration": 10.0,
+  "totalTokens": 1500,
   "error": null
 }
 ```

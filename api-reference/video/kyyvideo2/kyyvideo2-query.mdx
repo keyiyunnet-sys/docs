@@ -54,6 +54,14 @@ Authorization: Bearer {{key}}
   生成的视频URL，当 status 为 `completed` 时返回
 </ResponseField>
 
+<ResponseField name="actualDuration" type="number">
+  视频实际输出时长（秒），当 status 为 `completed` 时返回
+</ResponseField>
+
+<ResponseField name="totalTokens" type="integer">
+  消耗的 token 数量，当 status 为 `completed` 时返回
+</ResponseField>
+
 <ResponseField name="error" type="string">
   错误信息，当 status 为 `failed` 时返回
 </ResponseField>
@@ -282,6 +290,8 @@ await pollTaskStatus(taskId);
   "model": "kyyvideo2_fast",
   "status": "completed",
   "video_url": "https://example.com/generated_video.mp4",
+  "actualDuration": 10.0,
+  "totalTokens": 1500,
   "error": null
 }
 ```

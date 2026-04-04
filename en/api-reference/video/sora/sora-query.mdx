@@ -52,6 +52,10 @@ Authorization: Bearer {{key}}
   Generated video URL, returned when status is `completed`
 </ResponseField>
 
+<ResponseField name="actualDuration" type="number">
+  Actual video output duration in seconds, returned when status is `completed`
+</ResponseField>
+
 <ResponseField name="error" type="string">
   Error message, returned when status is `failed`
 </ResponseField>
@@ -161,6 +165,7 @@ response = requests.get(
   "model": "sora-2",
   "status": "completed",
   "video_url": "https://example.com/video.mp4",
+  "actualDuration": 10.0,
   "error": null
 }
 ```

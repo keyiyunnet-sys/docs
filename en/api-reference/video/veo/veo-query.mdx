@@ -52,6 +52,10 @@ Authorization: Bearer {{key}}
   Generated video URL, returned when status is `completed`
 </ResponseField>
 
+<ResponseField name="actualDuration" type="number">
+  Actual video output duration in seconds, returned when status is `completed`
+</ResponseField>
+
 <ResponseField name="error" type="string">
   Error message, returned when status is `failed`
 </ResponseField>
@@ -101,15 +105,6 @@ Authorization: Bearer {{key}}
   </Card>
 </CardGroup>
 
-## VEO vs Sora Comparison
-
-| Feature | VEO | Sora |
-|---------|-----|------|
-| Video Duration | Fixed 8 seconds | 10/15/25 seconds optional |
-| Generation Speed | Faster (2-5 minutes) | Slower (3-15 minutes) |
-| Guidance Modes | Reference images + First/last frame | Reference images only |
-| Model Options | veo3.1-fast | sora-2, sora-2-stable, sora-2-pro |
-
 <RequestExample>
 
 ```bash cURL
@@ -153,7 +148,7 @@ response = requests.get(
   "id": "vgen_abc123def456",
   "object": "video.generation",
   "created": 1761635478,
-  "model": "veo3.1-fast",
+  "model": "veo_3_1_fast",
   "status": "processing",
   "video_url": null,
   "error": null
@@ -165,9 +160,10 @@ response = requests.get(
   "id": "vgen_abc123def456",
   "object": "video.generation",
   "created": 1761635478,
-  "model": "veo3.1-fast",
+  "model": "veo_3_1_fast",
   "status": "completed",
   "video_url": "https://example.com/video.mp4",
+  "actualDuration": 8.0,
   "error": null
 }
 ```
@@ -177,7 +173,7 @@ response = requests.get(
   "id": "vgen_abc123def456",
   "object": "video.generation",
   "created": 1761635478,
-  "model": "veo3.1-fast",
+  "model": "veo_3_1_fast",
   "status": "failed",
   "video_url": null,
   "error": "Generation failed: prompt contains prohibited content"

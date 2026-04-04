@@ -16,13 +16,23 @@ api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/veo/videos"
 Authorization: Bearer {{key}}
 ```
 
+## 模型介绍
+
+支持的模型：
+
+- `veo3_1_fast_stable`（稳定版，仅720p）
+- `veo_3_1_fast`（快速版，支持720p/1080p/4k，画质较低、提示词控制度低，但速度高，适合快速迭代、快速出效果的场景）
+- `veo_3_1_pro`（高质量版，支持720p/1080p/4k，生成速度慢、画质高、提示词控制度高，适合追求极致画质、专业级创造、广告及实验性短片）
+
 ## 请求参数
 
 <ParamField path="model" type="string">
-  模型名称，默认为 `veo3.1-fast`
+  模型名称，默认为 `veo3_1_fast`
 
   可选值：
-  - `veo3.1-fast` - 快速生成模型
+  - `veo3_1_fast_stable` - 稳定版，仅720p
+  - `veo_3_1_fast` - 快速版，720p/1080p/4k
+  - `veo_3_1_pro` - 高质量版，720p/1080p/4k
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -31,64 +41,68 @@ Authorization: Bearer {{key}}
   示例：`"A cat dancing in the rain, cinematic style"`
 </ParamField>
 
-<ParamField path="size" type="string">
-  视频尺寸，默认为 `1280x720`
+<ParamField path="resolution" type="string">
+  输出分辨率，默认为 `720p`
 
-  可选值：
-  - `1280x720` - 横屏
-  - `720x1280` - 竖屏
+  支持的值：
+  - `720p` - 默认，所有 Veo3.1 模型均支持
+  - `1080p` - 仅 veo_3_1_fast、veo_3_1_pro 支持
+  - `4K` - 仅 veo3_1、veo_3_1_fast、veo_3_1_pro 支持
 
-  <Note>与 `aspect_ratio` 二选一使用</Note>
+  <Note>大小写兼容：支持 720p/720P/4K/4k 等任意格式</Note>
+  <Warning>veo3_1_fast_stable 仅支持 720p</Warning>
 </ParamField>
 
 <ParamField path="aspect_ratio" type="string">
-  视频宽高比
+  输出视频比例（纯宽高比），默认为 `16:9`
 
-  可选值：
+  支持的值：
   - `16:9` - 横屏
   - `9:16` - 竖屏
 
-  <Note>与 `size` 二选一使用</Note>
-</ParamField>
-
-<ParamField path="duration" type="integer">
-  视频时长（秒），支持 8，默认为 8
-
-  <Note>与 `seconds` 二选一使用</Note>
-</ParamField>
-
-<ParamField path="seconds" type="integer">
-  视频时长（秒），支持 8，默认为 8
-
-  <Note>与 `duration` 二选一使用</Note>
+  <Note>分辨率通过 resolution 字段单独指定，ratio 不支持 -1080p/-4K 后缀</Note>
 </ParamField>
 
 ### 参考图片模式
 
 <ParamField path="input_reference" type="array">
-  参考图片数组，用于指导视频生成，最多支持 3 张图片
+  参考图片 URL，最多支持三张图片用英文逗号隔开 [,]
 
-  <Warning>与首尾帧模式互斥，与 `image_urls` 二选一</Warning>
+  支持模型：veo3_1_fast_stable, veo_3_1_fast
+  
+  <Warning>不可搭配首尾帧使用。veo_3_1_pro 不支持参考图模式</Warning>
+  <Warning>与 `image_urls` 二选一</Warning>
 </ParamField>
 
 <ParamField path="image_urls" type="array">
-  参考图片URL数组，用于指导视频生成，最多支持 3 张图片
+  参考图片 URL，最多支持三张图片用英文逗号隔开 [,]
 
-  <Warning>与首尾帧模式互斥，与 `input_reference` 二选一</Warning>
+  支持模型：veo3_1_fast_stable, veo_3_1_fast
+  
+  <Warning>不可搭配首尾帧使用。veo_3_1_pro 不支持参考图模式</Warning>
+  <Warning>与 `input_reference` 二选一</Warning>
 </ParamField>
 
 ### 首尾帧模式
 
 <ParamField path="first_image" type="string">
-  首帧图片 URL，用于指定视频的开始帧
+  首帧图片 URL
+
+  支持所有 Veo3.1 模型
+
+  使用方式：
+  - 单独使用：图生视频模式
+  - 搭配 last_image 使用：帧转视频模式（仅部分模型支持尾帧）
 
   <Warning>与参考图片模式互斥</Warning>
 </ParamField>
 
 <ParamField path="last_image" type="string">
-  尾帧图片 URL，用于指定视频的结束帧
+  尾帧图片 URL，需搭配 first_image 使用（帧转视频模式）
 
-  <Warning>需要同时提供 `first_image`，与参考图片模式互斥</Warning>
+  支持模型：veo3_1_fast_stable, veo_3_1_fast, veo_3_1_pro
+
+  <Warning>必须与 `first_image` 一起使用，与参考图片模式互斥</Warning>
 </ParamField>
 
 ## 响应参数
@@ -140,23 +154,22 @@ VEO 支持两种互斥的图片引导模式：
 
 <Warning>
 **参数互斥规则：**
-- **尺寸参数**：`size` 和 `aspect_ratio` 二选一
-- **时长参数**：`duration` 和 `seconds` 二选一
 - **参考图片**：`input_reference` 和 `image_urls` 二选一
 - **引导模式**：参考图片模式 OR 首尾帧模式，不能同时使用
+- **模型限制**：veo_3_1_pro 不支持参考图模式，veo3_1_fast_stable 仅支持 720p
 </Warning>
 
 ## VEO 特性
 
 <CardGroup cols={2}>
-  <Card title="固定时长" icon="clock">
-    VEO 模型固定生成 8 秒视频
+  <Card title="多分辨率支持" icon="display">
+    支持 720p、1080p、4K 多种分辨率输出
   </Card>
   <Card title="双引导模式" icon="layer-group">
     支持参考图片和首尾帧两种引导方式
   </Card>
-  <Card title="高质量输出" icon="sparkles">
-    veo3.1-fast 模型提供高质量视频生成
+  <Card title="多模型选择" icon="sparkles">
+    提供稳定版、快速版、高质量版三种模型
   </Card>
   <Card title="灵活控制" icon="sliders">
     首尾帧模式提供精确的开始和结束控制
@@ -167,16 +180,21 @@ VEO 支持两种互斥的图片引导模式：
 **最佳实践：**
 1. 视频生成为异步处理，需要通过返回的 `id` 查询任务状态和结果
 2. 在提示词中明确描述所需的视觉效果和风格
-3. 选择合适的引导模式：
-   - 参考图片模式：适合风格引导
-   - 首尾帧模式：适合精确控制开始和结束
-4. 如果使用首尾帧模式，确保首帧图片始终提供
+3. 选择合适的模型：
+   - veo3_1_fast_stable：稳定性优先，仅720p
+   - veo_3_1_fast：快速迭代，支持多分辨率
+   - veo_3_1_pro：极致画质，专业级创作
+4. 选择合适的引导模式：
+   - 参考图片模式：适合风格引导（veo3_1_fast_stable、veo_3_1_fast）
+   - 首尾帧模式：适合精确控制开始和结束（所有模型）
+5. 根据模型选择合适的分辨率
 </Info>
 
 <Tip>
 **引导模式选择建议：**
-- **参考图片模式**：当你想要整体风格一致但允许创意变化时使用
-- **首尾帧模式**：当你需要精确控制视频的开始和结束画面时使用
+- **参考图片模式**：当你想要整体风格一致但允许创意变化时使用（仅 veo3_1_fast_stable、veo_3_1_fast 支持）
+- **首尾帧模式**：当你需要精确控制视频的开始和结束画面时使用（所有模型支持）
+- **分辨率选择**：根据模型能力和需求选择，veo3_1_fast_stable 仅支持 720p
 </Tip>
 
 <RequestExample>
@@ -187,10 +205,10 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "veo3.1-fast",
+    "model": "veo_3_1_fast",
     "prompt": "A cat dancing in the rain, cinematic style",
     "aspect_ratio": "16:9",
-    "seconds": 8,
+    "resolution": "1080p",
     "input_reference": [
       "https://example.com/reference1.jpg",
       "https://example.com/reference2.jpg"
@@ -204,10 +222,10 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "veo3.1-fast",
+    "model": "veo_3_1_pro",
     "prompt": "A cat dancing in the rain, cinematic style",
     "aspect_ratio": "16:9",
-    "seconds": 8,
+    "resolution": "4K",
     "first_image": "https://example.com/first-frame.jpg",
     "last_image": "https://example.com/last-frame.jpg"
   }'
@@ -226,10 +244,10 @@ HttpClient client = HttpClient.newHttpClient();
 ObjectMapper mapper = new ObjectMapper();
 
 Map<String, Object> requestBody = Map.of(
-    "model", "veo3.1-fast",
+    "model", "veo_3_1_fast",
     "prompt", "A cat dancing in the rain, cinematic style",
     "aspect_ratio", "16:9",
-    "seconds", 8,
+    "resolution", "1080p",
     "input_reference", List.of(
         "https://example.com/reference1.jpg",
         "https://example.com/reference2.jpg"
@@ -256,10 +274,10 @@ response = requests.post(
         'Content-Type': 'application/json'
     },
     json={
-        'model': 'veo3.1-fast',
+        'model': 'veo_3_1_pro',
         'prompt': 'A cat dancing in the rain, cinematic style',
         'aspect_ratio': '16:9',
-        'seconds': 8,
+        'resolution': '4K',
         'first_image': 'https://example.com/first-frame.jpg',
         'last_image': 'https://example.com/last-frame.jpg'
     }
@@ -275,7 +293,7 @@ response = requests.post(
   "id": "vgen_abc123def456",
   "object": "video.generation",
   "created": 1761635478,
-  "model": "veo3.1-fast",
+  "model": "veo_3_1_fast",
   "status": "queued"
 }
 ```

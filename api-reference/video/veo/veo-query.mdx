@@ -52,6 +52,10 @@ Authorization: Bearer {{key}}
   生成的视频URL，当 status 为 `completed` 时返回
 </ResponseField>
 
+<ResponseField name="actualDuration" type="number">
+  视频实际输出时长（秒），当 status 为 `completed` 时返回
+</ResponseField>
+
 <ResponseField name="error" type="string">
   错误信息，当 status 为 `failed` 时返回
 </ResponseField>
@@ -101,15 +105,6 @@ Authorization: Bearer {{key}}
   </Card>
 </CardGroup>
 
-## VEO vs Sora 对比
-
-| 特性 | VEO | Sora |
-|------|-----|------|
-| 视频时长 | 固定 8 秒 | 10/15/25 秒可选 |
-| 生成速度 | 较快 (2-5分钟) | 较慢 (3-15分钟) |
-| 引导模式 | 参考图片 + 首尾帧 | 仅参考图片 |
-| 模型选择 | veo3.1-fast | sora-2, sora-2-stable, sora-2-pro |
-
 <RequestExample>
 
 ```bash cURL
@@ -153,7 +148,7 @@ response = requests.get(
   "id": "vgen_abc123def456",
   "object": "video.generation",
   "created": 1761635478,
-  "model": "veo3.1-fast",
+  "model": "veo_3_1_fast",
   "status": "processing",
   "video_url": null,
   "error": null
@@ -165,9 +160,10 @@ response = requests.get(
   "id": "vgen_abc123def456",
   "object": "video.generation",
   "created": 1761635478,
-  "model": "veo3.1-fast",
+  "model": "veo_3_1_fast",
   "status": "completed",
   "video_url": "https://example.com/video.mp4",
+  "actualDuration": 8.0,
   "error": null
 }
 ```
@@ -177,7 +173,7 @@ response = requests.get(
   "id": "vgen_abc123def456",
   "object": "video.generation",
   "created": 1761635478,
-  "model": "veo3.1-fast",
+  "model": "veo_3_1_fast",
   "status": "failed",
   "video_url": null,
   "error": "生成失败：提示词包含违规内容"
