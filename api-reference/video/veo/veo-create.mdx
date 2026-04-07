@@ -21,13 +21,13 @@ Authorization: Bearer {{key}}
 支持的模型：
 
 - `veo3_1_fast_stable`（稳定版，仅720p）
-- `veo_3_1_fast`（快速版，支持720p/1080p/4k，画质较低、提示词控制度低，但速度高，适合快速迭代、快速出效果的场景）
-- `veo_3_1_pro`（高质量版，支持720p/1080p/4k，生成速度慢、画质高、提示词控制度高，适合追求极致画质、专业级创造、广告及实验性短片）
+- `veo_3_1_fast`（快速版，支持720p/1080p/4k，提示词控制度低，但速度高，适合快速迭代、快速出效果的场景）
+- `veo_3_1_pro`（高质量版，支持720p/1080p/4k，生成速度慢、提示词控制度高，适合追求极致画质、专业级创造、广告及实验性短片）
 
 ## 请求参数
 
-<ParamField path="model" type="string">
-  模型名称，默认为 `veo3_1_fast`
+<ParamField path="model" type="string" required>
+  模型名称
 
   可选值：
   - `veo3_1_fast_stable` - 稳定版，仅720p

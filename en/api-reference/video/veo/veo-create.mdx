@@ -21,13 +21,13 @@ Authorization: Bearer {{key}}
 Supported models:
 
 - `veo3_1_fast_stable` (Stable version, 720p only)
-- `veo_3_1_fast` (Fast version, supports 720p/1080p/4k, lower quality and prompt control but faster speed, suitable for rapid iteration and quick results)
-- `veo_3_1_pro` (High-quality version, supports 720p/1080p/4k, slower generation speed but higher quality and prompt control, suitable for premium quality, professional creation, advertising and experimental short films)
+- `veo_3_1_fast` (Fast version, supports 720p/1080p/4k, lower prompt control but faster speed, suitable for rapid iteration and quick results)
+- `veo_3_1_pro` (High-quality version, supports 720p/1080p/4k, slower generation speed but higher prompt control, suitable for premium quality, professional creation, advertising and experimental short films)
 
 ## Request Parameters
 
-<ParamField path="model" type="string">
-  Model name, defaults to `veo3_1_fast`
+<ParamField path="model" type="string" required>
+  Model name
   
   Available options:
   - `veo3_1_fast_stable` - Stable version, 720p only
