@@ -28,7 +28,7 @@ Supported models:
 
 <ParamField path="model" type="string" required>
   Model name
-  
+
   Available options:
   - `veo3_1_fast_stable` - Stable version, 720p only
   - `veo_3_1_fast` - Fast version, 720p/1080p/4k
@@ -37,7 +37,7 @@ Supported models:
 
 <ParamField path="prompt" type="string" required>
   Video generation prompt describing the desired video content
-  
+
   Example: `"A cat dancing in the rain, cinematic style"`
 </ParamField>
 
@@ -69,7 +69,7 @@ Supported models:
   Reference image URLs, supports up to three images separated by commas [,]
 
   Supported models: veo3_1_fast_stable, veo_3_1_fast
-  
+
   <Warning>Cannot be used with first/last frame mode. veo_3_1_pro does not support reference image mode</Warning>
   <Warning>Choose either this or `image_urls`</Warning>
 </ParamField>
@@ -78,7 +78,7 @@ Supported models:
   Reference image URLs, supports up to three images separated by commas [,]
 
   Supported models: veo3_1_fast_stable, veo_3_1_fast
-  
+
   <Warning>Cannot be used with first/last frame mode. veo_3_1_pro does not support reference image mode</Warning>
   <Warning>Choose either this or `input_reference`</Warning>
 </ParamField>
@@ -291,7 +291,7 @@ response = requests.post(
 ```json Creation Success
 {
   "id": "vgen_abc123def456",
-  "object": "video.generation",
+  "object": "video",
   "created": 1761635478,
   "model": "veo_3_1_fast",
   "status": "queued"

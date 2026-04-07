@@ -69,7 +69,7 @@ Authorization: Bearer {{key}}
   参考图片 URL，最多支持三张图片用英文逗号隔开 [,]
 
   支持模型：veo3_1_fast_stable, veo_3_1_fast
-  
+
   <Warning>不可搭配首尾帧使用。veo_3_1_pro 不支持参考图模式</Warning>
   <Warning>与 `image_urls` 二选一</Warning>
 </ParamField>
@@ -78,7 +78,7 @@ Authorization: Bearer {{key}}
   参考图片 URL，最多支持三张图片用英文逗号隔开 [,]
 
   支持模型：veo3_1_fast_stable, veo_3_1_fast
-  
+
   <Warning>不可搭配首尾帧使用。veo_3_1_pro 不支持参考图模式</Warning>
   <Warning>与 `input_reference` 二选一</Warning>
 </ParamField>
@@ -291,7 +291,7 @@ response = requests.post(
 ```json 创建成功
 {
   "id": "vgen_abc123def456",
-  "object": "video.generation",
+  "object": "video",
   "created": 1761635478,
   "model": "veo_3_1_fast",
   "status": "queued"
