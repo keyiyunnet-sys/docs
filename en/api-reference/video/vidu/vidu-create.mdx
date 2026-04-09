@@ -1,0 +1,313 @@
+---
+title: "Vidu - Create Task"
+description: "Create video generation tasks using Vidu models, supporting image-to-video and first/last frame guidance"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos"
+---
+
+# Vidu Create Video Task
+
+Create video generation tasks using Vidu's AI models, supporting text-to-video, image-to-video, and first/last frame guidance modes.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Model Introduction
+
+Supported models:
+
+- `viduq3-pro`: Efficiently generates high-quality audio-visual content, making videos more vivid, vivid, and three-dimensional, with better results
+- `viduq3-turbo`: Compared to viduq3-pro, faster generation speed
+
+## Request Parameters
+
+<ParamField path="model" type="string" required>
+  Model name
+
+  Available values:
+  - `viduq3-pro` - Vidu Q3 Pro, better quality
+  - `viduq3-turbo` - Vidu Q3 Turbo, faster speed
+</ParamField>
+
+<ParamField path="prompt" type="string" required>
+  Video generation prompt describing the desired video content
+
+  Example: `"A cat dancing in the rain, cinematic style"`
+</ParamField>
+
+<ParamField path="duration" type="number">
+  Video duration in seconds, default value depends on the model
+
+  - viduq3-pro, viduq3-turbo: default 5 seconds
+  - Available range: 1-16 seconds
+</ParamField>
+
+<ParamField path="aspect_ratio" type="string">
+  Output video aspect ratio, default is `16:9`
+
+  Supported values:
+  - `16:9` - Landscape
+  - `9:16` - Portrait
+  - `1:1` - Square
+  - `4:3` - Standard
+  - `3:4` - Portrait standard
+</ParamField>
+
+<ParamField path="resolution" type="string">
+  Output resolution, default is `720p`
+
+  Supported values:
+  - `540p` - Standard definition
+  - `720p` - High definition (default)
+  - `1080p` - Full HD
+</ParamField>
+
+### Image-to-Video Mode
+
+<ParamField path="first_image" type="string">
+  First frame image URL (image-to-video scenario)
+
+  Usage:
+  - Use alone: image-to-video scenario
+  - Use with last_image: first/last frame scenario
+
+  Format requirements: jpeg, png, webp
+  Value type: Public URL
+</ParamField>
+
+<ParamField path="last_image" type="string">
+  Last frame image URL (first/last frame scenario, must be used with first_image)
+
+  Format requirements: jpeg, png, webp
+  Value type: Public URL
+
+  <Warning>Must be used together with `first_image`</Warning>
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier for the video generation task, used for subsequent status queries
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, fixed as `video`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+  - `completed` - Completed
+  - `failed` - Failed
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when status is `failed`
+</ResponseField>
+
+## Use Cases
+
+<CardGroup cols={3}>
+  <Card title="Text-to-Video" icon="wand-magic-sparkles">
+    Generate videos using only prompt, no image guidance needed
+  </Card>
+  <Card title="Image-to-Video" icon="image">
+    Use first_image as the first frame to generate coherent video
+  </Card>
+  <Card title="First/Last Frame Guidance" icon="film">
+    Use both first_image and last_image for precise control of start and end
+  </Card>
+</CardGroup>
+
+## Vidu Features
+
+<CardGroup cols={2}>
+  <Card title="Flexible Duration" icon="clock">
+    Supports adjustable video duration from 1-16 seconds
+  </Card>
+  <Card title="Multiple Aspect Ratios" icon="expand">
+    Supports 5 common video aspect ratios
+  </Card>
+  <Card title="Multiple Resolutions" icon="display">
+    Supports 540p, 720p, 1080p resolutions
+  </Card>
+  <Card title="Dual Model Selection" icon="sparkles">
+    Pro version for better quality, Turbo version for faster speed
+  </Card>
+</CardGroup>
+
+<Info>
+**Best Practices:**
+1. Video generation is asynchronous, use the returned `id` to query task status and results
+2. Clearly describe the desired visual effects and style in the prompt
+3. Choose the appropriate model:
+   - viduq3-pro: Efficiently generates high-quality audio-visual content, better results
+   - viduq3-turbo: Faster generation speed
+4. Select appropriate duration based on needs (1-16 seconds)
+5. Image URLs must be publicly accessible
+</Info>
+
+<Tip>
+**Scenario Selection Recommendations:**
+- **Text-to-Video**: Fully AI-created, suitable for creative exploration
+- **Image-to-Video**: Generated based on first frame image, suitable for scenarios with clear starting visuals
+- **First/Last Frame Guidance**: Precise control of start and end, suitable for scenarios requiring specific transition effects
+</Tip>
+
+<RequestExample>
+
+```bash cURL (Text-to-Video)
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "viduq3-pro",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "duration": 5,
+    "aspect_ratio": "16:9",
+    "resolution": "1080p"
+  }'
+```
+
+```bash cURL (Image-to-Video)
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "viduq3-turbo",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "duration": 8,
+    "aspect_ratio": "16:9",
+    "resolution": "720p",
+    "first_image": "https://example.com/first-frame.jpg"
+  }'
+```
+
+```bash cURL (First/Last Frame)
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "viduq3-pro",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "duration": 10,
+    "aspect_ratio": "16:9",
+    "resolution": "1080p",
+    "first_image": "https://example.com/first-frame.jpg",
+    "last_image": "https://example.com/last-frame.jpg"
+  }'
+```
+
+```java Java (Text-to-Video)
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "viduq3-pro",
+    "prompt", "A cat dancing in the rain, cinematic style",
+    "duration", 5,
+    "aspect_ratio", "16:9",
+    "resolution", "1080p"
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python (Image-to-Video)
+import requests
+
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'viduq3-turbo',
+        'prompt': 'A cat dancing in the rain, cinematic style',
+        'duration': 8,
+        'aspect_ratio': '16:9',
+        'resolution': '720p',
+        'first_image': 'https://example.com/first-frame.jpg'
+    }
+)
+```
+
+```python Python (First/Last Frame)
+import requests
+
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'viduq3-pro',
+        'prompt': 'A cat dancing in the rain, cinematic style',
+        'duration': 10,
+        'aspect_ratio': '16:9',
+        'resolution': '1080p',
+        'first_image': 'https://example.com/first-frame.jpg',
+        'last_image': 'https://example.com/last-frame.jpg'
+    }
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Success
+{
+  "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "video",
+  "created": 1774836724,
+  "model": "viduq3-pro",
+  "status": "queued",
+  "error": null
+}
+```
+
+```json Failed
+{
+  "id": null,
+  "object": "error",
+  "created": 1774836724,
+  "model": null,
+  "status": "failed",
+  "error": "Creation failed: prompt contains prohibited content"
+}
+```
+
+</ResponseExample>

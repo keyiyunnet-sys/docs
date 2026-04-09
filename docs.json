@@ -80,6 +80,13 @@
                       "api-reference/video/kyyvideo2/kyyvideo2-create",
                       "api-reference/video/kyyvideo2/kyyvideo2-query"
                     ]
+                  },
+                  {
+                    "group": "Vidu（未上线）",
+                    "pages": [
+                      "api-reference/video/vidu/vidu-create",
+                      "api-reference/video/vidu/vidu-query"
+                    ]
                   }
                 ]
               }
@@ -160,6 +167,13 @@
                       "en/api-reference/video/kyyvideo2/kyyvideo2-asset-delete",
                       "en/api-reference/video/kyyvideo2/kyyvideo2-create",
                       "en/api-reference/video/kyyvideo2/kyyvideo2-query"
+                    ]
+                  },
+                  {
+                    "group": "Vidu",
+                    "pages": [
+                      "en/api-reference/video/vidu/vidu-create",
+                      "en/api-reference/video/vidu/vidu-query"
                     ]
                   }
                 ]

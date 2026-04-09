@@ -1,0 +1,243 @@
+---
+title: "Vidu - Query Task"
+description: "Query the status and results of Vidu video generation tasks"
+api: "GET https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/{id}"
+---
+
+# Vidu Query Video Task
+
+Use the task ID to query the status and results of Vidu video generation tasks.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  Unique identifier for the video generation task, returned from the create task interface
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier for the video generation task
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, fixed as `Video`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+  - `completed` - Completed
+  - `failed` - Failed
+</ResponseField>
+
+<ResponseField name="video_url" type="string">
+  Generated video URL, returned when status is `completed`
+</ResponseField>
+
+<ResponseField name="actualDuration" type="number">
+  Actual video output duration in seconds, returned when status is `completed`
+</ResponseField>
+
+<ResponseField name="totalTokens" type="number">
+  Total tokens consumed by the task
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when status is `failed`
+</ResponseField>
+
+## Status Flow
+
+<Steps>
+  <Step title="queued">
+    Task created and added to queue, waiting for processing
+  </Step>
+  <Step title="processing">
+    Task is being processed, Vidu model is generating the video
+  </Step>
+  <Step title="completed">
+    Task completed, video generated successfully, result available via `video_url`
+  </Step>
+</Steps>
+
+## Polling Recommendations
+
+<Info>
+**Polling Strategy:**
+- Recommended polling interval: 30-60 seconds
+- Vidu generation speed varies by model:
+  - viduq3-turbo: typically completes in 2-4 minutes
+  - viduq3-pro: typically completes in 3-6 minutes
+- Avoid overly frequent requests to prevent rate limiting
+- Stop polling when status is `completed` or `failed`
+</Info>
+
+## Video URL Information
+
+<Warning>
+**Important:**
+- Generated video URLs typically expire after 24 hours
+- Please download and save videos to your storage system promptly
+- URLs will be inaccessible after expiration
+- Video files are typically in MP4 format
+</Warning>
+
+## Generation Time Estimates
+
+<CardGroup cols={2}>
+  <Card title="Vidu Q3 Turbo" icon="bolt">
+    Speed priority
+
+    Estimated generation time: 2-4 minutes
+  </Card>
+  <Card title="Vidu Q3 Pro" icon="sparkles">
+    Quality priority
+
+    Estimated generation time: 3-6 minutes
+  </Card>
+</CardGroup>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd \
+  --header 'Authorization: Bearer {{key}}'
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+
+HttpClient client = HttpClient.newHttpClient();
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd"))
+    .header("Authorization", "Bearer {{key}}")
+    .GET()
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd',
+    headers={'Authorization': 'Bearer {{key}}'}
+)
+```
+
+```python Python (Polling Example)
+import requests
+import time
+
+def wait_for_video(task_id, api_key, max_wait=600, interval=30):
+    """
+    Poll and wait for video generation completion
+
+    Args:
+        task_id: Task ID
+        api_key: API key
+        max_wait: Maximum wait time (seconds)
+        interval: Polling interval (seconds)
+
+    Returns:
+        Video URL or None
+    """
+    url = f'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/{task_id}'
+    headers = {'Authorization': f'Bearer {api_key}'}
+
+    start_time = time.time()
+
+    while time.time() - start_time < max_wait:
+        response = requests.get(url, headers=headers)
+        data = response.json()
+
+        status = data.get('status')
+
+        if status == 'completed':
+            return data.get('video_url')
+        elif status == 'failed':
+            print(f"Generation failed: {data.get('error')}")
+            return None
+
+        print(f"Current status: {status}, waiting...")
+
+        time.sleep(interval)
+
+    print("Wait timeout")
+    return None
+
+# Usage example
+video_url = wait_for_video('video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd', 'your_api_key')
+if video_url:
+    print(f"Video generated successfully: {video_url}")
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Processing Status
+{
+  "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "Video",
+  "created": 1774836724,
+  "model": "viduq3-pro",
+  "status": "processing",
+  "video_url": null,
+  "totalTokens": null,
+  "error": null
+}
+```
+
+```json Completed Status
+{
+  "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "Video",
+  "created": 1774836724,
+  "model": "viduq3-pro",
+  "status": "completed",
+  "video_url": "https://example.com/video.mp4",
+  "actualDuration": 5.0,
+  "totalTokens": 1500,
+  "error": null
+}
+```
+
+```json Failed Status
+{
+  "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "Video",
+  "created": 1774836724,
+  "model": "viduq3-pro",
+  "status": "failed",
+  "video_url": null,
+  "totalTokens": null,
+  "error": "Generation failed: prompt contains prohibited content"
+}
+```
+
+</ResponseExample>

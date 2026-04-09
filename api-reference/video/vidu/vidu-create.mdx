@@ -1,0 +1,313 @@
+---
+title: "Vidu - 创建任务"
+description: "使用 Vidu 模型创建视频生成任务，支持图生视频和首尾帧引导"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos"
+---
+
+# Vidu 创建视频任务
+
+使用 Vidu 的 AI 模型创建视频生成任务，支持文生视频、图生视频和首尾帧引导模式。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## 模型介绍
+
+支持的模型：
+
+- `viduq3-pro`：高效生成优质音视频内容，让视频内容更生动、更形象、更立体，效果更好
+- `viduq3-turbo`：对比 viduq3-pro，生成速度更快
+
+## 请求参数
+
+<ParamField path="model" type="string" required>
+  模型名称
+
+  可选值：
+  - `viduq3-pro` - Vidu Q3 Pro，效果好
+  - `viduq3-turbo` - Vidu Q3 Turbo，速度快
+</ParamField>
+
+<ParamField path="prompt" type="string" required>
+  视频生成提示词，描述所需的视频内容
+
+  示例：`"A cat dancing in the rain, cinematic style"`
+</ParamField>
+
+<ParamField path="duration" type="number">
+  视频时长（秒），默认值依据模型而定
+
+  - viduq3-pro、viduq3-turbo: 默认 5 秒
+  - 可选范围：1-16 秒
+</ParamField>
+
+<ParamField path="aspect_ratio" type="string">
+  输出视频比例，默认为 `16:9`
+
+  支持的值：
+  - `16:9` - 横屏
+  - `9:16` - 竖屏
+  - `1:1` - 正方形
+  - `4:3` - 标准屏
+  - `3:4` - 竖屏标准
+</ParamField>
+
+<ParamField path="resolution" type="string">
+  输出分辨率，默认为 `720p`
+
+  支持的值：
+  - `540p` - 标清
+  - `720p` - 高清（默认）
+  - `1080p` - 全高清
+</ParamField>
+
+### 图生视频模式
+
+<ParamField path="first_image" type="string">
+  首帧图 URL（图生视频场景）
+
+  使用方式：
+  - 单独使用：图生视频场景
+  - 搭配 last_image：首尾帧场景
+
+  格式要求：jpeg、png、webp
+  值类型：公网 URL
+</ParamField>
+
+<ParamField path="last_image" type="string">
+  尾帧图 URL（首尾帧场景，必须搭配 first_image 使用）
+
+  格式要求：jpeg、png、webp
+  值类型：公网 URL
+
+  <Warning>必须与 `first_image` 一起使用</Warning>
+</ParamField>
+
+## 响应参数
+
+<ResponseField name="id" type="string">
+  视频生成任务的唯一标识符，用于后续查询任务状态
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  对象类型，固定为 `video`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  任务创建时间戳
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  使用的模型名称
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  任务状态：
+  - `queued` - 排队中
+  - `processing` - 处理中
+  - `completed` - 已完成
+  - `failed` - 失败
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  错误信息，当 status 为 `failed` 时返回
+</ResponseField>
+
+## 使用场景
+
+<CardGroup cols={3}>
+  <Card title="文生视频" icon="wand-magic-sparkles">
+    仅使用 prompt 生成视频，无需图片引导
+  </Card>
+  <Card title="图生视频" icon="image">
+    使用 first_image 作为首帧，生成连贯视频
+  </Card>
+  <Card title="首尾帧引导" icon="film">
+    同时使用 first_image 和 last_image，精确控制开始和结束
+  </Card>
+</CardGroup>
+
+## Vidu 特性
+
+<CardGroup cols={2}>
+  <Card title="灵活时长" icon="clock">
+    支持 1-16 秒可调节视频时长
+  </Card>
+  <Card title="多比例支持" icon="expand">
+    支持 5 种常用视频比例
+  </Card>
+  <Card title="多分辨率" icon="display">
+    支持 540p、720p、1080p 三种分辨率
+  </Card>
+  <Card title="双模型选择" icon="sparkles">
+    Pro 版效果更好，Turbo 版速度更快
+  </Card>
+</CardGroup>
+
+<Info>
+**最佳实践：**
+1. 视频生成为异步处理，需要通过返回的 `id` 查询任务状态和结果
+2. 在提示词中明确描述所需的视觉效果和风格
+3. 选择合适的模型：
+   - viduq3-pro：高效生成优质音视频内容，效果更好
+   - viduq3-turbo：生成速度更快
+4. 根据需求选择合适的时长（1-16秒）
+5. 图片 URL 必须是公网可访问的地址
+</Info>
+
+<Tip>
+**场景选择建议：**
+- **文生视频**：完全由 AI 创作，适合创意探索
+- **图生视频**：基于首帧图片生成，适合有明确起始画面的场景
+- **首尾帧引导**：精确控制开始和结束，适合需要特定转场效果的场景
+</Tip>
+
+<RequestExample>
+
+```bash cURL (文生视频)
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "viduq3-pro",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "duration": 5,
+    "aspect_ratio": "16:9",
+    "resolution": "1080p"
+  }'
+```
+
+```bash cURL (图生视频)
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "viduq3-turbo",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "duration": 8,
+    "aspect_ratio": "16:9",
+    "resolution": "720p",
+    "first_image": "https://example.com/first-frame.jpg"
+  }'
+```
+
+```bash cURL (首尾帧)
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "viduq3-pro",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "duration": 10,
+    "aspect_ratio": "16:9",
+    "resolution": "1080p",
+    "first_image": "https://example.com/first-frame.jpg",
+    "last_image": "https://example.com/last-frame.jpg"
+  }'
+```
+
+```java Java (文生视频)
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "viduq3-pro",
+    "prompt", "A cat dancing in the rain, cinematic style",
+    "duration", 5,
+    "aspect_ratio", "16:9",
+    "resolution", "1080p"
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python (图生视频)
+import requests
+
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'viduq3-turbo',
+        'prompt': 'A cat dancing in the rain, cinematic style',
+        'duration': 8,
+        'aspect_ratio': '16:9',
+        'resolution': '720p',
+        'first_image': 'https://example.com/first-frame.jpg'
+    }
+)
+```
+
+```python Python (首尾帧)
+import requests
+
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'viduq3-pro',
+        'prompt': 'A cat dancing in the rain, cinematic style',
+        'duration': 10,
+        'aspect_ratio': '16:9',
+        'resolution': '1080p',
+        'first_image': 'https://example.com/first-frame.jpg',
+        'last_image': 'https://example.com/last-frame.jpg'
+    }
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 创建成功
+{
+  "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "video",
+  "created": 1774836724,
+  "model": "viduq3-pro",
+  "status": "queued",
+  "error": null
+}
+```
+
+```json 创建失败
+{
+  "id": null,
+  "object": "error",
+  "created": 1774836724,
+  "model": null,
+  "status": "failed",
+  "error": "创建失败：提示词包含违禁内容"
+}
+```
+
+</ResponseExample>
