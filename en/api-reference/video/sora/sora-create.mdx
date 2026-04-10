@@ -23,6 +23,7 @@ Authorization: Bearer {{key}}
   - `sora2Stable` - Supports 10 or 15 seconds
   - `openAiSora2` - Supports 4, 8, 12 seconds
   - `openAiSora2Stable` - Supports 4, 8, 12 seconds
+  - `openAiSora2Plus` - Supports 4, 8, 12 seconds
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -66,11 +67,21 @@ Authorization: Bearer {{key}}
 <ParamField path="input_reference" type="array">
   Reference image array to guide video generation, supports up to 1 images
 
+  **Important Notes:**
+  - Do not upload real portrait images, as they are likely to fail
+  - For `openAiSora2-xxx` series models, image format must match the ratio
+  - Only supports 1280×720 (16:9 landscape) and 720×1280 (9:16 portrait)
+
   <Note>Use either this or `image_urls`, not both</Note>
 </ParamField>
 
 <ParamField path="image_urls" type="array">
   Reference image URL array to guide video generation
+
+  **Important Notes:**
+  - Do not upload real portrait images, as they are likely to fail
+  - For `openAiSora2-xxx` series models, image format must match the ratio
+  - Only supports 1280×720 (16:9 landscape) and 720×1280 (9:16 portrait)
 
   <Note>Use either this or `input_reference`, not both</Note>
 </ParamField>
@@ -105,7 +116,7 @@ Authorization: Bearer {{key}}
 
 ## Model Features
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card title="sora2Stable" icon="shield-check">
     Stable version model, supports 10 or 15 seconds with more stable output
   </Card>
@@ -114,6 +125,9 @@ Authorization: Bearer {{key}}
   </Card>
   <Card title="openAiSora2Stable" icon="check-circle">
     OpenAI Sora2 stable version, supports 4, 8, 12 seconds with more stable output
+  </Card>
+  <Card title="openAiSora2Plus" icon="star">
+    OpenAI Sora2 Plus version, supports 4, 8, 12 seconds, enhanced model
   </Card>
 </CardGroup>
 
@@ -133,6 +147,7 @@ Authorization: Bearer {{key}}
 | sora2Stable | 10 seconds, 15 seconds |
 | openAiSora2 | 4 seconds, 8 seconds, 12 seconds |
 | openAiSora2Stable | 4 seconds, 8 seconds, 12 seconds |
+| openAiSora2Plus | 4 seconds, 8 seconds, 12 seconds |
 
 <Info>
 **Best Practices:**
