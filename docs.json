@@ -72,13 +72,13 @@
                     ]
                   },
                   {
-                    "group": "KyyVideo2",
+                    "group": "Seedance2.0（满血版）",
                     "pages": [
-                      "api-reference/video/kyyvideo2/kyyvideo2-asset-upload",
-                      "api-reference/video/kyyvideo2/kyyvideo2-asset-detail",
-                      "api-reference/video/kyyvideo2/kyyvideo2-asset-delete",
-                      "api-reference/video/kyyvideo2/kyyvideo2-create",
-                      "api-reference/video/kyyvideo2/kyyvideo2-query"
+                      "api-reference/video/seedance2/seedance2-asset-upload",
+                      "api-reference/video/seedance2/seedance2-asset-detail",
+                      "api-reference/video/seedance2/seedance2-asset-delete",
+                      "api-reference/video/seedance2/seedance2-create",
+                      "api-reference/video/seedance2/seedance2-query"
                     ]
                   },
                   {
@@ -160,13 +160,13 @@
                     ]
                   },
                   {
-                    "group": "KyyVideo2",
+                    "group": "Seedance2.0(Full)",
                     "pages": [
-                      "en/api-reference/video/kyyvideo2/kyyvideo2-asset-upload",
-                      "en/api-reference/video/kyyvideo2/kyyvideo2-asset-detail",
-                      "en/api-reference/video/kyyvideo2/kyyvideo2-asset-delete",
-                      "en/api-reference/video/kyyvideo2/kyyvideo2-create",
-                      "en/api-reference/video/kyyvideo2/kyyvideo2-query"
+                      "en/api-reference/video/seedance2/seedance2-asset-upload",
+                      "en/api-reference/video/seedance2/seedance2-asset-detail",
+                      "en/api-reference/video/seedance2/seedance2-asset-delete",
+                      "en/api-reference/video/seedance2/seedance2-create",
+                      "en/api-reference/video/seedance2/seedance2-query"
                     ]
                   },
                   {

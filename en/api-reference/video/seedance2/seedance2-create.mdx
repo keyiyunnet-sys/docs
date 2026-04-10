@@ -1,12 +1,12 @@
 ---
-title: "KyyVideo2 - Create Task"
-description: "Create video generation tasks using KyyVideo2 models with support for standard, fast, and Pro variants"
+title: "Seedance2.0 - Create Task"
+description: "Create video generation tasks using Seedance2.0 models with support for standard, fast, and Pro variants"
 api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos"
 ---
 
-# KyyVideo2 Create Video Task
+# Seedance2.0 Create Video Task
 
-Create high-quality video generation tasks using KyyVideo2's advanced AI models with support for multiple model options and multimodal reference inputs.
+Create high-quality video generation tasks using Seedance2.0's advanced AI models with support for multiple model options and multimodal reference inputs.
 
 ## Authentication
 
@@ -20,10 +20,10 @@ Authorization: Bearer {{key}}
 
 <ParamField path="model" type="string" required>
   Model name, available options:
-  - `kyyvideo2` - Standard model (only supports generation with reference videos)
-  - `kyyvideo2_fast` - Fast model (only supports generation with reference videos)
-  - `kyyvideo2_pro` - Pro model (optional reference videos)
-  - `kyyvideo2_fast_pro` - Fast Pro model (optional reference videos)
+  - `seedance_2_0` - Standard model (only supports generation with reference videos)
+  - `seedance_2_0_fast` - Fast model (only supports generation with reference videos)
+  - `seedance_2_0_pro` - Pro model (optional reference videos)
+  - `seedance_2_0_fast_pro` - Fast Pro model (optional reference videos)
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -159,16 +159,16 @@ Authorization: Bearer {{key}}
 ## Model Features
 
 <CardGroup cols={2}>
-  <Card title="kyyvideo2" icon="video">
+  <Card title="seedance_2_0" icon="video">
     Standard model, only supports generation with reference videos
   </Card>
-  <Card title="kyyvideo2_fast" icon="bolt">
+  <Card title="seedance_2_0_fast" icon="bolt">
     Fast model, only supports generation with reference videos, faster generation speed
   </Card>
-  <Card title="kyyvideo2_pro" icon="crown">
+  <Card title="seedance_2_0_pro" icon="crown">
     Pro model, optional reference videos, higher quality
   </Card>
-  <Card title="kyyvideo2_fast_pro" icon="rocket">
+  <Card title="seedance_2_0_fast_pro" icon="rocket">
     Fast Pro model, optional reference videos, balances speed and quality
   </Card>
 </CardGroup>
@@ -185,10 +185,10 @@ Authorization: Bearer {{key}}
 
 | Model | Reference Video Support | Generation Speed | Video Quality |
 |-------|------------------------|------------------|---------------|
-| kyyvideo2 | ✅ Only with reference videos | Standard | Standard |
-| kyyvideo2_fast | ✅ Only with reference videos | Fast | Standard |
-| kyyvideo2_pro | ⭕ Optional reference videos | Standard | High Quality |
-| kyyvideo2_fast_pro | ⭕ Optional reference videos | Fast | High Quality |
+| seedance_2_0 | ✅ Only with reference videos | Standard | Standard |
+| seedance_2_0_fast | ✅ Only with reference videos | Fast | Standard |
+| seedance_2_0_pro | ⭕ Optional reference videos | Standard | High Quality |
+| seedance_2_0_fast_pro | ⭕ Optional reference videos | Fast | High Quality |
 
 <Info>
 **Best Practices:**
@@ -215,7 +215,7 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "kyyvideo2",
+    "model": "seedance_2_0",
     "prompt": "A cat dancing in the rain, cinematic style",
     "duration": 10,
     "aspect_ratio": "16:9",
@@ -229,7 +229,7 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "kyyvideo2_fast",
+    "model": "seedance_2_0_fast",
     "prompt": "A cat gracefully dancing in the rain",
     "duration": 8,
     "first_image": "https://example.com/cat.jpg",
@@ -243,7 +243,7 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "kyyvideo2_pro",
+    "model": "seedance_2_0_pro",
     "prompt": "City transformation from day to night",
     "duration": 12,
     "first_image": "https://example.com/day.jpg",
@@ -258,7 +258,7 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "kyyvideo2",
+    "model": "seedance_2_0",
     "prompt": "Waves crashing on the shore with wave sounds",
     "duration": 10,
     "referenceImages": [
@@ -283,7 +283,7 @@ response = requests.post(
         'Content-Type': 'application/json'
     },
     json={
-        'model': 'kyyvideo2',
+        'model': 'seedance_2_0',
         'prompt': 'A cat dancing in the rain, cinematic style',
         'duration': 10,
         'aspect_ratio': '16:9',
@@ -306,7 +306,7 @@ HttpClient client = HttpClient.newHttpClient();
 ObjectMapper mapper = new ObjectMapper();
 
 Map<String, Object> requestBody = Map.of(
-    "model", "kyyvideo2",
+    "model", "seedance_2_0",
     "prompt", "A cat dancing in the rain, cinematic style",
     "duration", 10,
     "aspect_ratio", "16:9",
@@ -333,7 +333,7 @@ System.out.println(response.body());
   "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
   "object": "video",
   "created": 1774836724,
-  "model": "kyyvideo2_fast",
+  "model": "seedance_2_0_fast",
   "status": "queued",
   "error": null
 }

@@ -1,12 +1,12 @@
 ---
-title: "KyyVideo2 - 创建任务"
-description: "使用 KyyVideo2 模型创建视频生成任务，支持标准、快速、Pro 等多种模型"
+title: "Seedance2.0 - 创建任务"
+description: "使用 Seedance2.0 模型创建视频生成任务，支持标准、快速、Pro 等多种模型"
 api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/kyyvideo2/videos"
 ---
 
-# KyyVideo2 创建视频任务
+# Seedance2.0 创建视频任务
 
-使用 KyyVideo2 的先进 AI 模型创建高质量视频生成任务，支持多种模型选项和多模态参考输入。
+使用 Seedance2.0 的先进 AI 模型创建高质量视频生成任务，支持多种模型选项和多模态参考输入。
 
 ## 认证
 
@@ -20,10 +20,10 @@ Authorization: Bearer {{key}}
 
 <ParamField path="model" type="string" required>
   模型名称，可选值：
-  - `kyyvideo2` - 标准模型（仅支持带参考视频生成）
-  - `kyyvideo2_fast` - 快速模型（仅支持带参考视频生成）
-  - `kyyvideo2_pro` - Pro 模型（可选参考视频）
-  - `kyyvideo2_fast_pro` - Fast Pro 模型（可选参考视频）
+  - `seedance_2_0` - 标准模型（仅支持带参考视频生成）
+  - `seedance_2_0_fast` - 快速模型（仅支持带参考视频生成）
+  - `seedance_2_0_pro` - Pro 模型（可选参考视频）
+  - `seedance_2_0_fast_pro` - Fast Pro 模型（可选参考视频）
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -159,16 +159,16 @@ Authorization: Bearer {{key}}
 ## 模型特性
 
 <CardGroup cols={2}>
-  <Card title="kyyvideo2" icon="video">
+  <Card title="seedance_2_0" icon="video">
     标准模型，仅支持带参考视频生成
   </Card>
-  <Card title="kyyvideo2_fast" icon="bolt">
+  <Card title="seedance_2_0_fast" icon="bolt">
     快速模型，仅支持带参考视频生成，生成速度更快
   </Card>
-  <Card title="kyyvideo2_pro" icon="crown">
+  <Card title="seedance_2_0_pro" icon="crown">
     Pro 模型，可选参考视频，质量更高
   </Card>
-  <Card title="kyyvideo2_fast_pro" icon="rocket">
+  <Card title="seedance_2_0_fast_pro" icon="rocket">
     Fast Pro 模型，可选参考视频，速度与质量兼顾
   </Card>
 </CardGroup>
@@ -185,10 +185,10 @@ Authorization: Bearer {{key}}
 
 | 模型 | 参考视频支持 | 生成速度 | 视频质量 |
 |------|------------|---------|---------|
-| kyyvideo2 | ✅ 仅支持带参考视频 | 标准 | 标准 |
-| kyyvideo2_fast | ✅ 仅支持带参考视频 | 快速 | 标准 |
-| kyyvideo2_pro | ⭕ 可选参考视频 | 标准 | 高质量 |
-| kyyvideo2_fast_pro | ⭕ 可选参考视频 | 快速 | 高质量 |
+| seedance_2_0 | ✅ 仅支持带参考视频 | 标准 | 标准 |
+| seedance_2_0_fast | ✅ 仅支持带参考视频 | 快速 | 标准 |
+| seedance_2_0_pro | ⭕ 可选参考视频 | 标准 | 高质量 |
+| seedance_2_0_fast_pro | ⭕ 可选参考视频 | 快速 | 高质量 |
 
 <Info>
 **最佳实践：**
@@ -215,7 +215,7 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "kyyvideo2",
+    "model": "seedance_2_0",
     "prompt": "一只猫在雨中跳舞，电影风格",
     "duration": 10,
     "aspect_ratio": "16:9",
@@ -229,7 +229,7 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "kyyvideo2_fast",
+    "model": "seedance_2_0_fast",
     "prompt": "猫咪在雨中优雅地跳舞",
     "duration": 8,
     "first_image": "https://example.com/cat.jpg",
@@ -243,7 +243,7 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "kyyvideo2_pro",
+    "model": "seedance_2_0_pro",
     "prompt": "从白天到夜晚的城市变化",
     "duration": 12,
     "first_image": "https://example.com/day.jpg",
@@ -258,7 +258,7 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "kyyvideo2",
+    "model": "seedance_2_0",
     "prompt": "海浪拍打着海岸，配合海浪声",
     "duration": 10,
     "referenceImages": [
@@ -283,7 +283,7 @@ response = requests.post(
         'Content-Type': 'application/json'
     },
     json={
-        'model': 'kyyvideo2',
+        'model': 'seedance_2_0',
         'prompt': '一只猫在雨中跳舞，电影风格',
         'duration': 10,
         'aspect_ratio': '16:9',
@@ -306,7 +306,7 @@ HttpClient client = HttpClient.newHttpClient();
 ObjectMapper mapper = new ObjectMapper();
 
 Map<String, Object> requestBody = Map.of(
-    "model", "kyyvideo2",
+    "model", "seedance_2_0",
     "prompt", "一只猫在雨中跳舞，电影风格",
     "duration", 10,
     "aspect_ratio", "16:9",
@@ -333,7 +333,7 @@ System.out.println(response.body());
   "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
   "object": "video",
   "created": 1774836724,
-  "model": "kyyvideo2_fast",
+  "model": "seedance_2_0_fast",
   "status": "queued",
   "error": null
 }
