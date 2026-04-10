@@ -1,12 +1,12 @@
 ---
 title: "Upload Asset"
-description: "Upload images, videos, audio and other assets to KyyVideo2 asset library"
+description: "Upload images, videos, audio and other assets to Seedance2.0 asset library"
 api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload"
 ---
 
-# KyyVideo2 Upload Asset
+# Seedance2.0 Upload Asset
 
-Upload assets to the KyyVideo2 asset library and obtain asset IDs for use in video generation tasks.
+Upload assets to the Seedance2.0 asset library and obtain asset IDs for use in video generation tasks.
 
 ## Authentication
 
@@ -188,7 +188,7 @@ video_response = requests.post(
         'Content-Type': 'application/json'
     },
     json={
-        'model': 'kyyvideo2',
+        'model': 'seedance_2_0',
         'prompt': 'A cat dancing in the rain',
         'duration': 10,
         'first_image': f'asset://{asset_id}',  # Use asset ID
@@ -257,7 +257,7 @@ const videoResponse = await fetch(
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      model: 'kyyvideo2',
+      model: 'seedance_2_0',
       prompt: 'A cat dancing in the rain',
       duration: 10,
       first_image: `asset://${assetId}`,  // Use asset ID

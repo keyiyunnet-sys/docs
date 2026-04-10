@@ -1,12 +1,12 @@
 ---
 title: "上传素材"
-description: "上传图片、视频、音频等素材到 KyyVideo2 素材库"
+description: "上传图片、视频、音频等素材到 Seedance2.0 素材库"
 api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/kyyVideo2/asset/upload"
 ---
 
-# KyyVideo2 上传素材
+# Seedance2.0 上传素材
 
-上传素材到 KyyVideo2 素材库，获取素材 ID 用于视频生成任务。
+上传素材到 Seedance2.0 素材库，获取素材 ID 用于视频生成任务。
 
 ## 认证
 
@@ -188,7 +188,7 @@ video_response = requests.post(
         'Content-Type': 'application/json'
     },
     json={
-        'model': 'kyyvideo2',
+        'model': 'seedance_2_0',
         'prompt': '猫咪在雨中跳舞',
         'duration': 10,
         'first_image': f'asset://{asset_id}',  # 使用素材 ID
@@ -257,7 +257,7 @@ const videoResponse = await fetch(
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      model: 'kyyvideo2',
+      model: 'seedance_2_0',
       prompt: '猫咪在雨中跳舞',
       duration: 10,
       first_image: `asset://${assetId}`,  // 使用素材 ID

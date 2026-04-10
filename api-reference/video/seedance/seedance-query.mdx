@@ -1,12 +1,12 @@
 ---
-title: "Seedance - 查询任务"
-description: "查询 Seedance 视频生成任务的状态和结果"
+title: "Seedance1.5 - 查询任务"
+description: "查询 Seedance1.5 视频生成任务的状态和结果"
 api: "GET https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/{id}"
 ---
 
-# Seedance 查询视频任务
+# Seedance1.5 查询视频任务
 
-使用任务 ID 查询 Seedance 视频生成任务的状态和结果。
+使用任务 ID 查询 Seedance1.5 视频生成任务的状态和结果。
 
 ## 认证
 
@@ -68,7 +68,7 @@ Authorization: Bearer {{YOUR_API_KEY}}
     任务已创建并加入队列，等待处理
   </Step>
   <Step title="processing">
-    任务正在处理中，Seedance 模型正在生成视频
+    任务正在处理中，Seedance1.5 模型正在生成视频
   </Step>
   <Step title="completed">
     任务完成，视频生成成功，可通过 `video_url` 获取结果

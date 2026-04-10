@@ -71,7 +71,7 @@
                     ]
                   },
                   {
-                    "group": "Seedance",
+                    "group": "Seedance1.5",
                     "pages": [
                       "api-reference/video/seedance/seedance-create",
                       "api-reference/video/seedance/seedance-query"
@@ -165,7 +165,7 @@
                     ]
                   },
                   {
-                    "group": "Seedance",
+                    "group": "Seedance1.5",
                     "pages": [
                       "en/api-reference/video/seedance/seedance-create",
                       "en/api-reference/video/seedance/seedance-query"
