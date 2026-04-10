@@ -30,6 +30,12 @@
                 ]
               },
               {
+                "group": "更新日志",
+                "pages": [
+                  "change-log/zh/changelog"
+                ]
+              },
+              {
                 "group": "文字系列 API",
                 "pages": [
                   "api-reference/text/gemini-chat"
@@ -115,6 +121,12 @@
                 "group": "API Introduction",
                 "pages": [
                   "en/api-reference/introduction"
+                ]
+              },
+              {
+                "group": "Changelog",
+                "pages": [
+                  "change-log/en/changelog"
                 ]
               },
               {
