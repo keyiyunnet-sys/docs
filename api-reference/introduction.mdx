@@ -1,165 +1,210 @@
 ---
-title: "APIMart — OpenAI 兼容 API 网关"
-description: "统一的 OpenAI 兼容端点，支持 GPT-5、Claude、Gemini、Sora 和 VEO"
+title: "API 介绍"
+description: "AI 视频生成、图像生成和文本处理 API 服务"
 ---
 
-# APIMart — OpenAI 兼容 API 网关
+# API 介绍
 
-OpenAI 兼容 API，支持 GPT-5、Claude、Gemini。多供应商路由、透明定价、低延迟。企业 SLA、SDK 支持、按需付费。
-
-统一的 OpenAI 兼容端点，支持 GPT-5、Claude 和 Gemini。只需将 Base URL 更改为 `https://api.globalaiopc.com/v1`，即可在几分钟内从 OpenAI 迁移——保留现有 SDK，无需重写代码。多供应商路由确保低延迟和高可用性。透明定价、企业 SLA 和全球 CDN 加速。
-
-## 快速开始
-
-立即开始使用 OpenAI 兼容的聊天 API，支持 GPT-5、Claude Sonnet 4.5、Gemini 2.0。切换 Base URL，无需修改代码。
-
-### OpenAI 兼容端点
-
-APIMart 提供 OpenAI 风格的端点，实现无缝迁移。只需更改 Base URL 并继续使用现有 SDK。所有接口遵循 OpenAI 标准，扩展支持 Claude、Gemini、Sora 和 VEO 模型。
+提供多种 AI 视频生成、图像生成和文本处理 API，支持 Sora、VEO、Seedance、Vidu、Grok 等主流模型。
 
 ## 核心 API 服务
 
 <CardGroup cols={3}>
-  <Card title="聊天补全 API" icon="message" href="/api-reference/text/gemini-chat">
-    支持 GPT-5、GPT-4o、Claude Sonnet 4.5、Gemini 2.0 Flash。OpenAI 兼容 API，支持流式传输和低延迟。
+  <Card title="视频生成 API" icon="video" href="/api-reference/video/sora/sora-create">
+    支持 Sora、VEO、Seedance、Vidu、Grok 等多种视频生成模型，提供文生视频和图生视频能力
   </Card>
   <Card title="图像生成 API" icon="image" href="/api-reference/image/navo-banana-create">
-    支持 GPT-4o Image、Gemini 2.5 Flash Image-preview 模型。OpenAI 风格 API，无缝集成。
+    支持 Navo Banana 图像生成模型，从文本提示创建高质量图像
   </Card>
-  <Card title="视频生成 API" icon="video" href="/api-reference/video/sora-create">
-    支持 OpenAI Sora2、Google VEO3 模型。异步任务管理，支持状态追踪和 Webhook。
-  </Card>
-</CardGroup>
-
-## 平台优势
-
-### 透明定价
-
-按需付费，无需订阅。所有模型清晰的按 Token 计费，比官方供应商更实惠，同时保持相同质量和低延迟。
-
-- 所有模型清晰的按 Token 计费
-- 企业用量批量折扣
-- 无隐藏费用
-- 只为实际使用量付费
-
-### 多供应商路由与企业 SLA
-
-内置智能路由，跨多个 LLM 供应商确保高可用性和低延迟。当某个供应商出现问题时，请求自动路由到备用供应商，无服务中断。
-
-<CardGroup cols={2}>
-  <Card title="99.9% 可用性 SLA" icon="shield-check">
-    企业级可靠性，自动故障转移。多供应商路由确保您的请求始终以最小延迟响应。
-  </Card>
-  <Card title="全球 CDN 加速" icon="globe">
-    全球边缘节点，实现最低延迟。优化路由减少响应时间，提升全球用户体验。
-  </Card>
-  <Card title="速率限制管理" icon="gauge">
-    跨供应商自动处理速率限制。智能请求分发防止节流，确保平稳运行。
-  </Card>
-  <Card title="实时状态监控" icon="chart-line">
-    监控端点健康和性能。追踪图像和视频生成的异步任务进度，支持 Webhook 通知。
+  <Card title="文本处理 API" icon="message" href="/api-reference/text/gemini-chat">
+    支持 Gemini 聊天模型，提供智能对话和文本生成能力
   </Card>
 </CardGroup>
 
-## SDK 与代码示例
+## 视频生成模型
 
-官方 SDK 支持 Python、Node.js 和 Java。所有 SDK 均 OpenAI 兼容，仅需更改 Base URL 配置即可无缝迁移。
+支持多种主流视频生成模型，满足不同场景需求：
+
+### Sora
+
+OpenAI 的视频生成模型，支持多种时长和分辨率选项。
+
+- **sora2Stable**：稳定版，支持 10 或 15 秒
+- **openAiSora2**：支持 4、8、12 秒
+- **openAiSora2Stable**：稳定版，支持 4、8、12 秒
+- **openAiSora2Plus**：增强版，支持 4、8、12 秒
+
+[查看 Sora 文档](/api-reference/video/sora/sora-create)
+
+### VEO
+
+Google 的视频生成模型，提供高质量视频输出。
+
+- 支持多种时长和分辨率
+- 文生视频和图生视频
+
+[查看 VEO 文档](/api-reference/video/veo/veo-create)
+
+### Seedance1.5
+
+火山引擎的视频生成模型，支持多种分辨率和时长。
+
+- **seedance_1_5_pro_720p**：720p 高清输出
+- **seedance_1_5_pro_1080p**：1080p 全高清输出
+- 支持 5-10 秒视频生成
+
+[查看 Seedance1.5 文档](/api-reference/video/seedance/seedance-create)
+
+### Seedance2.0
+
+火山引擎最新视频生成模型，提供更强大的生成能力。
+
+- **seedance_2_0**：标准版
+- **seedance_2_0_fast**：快速版
+- **seedance_2_0_pro**：专业版
+- **seedance_2_0_fast_pro**：快速专业版
+- 支持素材管理功能
+
+[查看 Seedance2.0 文档](/api-reference/video/seedance2/seedance2-create)
+
+### Vidu
+
+支持文生视频、图生视频和首尾帧引导的灵活视频生成模型。
+
+- **viduq3-pro**：高质量输出，效果更好
+- **viduq3-turbo**：快速生成，速度更快
+- 支持 1-16 秒可调时长
+- 支持 540p、720p、1080p 多种分辨率
+
+[查看 Vidu 文档](/api-reference/video/vidu/vidu-create)
+
+### Grok
+
+xAI 的视频生成模型，支持灵活的时长和分辨率配置。
+
+- **grok_video3**：支持 6-30 秒可调，480p/720p 分辨率
+- **grok_video3_pro**：固定 10 秒，不支持指定分辨率
+- 支持图生视频（grok_video3 最多 7 张参考图）
+
+[查看 Grok 文档](/api-reference/video/grok/grok-create)
+
+## 认证方式
+
+所有 API 请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## 基础 URL
+
+```
+https://zcbservice.aizfw.cn/kyyReactApiServer
+```
+
+## 异步任务处理
+
+视频生成和图像生成均采用异步任务处理模式：
+
+1. 创建任务后返回任务 ID
+2. 使用任务 ID 查询任务状态和结果
+3. 任务状态包括：`queued`（排队中）、`processing`（处理中）、`completed`（已完成）、`failed`（失败）
+
+## 代码示例
 
 <CodeGroup>
-```python Python SDK
-from openai import OpenAI
+```python Python
+import requests
 
-client = OpenAI(
-    base_url="https://api.globalaiopc.com/v1",
-    api_key="your-apimart-key"
+# 创建视频生成任务
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/sora/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'sora2Stable',
+        'prompt': 'A cat dancing in the rain, cinematic style',
+        'aspect_ratio': '16:9',
+        'seconds': 10
+    }
+)
+
+task_id = response.json()['id']
+
+# 查询任务状态
+status_response = requests.get(
+    f'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/sora/videos/{task_id}',
+    headers={'Authorization': 'Bearer {{key}}'}
 )
 ```
 
-```javascript Node.js SDK
-import OpenAI from 'openai';
+```bash cURL
+# 创建视频生成任务
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/sora/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "sora2Stable",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "aspect_ratio": "16:9",
+    "seconds": 10
+  }'
 
-const client = new OpenAI({
-  baseURL: 'https://api.globalaiopc.com/v1',
-  apiKey: 'your-apimart-key'
-});
+# 查询任务状态
+curl --request GET \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/sora/videos/{task_id} \
+  --header 'Authorization: Bearer {{key}}'
 ```
 
-```java Java SDK
-import com.openai.OpenAI;
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
 
-OpenAI client = OpenAI.builder()
-    .baseUrl("https://api.globalaiopc.com/v1")
-    .apiKey("your-apimart-key")
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+// 创建视频生成任务
+Map<String, Object> requestBody = Map.of(
+    "model", "sora2Stable",
+    "prompt", "A cat dancing in the rain, cinematic style",
+    "aspect_ratio", "16:9",
+    "seconds", 10
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/sora/videos"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
     .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 ```
 </CodeGroup>
-
-## 从 OpenAI 迁移
-
-5 分钟内切换到 APIMart。无需重写代码——只需更改 Base URL 和 API Key。
-
-<Steps>
-  <Step title="获取 API Key">
-    注册 APIMart 并从控制台获取 API Key。
-  </Step>
-  <Step title="更新 Base URL">
-    将 OpenAI Base URL 改为 APIMart 端点。现有 SDK 集成无需修改即可工作。
-  </Step>
-  <Step title="测试端点">
-    使用新的 Base URL 运行现有代码。所有 OpenAI 兼容端点响应格式完全相同。在控制台查看延迟和速率限制。
-  </Step>
-</Steps>
-
-## 统一端点支持的模型
-
-通过一个 OpenAI 兼容网关访问领先的 LLM 供应商。所有模型支持一致的请求/响应格式。
-
-### 聊天补全模型
-
-用于聊天、补全和代码任务的领先语言模型：
-
-- **GPT-5**：OpenAI 旗舰模型，增强推理能力
-- **GPT-4o & GPT-4o Mini**：多模态模型，平衡性能与成本
-- **Claude Sonnet 4.5 & Haiku 4.5**：Anthropic 复杂推理模型
-- **Gemini 2.0 Flash & Flash Thinking**：Google 多模态模型
-
-### 图像生成模型
-
-从文本提示生成图像：
-
-- **GPT-4o Image**：OpenAI 图像生成模型
-- **Gemini 2.5 Flash Image-preview**：Google 高效图像模型
-
-### 视频生成模型
-
-支持异步任务追踪和 Webhook 回调的视频生成：
-
-- **OpenAI Sora2**：OpenAI 视频生成模型
-- **Google VEO3**：Google 视频生成模型
-
-### 语音模型
-
-通过 OpenAI 兼容端点实现语音转文本和文本转语音：
-
-- **Whisper-1**：OpenAI 转录模型
-- **TTS**：多种音色的文本转语音
 
 ## 常见问题
 
 <AccordionGroup>
-  <Accordion title="如何从 OpenAI 迁移？">
-    只需更改 Base URL 为 `https://api.globalaiopc.com/v1` 并使用 APIMart API Key。现有代码无需修改，所有 OpenAI SDK 都兼容。
+  <Accordion title="如何获取 API Key？">
+    请联系我们获取 API Key，所有请求都需要在 Authorization 头中包含 Bearer token。
   </Accordion>
   
-  <Accordion title="SLA 包含什么？">
-    我们提供 99.9% 可用性 SLA，包括自动故障转移、多供应商路由和企业级支持。
+  <Accordion title="视频生成需要多长时间？">
+    视频生成时间取决于模型和视频时长，通常需要几分钟。您可以通过查询接口实时获取任务状态。
   </Accordion>
   
-  <Accordion title="定价如何与 OpenAI 比较？">
-    我们提供透明的按 Token 计费，通常比官方供应商更实惠，同时保持相同的质量和性能。
+  <Accordion title="支持哪些视频分辨率？">
+    不同模型支持的分辨率不同，常见的有 480p、540p、720p、1080p。具体请查看各模型的文档说明。
   </Accordion>
   
-  <Accordion title="延迟和性能如何？">
-    通过全球 CDN 和智能路由，我们确保最低延迟。多供应商架构提供比单一供应商更好的性能和可靠性。
+  <Accordion title="如何使用图生视频功能？">
+    在创建任务时提供参考图片 URL，不同模型对参考图片的数量和格式要求不同，请查看具体模型文档。
   </Accordion>
 </AccordionGroup>
