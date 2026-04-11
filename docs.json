@@ -12,6 +12,11 @@
   "api": {
     "playground": {
       "mode": "show"
+    },
+    "baseUrl": "https://zcbservice.aizfw.cn/kyyReactApiServer",
+    "auth": {
+      "method": "bearer",
+      "name": "Authorization"
     }
   },
   "navigation": {
