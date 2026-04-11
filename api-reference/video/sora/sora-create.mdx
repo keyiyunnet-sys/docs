@@ -18,7 +18,7 @@ Authorization: Bearer {{key}}
 
 ## 请求参数
 
-<ParamField path="model" type="string" required>
+<ParamField body="model" type="string" required>
   模型名称，可选值：
   - `sora2Stable` - 支持 10 或 15 秒
   - `openAiSora2` - 支持 4、8、12 秒
@@ -26,13 +26,13 @@ Authorization: Bearer {{key}}
   - `openAiSora2Plus` - 支持 4、8、12 秒
 </ParamField>
 
-<ParamField path="prompt" type="string" required>
+<ParamField body="prompt" type="string" required>
   视频生成提示词，描述所需的视频内容
 
   示例：`"A cat dancing in the rain, cinematic style"`
 </ParamField>
 
-<ParamField path="size" type="string">
+<ParamField body="size" type="string">
   视频尺寸，默认为 `720x1280`
 
   可选值：
@@ -42,7 +42,7 @@ Authorization: Bearer {{key}}
   <Note>与 `aspect_ratio` 二选一使用</Note>
 </ParamField>
 
-<ParamField path="aspect_ratio" type="string">
+<ParamField body="aspect_ratio" type="string">
   视频宽高比
 
   可选值：
@@ -52,19 +52,19 @@ Authorization: Bearer {{key}}
   <Note>与 `size` 二选一使用</Note>
 </ParamField>
 
-<ParamField path="duration" type="integer">
+<ParamField body="duration" type="integer">
   视频时长（秒），支持 10 和 15
 
   <Note>与 `seconds` 二选一使用</Note>
 </ParamField>
 
-<ParamField path="seconds" type="integer">
+<ParamField body="seconds" type="integer">
   视频时长（秒），支持 10 和 15
 
   <Note>与 `duration` 二选一使用</Note>
 </ParamField>
 
-<ParamField path="input_reference" type="array">
+<ParamField body="input_reference" type="array">
   参考图片数组，用于指导视频生成，最多支持 1 张图片
 
   **重要说明：**
@@ -75,7 +75,7 @@ Authorization: Bearer {{key}}
   <Note>与 `image_urls` 二选一使用</Note>
 </ParamField>
 
-<ParamField path="image_urls" type="array">
+<ParamField body="image_urls" type="array">
   参考图片URL数组，用于指导视频生成
 
   **重要说明：**
