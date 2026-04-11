@@ -1,6 +1,6 @@
 ---
 title: "Vidu - 创建任务"
-description: "使用 Vidu 模型创建视频生成任务，支持图生视频和首尾帧引导"
+description: "使用 Vidu 模型创建视频生成任务，支持图生视频和首尾帧引导。"
 api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/vidu/videos"
 ---
 
@@ -29,6 +29,7 @@ Authorization: Bearer {{key}}
   模型名称
 
   可选值：
+
   - `viduq3-pro` - Vidu Q3 Pro，效果好
   - `viduq3-turbo` - Vidu Q3 Turbo，速度快
 </ParamField>
@@ -50,6 +51,7 @@ Authorization: Bearer {{key}}
   输出视频比例，默认为 `16:9`
 
   支持的值：
+
   - `16:9` - 横屏
   - `9:16` - 竖屏
   - `1:1` - 正方形
@@ -61,6 +63,7 @@ Authorization: Bearer {{key}}
   输出分辨率，默认为 `720p`
 
   支持的值：
+
   - `540p` - 标清
   - `720p` - 高清（默认）
   - `1080p` - 全高清
@@ -72,20 +75,21 @@ Authorization: Bearer {{key}}
   首帧图 URL（图生视频场景）
 
   使用方式：
-  - 单独使用：图生视频场景
-  - 搭配 last_image：首尾帧场景
 
-  格式要求：jpeg、png、webp
-  值类型：公网 URL
+  - 单独使用：图生视频场景
+  - 搭配 last\_image：首尾帧场景
+
+  格式要求：jpeg、png、webp 值类型：公网 URL
 </ParamField>
 
 <ParamField path="last_image" type="string">
-  尾帧图 URL（首尾帧场景，必须搭配 first_image 使用）
+  尾帧图 URL（首尾帧场景，必须搭配 first\_image 使用）
 
-  格式要求：jpeg、png、webp
-  值类型：公网 URL
+  格式要求：jpeg、png、webp 值类型：公网 URL
 
-  <Warning>必须与 `first_image` 一起使用</Warning>
+  <Warning>
+    必须与 `first_image` 一起使用
+  </Warning>
 </ParamField>
 
 ## 响应参数
@@ -108,6 +112,7 @@ Authorization: Bearer {{key}}
 
 <ResponseField name="status" type="string">
   任务状态：
+
   - `queued` - 排队中
   - `processing` - 处理中
   - `completed` - 已完成
@@ -124,11 +129,13 @@ Authorization: Bearer {{key}}
   <Card title="文生视频" icon="wand-magic-sparkles">
     仅使用 prompt 生成视频，无需图片引导
   </Card>
+
   <Card title="图生视频" icon="image">
-    使用 first_image 作为首帧，生成连贯视频
+    使用 first\_image 作为首帧，生成连贯视频
   </Card>
+
   <Card title="首尾帧引导" icon="film">
-    同时使用 first_image 和 last_image，精确控制开始和结束
+    同时使用 first\_image 和 last\_image，精确控制开始和结束
   </Card>
 </CardGroup>
 
@@ -138,33 +145,38 @@ Authorization: Bearer {{key}}
   <Card title="灵活时长" icon="clock">
     支持 1-16 秒可调节视频时长
   </Card>
+
   <Card title="多比例支持" icon="expand">
     支持 5 种常用视频比例
   </Card>
+
   <Card title="多分辨率" icon="display">
     支持 540p、720p、1080p 三种分辨率
   </Card>
+
   <Card title="双模型选择" icon="sparkles">
     Pro 版效果更好，Turbo 版速度更快
   </Card>
 </CardGroup>
 
 <Info>
-**最佳实践：**
-1. 视频生成为异步处理，需要通过返回的 `id` 查询任务状态和结果
-2. 在提示词中明确描述所需的视觉效果和风格
-3. 选择合适的模型：
-   - viduq3-pro：高效生成优质音视频内容，效果更好
-   - viduq3-turbo：生成速度更快
-4. 根据需求选择合适的时长（1-16秒）
-5. 图片 URL 必须是公网可访问的地址
+  **最佳实践：**
+
+  1. 视频生成为异步处理，需要通过返回的 `id` 查询任务状态和结果
+  2. 在提示词中明确描述所需的视觉效果和风格
+  3. 选择合适的模型：
+     - viduq3-pro：高效生成优质音视频内容，效果更好
+     - viduq3-turbo：生成速度更快
+  4. 根据需求选择合适的时长（1-16秒）
+  5. 图片 URL 必须是公网可访问的地址
 </Info>
 
 <Tip>
-**场景选择建议：**
-- **文生视频**：完全由 AI 创作，适合创意探索
-- **图生视频**：基于首帧图片生成，适合有明确起始画面的场景
-- **首尾帧引导**：精确控制开始和结束，适合需要特定转场效果的场景
+  **场景选择建议：**
+
+  - **文生视频**：完全由 AI 创作，适合创意探索
+  - **图生视频**：基于首帧图片生成，适合有明确起始画面的场景
+  - **首尾帧引导**：精确控制开始和结束，适合需要特定转场效果的场景
 </Tip>
 
 <RequestExample>
