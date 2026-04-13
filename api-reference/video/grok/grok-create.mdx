@@ -1,0 +1,315 @@
+---
+title: "Grok - 创建任务"
+description: "使用 Grok 模型创建视频生成任务，支持文生视频和图生视频"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos"
+hidePlayground: true
+---
+
+# Grok 创建视频任务
+
+使用 Grok 的 AI 模型创建视频生成任务，支持文生视频和图生视频模式。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## 模型介绍
+
+支持的模型：
+
+- `grok_video3`：可变时长 6-30 秒，支持 480p/720p 分辨率，按秒计费
+- `grok_video3_pro`：固定 10 秒，不支持指定分辨率
+
+## 请求参数
+
+<ParamField body="model" type="string" required>
+  模型名称
+
+  可选值：
+  - `grok_video3` - 可变时长 6-30 秒（按秒计费）
+  - `grok_video3_pro` - 固定 10 秒
+</ParamField>
+
+<ParamField body="prompt" type="string" required>
+  视频生成提示词，描述所需的视频内容
+
+  示例：`"一只猫在雨中跳舞，电影风格"`
+</ParamField>
+
+<ParamField body="duration" type="integer">
+  视频时长（秒）
+
+  - `grok_video3`：支持 6-30 秒，默认 6 秒
+  - `grok_video3_pro`：固定 10 秒（无需设置）
+</ParamField>
+
+<ParamField body="aspect_ratio" type="string">
+  输出视频比例，默认为 `16:9`
+
+  支持的值：
+  - `16:9` - 横屏
+  - `9:16` - 竖屏
+  - `1:1` - 正方形
+  - `3:2` - 标准横屏
+  - `2:3` - 标准竖屏
+</ParamField>
+
+<ParamField body="resolution" type="string">
+  输出分辨率，默认为 `480p`
+
+  支持的值：
+  - `480p` - 标清（默认）
+  - `720p` - 高清
+
+  <Note>仅 `grok_video3` 支持画质选择</Note>
+</ParamField>
+
+### 图生视频模式
+
+<ParamField body="image_urls" type="array">
+  参考图片 URL 数组（图生视频场景）
+
+  - `grok_video3`：最多支持 7 张参考图片
+  - `grok_video3_pro`：支持参考图片
+
+  格式要求：jpeg、png、webp
+  值类型：公网 URL 数组
+
+  示例：`["https://example.com/image1.jpg", "https://example.com/image2.jpg"]`
+</ParamField>
+
+## 响应参数
+
+<ResponseField name="id" type="string">
+  视频生成任务的唯一标识符，用于后续查询任务状态
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  对象类型，固定为 `video`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  任务创建时间戳
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  使用的模型名称
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  任务状态：
+  - `queued` - 排队中
+  - `processing` - 处理中
+  - `completed` - 已完成
+  - `failed` - 失败
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  错误信息，当 status 为 `failed` 时返回
+</ResponseField>
+
+## 使用场景
+
+<CardGroup cols={2}>
+  <Card title="文生视频" icon="wand-magic-sparkles">
+    仅使用 prompt 生成视频，无需图片引导
+  </Card>
+  <Card title="图生视频" icon="image">
+    使用参考图片引导视频生成，最多支持 7 张
+  </Card>
+</CardGroup>
+
+## Grok 特性
+
+<CardGroup cols={2}>
+  <Card title="灵活时长" icon="clock">
+    grok_video3 支持 6-30 秒可调节视频时长
+  </Card>
+  <Card title="多比例支持" icon="expand">
+    支持 5 种常用视频比例
+  </Card>
+  <Card title="分辨率选择" icon="display">
+    grok_video3 支持 480p、720p 两种分辨率
+  </Card>
+  <Card title="多图参考" icon="images">
+    grok_video3 最多支持 7 张参考图片
+  </Card>
+</CardGroup>
+
+## 模型对比
+
+| 特性 | grok_video3 | grok_video3_pro |
+|------|-------------|-----------------|
+| 时长 | 6-30 秒可调 | 固定 10 秒 |
+| 分辨率 | 480p / 720p | 不支持指定 |
+| 计费 | 按秒计费 | 按次计费 |
+| 参考图片 | 最多 7 张 | 支持 |
+
+<Info>
+**最佳实践：**
+1. 视频生成为异步处理，需要通过返回的 `id` 查询任务状态和结果
+2. 在提示词中明确描述所需的视觉效果和风格
+3. 选择合适的模型：
+   - grok_video3：灵活时长，按秒计费，适合不同时长需求
+   - grok_video3_pro：固定 10 秒，适合标准时长场景
+4. 图片 URL 必须是公网可访问的地址
+5. 合理使用参考图片数量，避免过多图片导致生成效果不佳
+</Info>
+
+<Tip>
+**场景选择建议：**
+- **文生视频**：完全由 AI 创作，适合创意探索
+- **图生视频**：基于参考图片生成，适合有明确风格或内容参考的场景
+- **多图参考**：使用多张图片提供更丰富的视觉引导
+</Tip>
+
+<RequestExample>
+
+```bash cURL (文生视频)
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "grok_video3",
+    "prompt": "一只猫在雨中跳舞，电影风格",
+    "duration": 10,
+    "aspect_ratio": "16:9",
+    "resolution": "720p"
+  }'
+```
+
+```bash cURL (图生视频)
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "grok_video3",
+    "prompt": "一只猫在雨中跳舞，电影风格",
+    "duration": 15,
+    "aspect_ratio": "16:9",
+    "resolution": "720p",
+    "image_urls": [
+      "https://example.com/cat1.jpg",
+      "https://example.com/cat2.jpg"
+    ]
+  }'
+```
+
+```bash cURL (Pro 模型)
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "grok_video3_pro",
+    "prompt": "一只猫在雨中跳舞，电影风格",
+    "aspect_ratio": "16:9"
+  }'
+```
+
+```java Java (文生视频)
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "grok_video3",
+    "prompt", "一只猫在雨中跳舞，电影风格",
+    "duration", 10,
+    "aspect_ratio", "16:9",
+    "resolution", "720p"
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python (图生视频)
+import requests
+
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'grok_video3',
+        'prompt': '一只猫在雨中跳舞，电影风格',
+        'duration': 15,
+        'aspect_ratio': '16:9',
+        'resolution': '720p',
+        'image_urls': [
+            'https://example.com/cat1.jpg',
+            'https://example.com/cat2.jpg'
+        ]
+    }
+)
+
+print(response.json())
+```
+
+```python Python (Pro 模型)
+import requests
+
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'grok_video3_pro',
+        'prompt': '一只猫在雨中跳舞，电影风格',
+        'aspect_ratio': '16:9'
+    }
+)
+
+print(response.json())
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 创建成功
+{
+  "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "video",
+  "created": 1774836724,
+  "model": "grok_video3",
+  "status": "queued",
+  "error": null
+}
+```
+
+```json 创建失败
+{
+  "id": null,
+  "object": "error",
+  "created": 1774836724,
+  "model": null,
+  "status": "failed",
+  "error": "创建失败：提示词包含违禁内容"
+}
+```
+
+</ResponseExample>

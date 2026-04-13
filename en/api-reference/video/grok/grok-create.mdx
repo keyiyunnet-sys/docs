@@ -1,0 +1,314 @@
+---
+title: "Grok - Create Task"
+description: "Create video generation tasks using Grok model, supporting text-to-video and image-to-video"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos"
+---
+
+# Grok Create Video Task
+
+Create video generation tasks using Grok's AI model, supporting text-to-video and image-to-video modes.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Model Introduction
+
+Supported models:
+
+- `grok_video3`: Variable duration 6-30 seconds, supports 480p/720p resolution, billed per second
+- `grok_video3_pro`: Fixed 10 seconds, does not support specifying resolution
+
+## Request Parameters
+
+<ParamField body="model" type="string" required>
+  Model name
+
+  Available values:
+  - `grok_video3` - Variable duration 6-30 seconds (billed per second)
+  - `grok_video3_pro` - Fixed 10 seconds
+</ParamField>
+
+<ParamField body="prompt" type="string" required>
+  Video generation prompt describing the desired video content
+
+  Example: `"A cat dancing in the rain, cinematic style"`
+</ParamField>
+
+<ParamField body="duration" type="integer">
+  Video duration (seconds)
+
+  - `grok_video3`: Supports 6-30 seconds, default 6 seconds
+  - `grok_video3_pro`: Fixed 10 seconds (no need to set)
+</ParamField>
+
+<ParamField body="aspect_ratio" type="string">
+  Output video aspect ratio, default is `16:9`
+
+  Supported values:
+  - `16:9` - Landscape
+  - `9:16` - Portrait
+  - `1:1` - Square
+  - `3:2` - Standard landscape
+  - `2:3` - Standard portrait
+</ParamField>
+
+<ParamField body="resolution" type="string">
+  Output resolution, default is `480p`
+
+  Supported values:
+  - `480p` - Standard definition (default)
+  - `720p` - High definition
+
+  <Note>Only `grok_video3` supports resolution selection</Note>
+</ParamField>
+
+### Image-to-Video Mode
+
+<ParamField body="image_urls" type="array">
+  Reference image URL array (for image-to-video scenarios)
+
+  - `grok_video3`: Supports up to 7 reference images
+  - `grok_video3_pro`: Supports reference images
+
+  Format requirements: jpeg, png, webp
+  Value type: Public URL array
+
+  Example: `["https://example.com/image1.jpg", "https://example.com/image2.jpg"]`
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier of the video generation task, used to query task status later
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, fixed as `video`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - In queue
+  - `processing` - Processing
+  - `completed` - Completed
+  - `failed` - Failed
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when status is `failed`
+</ResponseField>
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Text-to-Video" icon="wand-magic-sparkles">
+    Generate video using only a prompt, no image guidance needed
+  </Card>
+  <Card title="Image-to-Video" icon="image">
+    Use reference images to guide video generation, supports up to 7 images
+  </Card>
+</CardGroup>
+
+## Grok Features
+
+<CardGroup cols={2}>
+  <Card title="Flexible Duration" icon="clock">
+    grok_video3 supports adjustable video duration from 6-30 seconds
+  </Card>
+  <Card title="Multiple Aspect Ratios" icon="expand">
+    Supports 5 common video aspect ratios
+  </Card>
+  <Card title="Resolution Selection" icon="display">
+    grok_video3 supports 480p and 720p resolutions
+  </Card>
+  <Card title="Multiple Reference Images" icon="images">
+    grok_video3 supports up to 7 reference images
+  </Card>
+</CardGroup>
+
+## Model Comparison
+
+| Feature | grok_video3 | grok_video3_pro |
+|---------|-------------|-----------------|
+| Duration | 6-30 seconds adjustable | Fixed 10 seconds |
+| Resolution | 480p / 720p | Not configurable |
+| Billing | Per second | Per task |
+| Reference Images | Up to 7 | Supported |
+
+<Info>
+**Best Practices:**
+1. Video generation is asynchronous, you need to query task status and results using the returned `id`
+2. Clearly describe the desired visual effects and style in the prompt
+3. Choose the appropriate model:
+   - grok_video3: Flexible duration, billed per second, suitable for different duration needs
+   - grok_video3_pro: Fixed 10 seconds, suitable for standard duration scenarios
+4. Image URLs must be publicly accessible
+5. Use reference images reasonably, too many images may affect generation quality
+</Info>
+
+<Tip>
+**Scenario Selection Tips:**
+- **Text-to-Video**: Fully AI-created, suitable for creative exploration
+- **Image-to-Video**: Generated based on reference images, suitable for scenarios with clear style or content references
+- **Multiple Image Reference**: Use multiple images to provide richer visual guidance
+</Tip>
+
+<RequestExample>
+
+```bash cURL (Text-to-Video)
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "grok_video3",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "duration": 10,
+    "aspect_ratio": "16:9",
+    "resolution": "720p"
+  }'
+```
+
+```bash cURL (Image-to-Video)
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "grok_video3",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "duration": 15,
+    "aspect_ratio": "16:9",
+    "resolution": "720p",
+    "image_urls": [
+      "https://example.com/cat1.jpg",
+      "https://example.com/cat2.jpg"
+    ]
+  }'
+```
+
+```bash cURL (Pro Model)
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "grok_video3_pro",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "aspect_ratio": "16:9"
+  }'
+```
+
+```java Java (Text-to-Video)
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "grok_video3",
+    "prompt", "A cat dancing in the rain, cinematic style",
+    "duration", 10,
+    "aspect_ratio", "16:9",
+    "resolution", "720p"
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python (Image-to-Video)
+import requests
+
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'grok_video3',
+        'prompt': 'A cat dancing in the rain, cinematic style',
+        'duration': 15,
+        'aspect_ratio': '16:9',
+        'resolution': '720p',
+        'image_urls': [
+            'https://example.com/cat1.jpg',
+            'https://example.com/cat2.jpg'
+        ]
+    }
+)
+
+print(response.json())
+```
+
+```python Python (Pro Model)
+import requests
+
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'grok_video3_pro',
+        'prompt': 'A cat dancing in the rain, cinematic style',
+        'aspect_ratio': '16:9'
+    }
+)
+
+print(response.json())
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Success
+{
+  "id": "video_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "video",
+  "created": 1774836724,
+  "model": "grok_video3",
+  "status": "queued",
+  "error": null
+}
+```
+
+```json Failed
+{
+  "id": null,
+  "object": "error",
+  "created": 1774836724,
+  "model": null,
+  "status": "failed",
+  "error": "Creation failed: prompt contains prohibited content"
+}
+```
+
+</ResponseExample>
