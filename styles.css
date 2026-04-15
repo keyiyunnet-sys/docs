@@ -85,3 +85,14 @@ header input,
   max-height: 500px !important;
   overflow-y: auto !important;
 }
+
+/* 隐藏底部 "Powered by Mintlify" 技术支持标识 */
+footer,
+[class*="footer" i],
+a[href*="mintlify.com"][class*="powered" i],
+div[class*="powered" i],
+span[class*="powered" i],
+a[href*="mintlify.com"]:not(.mintlify-content a) {
+  display: none !important;
+  visibility: hidden !important;
+}
