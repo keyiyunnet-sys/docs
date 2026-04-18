@@ -206,7 +206,7 @@ Map<String, Object> requestBody = Map.of(
 );
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://api.globalaiopc.com/sora/videos"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/sora/videos"))
     .header("Authorization", "Bearer {{key}}")
     .header("Content-Type", "application/json")
     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))

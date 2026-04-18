@@ -156,7 +156,7 @@ Map<String, Object> requestBody = Map.of(
 );
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://api.globalaiopc.com/v1/image/banana/"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/image/banana/"))
     .header("Authorization", "Bearer {{key}}")
     .header("Content-Type", "application/json")
     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
@@ -169,7 +169,7 @@ HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.o
 import requests
 
 response = requests.post(
-    'https://api.globalaiopc.com/v1/image/banana/',
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/image/banana/',
     headers={
         'Authorization': 'Bearer {{key}}',
         'Content-Type': 'application/json'

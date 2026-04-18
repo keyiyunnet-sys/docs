@@ -1,7 +1,7 @@
 ---
 title: "Gemini Chat API"
 description: "AI conversation service based on Chat-compatible format, supporting multimodal input"
-api: "POST https://api.globalaiopc.com/v1/chat/completions"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/chat/completions"
 ---
 
 ## Authentication
@@ -173,7 +173,7 @@ Gemini models support multimodal input, capable of processing text, images, and 
 
 ```bash cURL (Plain Text)
 curl --request POST \
-  --url https://api.globalaiopc.com/v1/chat/completions \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/chat/completions \
   --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -195,7 +195,7 @@ curl --request POST \
 
 ```bash cURL (Image Analysis)
 curl --request POST \
-  --url https://api.globalaiopc.com/v1/chat/completions \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/chat/completions \
   --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -247,7 +247,7 @@ Map<String, Object> requestBody = Map.of(
 );
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://api.globalaiopc.com/v1/chat/completions"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/chat/completions"))
     .header("Authorization", "Bearer {{YOUR_API_KEY}}")
     .header("Content-Type", "application/json")
     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
@@ -260,7 +260,7 @@ HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.o
 import requests
 
 response = requests.post(
-    'https://api.globalaiopc.com/v1/chat/completions',
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/chat/completions',
     headers={
         'Authorization': 'Bearer {{YOUR_API_KEY}}',
         'Content-Type': 'application/json'

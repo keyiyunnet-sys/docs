@@ -1,7 +1,7 @@
 ---
 title: "VEO - Create Task"
 description: "Create video generation tasks using VEO models with support for reference images and first/last frame guidance"
-api: "POST https://api.globalaiopc.com/v1/veo/videos/"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/veo/videos/"
 ---
 
 # VEO Create Video Task
@@ -201,7 +201,7 @@ VEO supports two mutually exclusive image guidance modes:
 
 ```bash cURL (Reference Images)
 curl --request POST \
-  --url https://api.globalaiopc.com/veo/videos \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/veo/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -218,7 +218,7 @@ curl --request POST \
 
 ```bash cURL (First/Last Frame)
 curl --request POST \
-  --url https://api.globalaiopc.com/veo/videos \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/veo/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -255,7 +255,7 @@ Map<String, Object> requestBody = Map.of(
 );
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://api.globalaiopc.com/veo/videos"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/veo/videos"))
     .header("Authorization", "Bearer {{key}}")
     .header("Content-Type", "application/json")
     .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
@@ -268,7 +268,7 @@ HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.o
 import requests
 
 response = requests.post(
-    'https://api.globalaiopc.com/veo/videos',
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/veo/videos',
     headers={
         'Authorization': 'Bearer {{key}}',
         'Content-Type': 'application/json'

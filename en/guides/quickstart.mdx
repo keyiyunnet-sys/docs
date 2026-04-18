@@ -34,7 +34,7 @@ We provide various AI models for your selection:
 ### Text Generation Example
 
 ```bash
-curl -X POST https://api.globalaiopc.com/v1/chat/completions \
+curl -X POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/chat/completions \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -51,7 +51,7 @@ curl -X POST https://api.globalaiopc.com/v1/chat/completions \
 ### Image Generation Example
 
 ```bash
-curl -X POST https://api.globalaiopc.com/v1/images/generations \
+curl -X POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/images/generations \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -65,7 +65,7 @@ curl -X POST https://api.globalaiopc.com/v1/images/generations \
 ### Video Generation Example
 
 ```bash
-curl -X POST https://api.globalaiopc.com/v1/videos/generations \
+curl -X POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/videos/generations \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -81,7 +81,7 @@ curl -X POST https://api.globalaiopc.com/v1/videos/generations \
 Since we use asynchronous processing mode, you need to query the task status to get results:
 
 ```bash
-curl -X GET https://api.globalaiopc.com/v1/tasks/YOUR_TASK_ID \
+curl -X GET https://zcbservice.aizfw.cn/kyyReactApiServer/v1/tasks/YOUR_TASK_ID \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
