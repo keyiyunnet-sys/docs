@@ -56,6 +56,15 @@ Authorization: Bearer {{key}}
   - `9:21` - 超长竖
 </ParamField>
 
+<ParamField path="resolution" type="string">
+  分辨率设置，与 `size` 二选一传入即可。使用 `resolution` 时**必须同时传入 `ratio`**
+
+  可选值：
+  - `1k` - 1K 分辨率
+  - `2k` - 2K 分辨率
+  - `4k` - 4K 分辨率
+</ParamField>
+
 <ParamField path="size" type="string">
   尺寸设置。传入 `size` 后，`resolution` 和 `ratio` 可不传。若同时传入 `size` 和 `resolution`，以 `size` 为准
 
@@ -67,15 +76,6 @@ Authorization: Bearer {{key}}
   - `2048x1152` - 2K 横屏
   - `3840x2160` - 4K 横屏
   - `2160x3840` - 4K 竖屏
-</ParamField>
-
-<ParamField path="resolution" type="string">
-  分辨率设置，与 `size` 二选一传入即可。使用 `resolution` 时**必须同时传入 `ratio`**
-
-  可选值：
-  - `1k` - 1K 分辨率
-  - `2k` - 2K 分辨率
-  - `4k` - 4K 分辨率
 </ParamField>
 
 <ParamField path="image_urls" type="array">
