@@ -37,8 +37,8 @@ Authorization: Bearer {{key}}
   - `high` - High quality
 </ParamField>
 
-<ParamField path="ratio" type="string">
-  Aspect ratio setting
+<ParamField path="ratio" type="string" default="1:1">
+  Aspect ratio setting. Required when using `resolution`, defaults to `1:1`
 
   Available options:
   - `1:1` - Square (default)
@@ -57,7 +57,7 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="size" type="string">
-  Size setting. Use either `size` or `resolution` — if both are provided, `resolution` takes precedence
+  Size setting. When `size` is provided, `resolution` and `ratio` are not required. If both `size` and `resolution` are provided, `size` takes precedence
 
   Available options:
   - `1024x1024` - Square
@@ -70,7 +70,7 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="resolution" type="string">
-  Resolution setting. Use either `resolution` or `size` — **takes precedence over `size`**
+  Resolution setting. Use either `resolution` or `size`. When using `resolution`, **`ratio` must also be provided**
 
   Available options:
   - `1k` - 1K resolution
@@ -129,7 +129,9 @@ Authorization: Bearer {{key}}
 <Warning>
 **Important:**
 - Image generation is asynchronous, use the returned `id` to query task status and results
-- `resolution` and `size` are interchangeable — provide either one. When both are provided, `resolution` takes precedence
+- When `size` is provided, `resolution` and `ratio` are not required
+- When `resolution` is provided, `ratio` must also be provided (defaults to `1:1`)
+- If both `size` and `resolution` are provided, `size` takes precedence
 - Recommended polling interval is 2-5 seconds, avoid frequent requests
 </Warning>
 

@@ -37,8 +37,8 @@ Authorization: Bearer {{key}}
   - `high` - 高画质
 </ParamField>
 
-<ParamField path="ratio" type="string">
-  宽高比设置
+<ParamField path="ratio" type="string" default="1:1">
+  宽高比设置，使用 `resolution` 时必须传入，默认 `1:1`
 
   可选值：
   - `1:1` - 正方形（默认）
@@ -57,7 +57,7 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="size" type="string">
-  尺寸设置，与 `resolution` 二选一传入即可。若同时传入，以 `resolution` 为准
+  尺寸设置。传入 `size` 后，`resolution` 和 `ratio` 可不传。若同时传入 `size` 和 `resolution`，以 `size` 为准
 
   可选值：
   - `1024x1024` - 正方形
@@ -70,7 +70,7 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="resolution" type="string">
-  分辨率设置，与 `size` 二选一传入即可，**优先级高于 `size`**
+  分辨率设置，与 `size` 二选一传入即可。使用 `resolution` 时**必须同时传入 `ratio`**
 
   可选值：
   - `1k` - 1K 分辨率
@@ -129,7 +129,9 @@ Authorization: Bearer {{key}}
 <Warning>
 **重要提示：**
 - 图片生成为异步处理，需要通过返回的 `id` 查询任务状态和结果
-- `resolution` 和 `size` 二选一传入即可，同时传入时 `resolution` 优先级更高
+- 传入 `size` 时，`resolution` 和 `ratio` 可不传
+- 传入 `resolution` 时，必须同时传入 `ratio`（默认 `1:1`）
+- 若同时传入 `size` 和 `resolution`，以 `size` 为准
 - 建议轮询间隔为 2-5 秒，避免频繁请求
 </Warning>
 
