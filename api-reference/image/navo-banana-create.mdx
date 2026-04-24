@@ -20,9 +20,11 @@ Authorization: Bearer {{key}}
 
 <ParamField path="model" type="string" required>
   模型名称，可选值：
-  - `nano-banana-fast`
-  - `nano-banana-pro`
-  - `nano-banana-2`
+    - `nano-banana`
+    - `nano-banana-pro`
+    - `nano-banana-pro-stable`
+    - `nano-banana-2-stable`
+    - `nano-banana-2`
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -32,8 +34,7 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="resolution" type="string">
-  分辨率设置，仅 `nano-banana-2` 和 `nano-banana-pro` 支持
-
+    <Warning> `nano-banana`、`nano-banana-2`、`nano-banana-2-stable` 按受限能力说明，建议按 1K 使用；</Warning>
   可选值：
   - `1k` - 1K 分辨率
   - `2k` - 2K 分辨率

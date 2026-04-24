@@ -20,8 +20,10 @@ Authorization: Bearer {{key}}
 
 <ParamField path="model" type="string" required>
     Model name, available options:
-    - `nano-banana-fast`
+    - `nano-banana`
     - `nano-banana-pro`
+    - `nano-banana-pro-stable`
+    - `nano-banana-2-stable`
     - `nano-banana-2`
 </ParamField>
 
@@ -32,7 +34,7 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="resolution" type="string">
-    Resolution setting, only supported by `nano-banana-2` and `nano-banana-pro`
+    <Warning> `nano-banana`、`nano-banana-2`、`nano-banana-2-stable` According to the restricted ability instructions, it is recommended to use 1K</Warning>
 
     Available options:
     - `1k` - 1K resolution
