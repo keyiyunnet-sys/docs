@@ -1,0 +1,238 @@
+---
+title: "GPT Image 2 - Create Task"
+description: "Create GPT Image 2 image generation tasks with support for multiple quality levels, aspect ratios, and resolution options"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/image2/images"
+---
+
+# Create Image Generation Task
+
+Use the GPT Image 2 API to create high-quality AI image generation tasks with support for multiple quality levels, aspect ratios, and resolution options.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Request Parameters
+
+<ParamField path="model" type="string" required>
+  Model name, must be `gpt-image-2`
+</ParamField>
+
+<ParamField path="prompt" type="string" required>
+  Image generation prompt
+
+  Example: `"A cute orange cat sitting on a windowsill looking at the scenery outside"`
+</ParamField>
+
+<ParamField path="quality" type="string" default="low">
+  Quality level, defaults to `low`
+
+  Available options:
+  - `low` - Low quality
+  - `medium` - Medium quality
+  - `high` - High quality
+</ParamField>
+
+<ParamField path="ratio" type="string">
+  Aspect ratio setting
+
+  Available options:
+  - `1:1` - Square (default)
+  - `16:9` - Widescreen landscape
+  - `9:16` - Widescreen portrait
+  - `4:3` - Standard landscape
+  - `3:4` - Standard portrait
+  - `3:2` - Classic landscape
+  - `2:3` - Classic portrait
+  - `5:4` - Near-square landscape
+  - `4:5` - Near-square portrait
+  - `2:1` - Wide landscape
+  - `1:2` - Tall portrait
+  - `21:9` - Ultra-wide landscape
+  - `9:21` - Ultra-tall portrait
+</ParamField>
+
+<ParamField path="size" type="string">
+  Size setting. Use either `size` or `resolution` — if both are provided, `resolution` takes precedence
+
+  Available options:
+  - `1024x1024` - Square
+  - `1536x1024` - Landscape
+  - `1024x1536` - Portrait
+  - `2048x2048` - 2K Square
+  - `2048x1152` - 2K Landscape
+  - `3840x2160` - 4K Landscape
+  - `2160x3840` - 4K Portrait
+</ParamField>
+
+<ParamField path="resolution" type="string">
+  Resolution setting. Use either `resolution` or `size` — **takes precedence over `size`**
+
+  Available options:
+  - `1k` - 1K resolution
+  - `2k` - 2K resolution
+  - `4k` - 4K resolution
+</ParamField>
+
+<ParamField path="image_urls" type="array">
+  Array of reference image URLs to guide image generation style
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier for the image generation task, used for subsequent status queries
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, always `image`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when status is `failed`
+</ResponseField>
+
+## Quality Levels
+
+<CardGroup cols={3}>
+  <Card title="low" icon="image">
+    Low quality, fast generation, suitable for draft previews
+  </Card>
+  <Card title="medium" icon="sparkles">
+    Medium quality, balances speed and quality, suitable for general use
+  </Card>
+  <Card title="high" icon="crown">
+    High quality, best results, suitable for fine-detail creation
+  </Card>
+</CardGroup>
+
+## Important Notes
+
+<Warning>
+**Important:**
+- Image generation is asynchronous, use the returned `id` to query task status and results
+- `resolution` and `size` are interchangeable — provide either one. When both are provided, `resolution` takes precedence
+- Recommended polling interval is 2-5 seconds, avoid frequent requests
+</Warning>
+
+<Tip>
+**Best Practices:**
+1. Use `application/json` format for requests
+2. Prompts should clearly describe the desired image content and style
+3. Reference images can help guide generation style but are not required
+4. Choose appropriate aspect ratio or size to match your use case
+</Tip>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/image2/images \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "gpt-image-2",
+    "prompt": "A cute orange cat sitting on a windowsill looking at the scenery outside",
+    "quality": "high",
+    "ratio": "16:9",
+    "resolution": "2k",
+    "image_urls": []
+  }'
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.List;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "gpt-image-2",
+    "prompt", "A cute orange cat sitting on a windowsill looking at the scenery outside",
+    "quality", "high",
+    "ratio", "16:9",
+    "resolution", "2k",
+    "image_urls", List.of()
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/image2/images"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/image2/images',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'gpt-image-2',
+        'prompt': 'A cute orange cat sitting on a windowsill looking at the scenery outside',
+        'quality': 'high',
+        'ratio': '16:9',
+        'resolution': '2k',
+        'image_urls': []
+    }
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Creation Success
+{
+  "id": "image_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "image",
+  "created": 1774836724,
+  "model": "gpt-image-2",
+  "status": "queued",
+  "error": null
+}
+```
+
+```json Creation Failed
+{
+  "id": null,
+  "object": "error",
+  "created": 1774836724,
+  "model": null,
+  "status": "failed",
+  "error": "Creation failed"
+}
+```
+
+</ResponseExample>

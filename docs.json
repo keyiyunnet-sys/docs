@@ -50,6 +50,13 @@
                       "api-reference/image/navo-banana-create",
                       "api-reference/image/navo-banana-query"
                     ]
+                  },
+                  {
+                    "group": "GPT Image 2",
+                    "pages": [
+                      "api-reference/image/gpt-image2/gpt-image2-create",
+                      "api-reference/image/gpt-image2/gpt-image2-query"
+                    ]
                   }
                 ]
               },
@@ -150,6 +157,13 @@
                     "pages": [
                       "en/api-reference/image/navo-banana-create",
                       "en/api-reference/image/navo-banana-query"
+                    ]
+                  },
+                  {
+                    "group": "GPT Image 2",
+                    "pages": [
+                      "en/api-reference/image/gpt-image2/gpt-image2-create",
+                      "en/api-reference/image/gpt-image2/gpt-image2-query"
                     ]
                   }
                 ]

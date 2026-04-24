@@ -1,0 +1,238 @@
+---
+title: "GPT Image 2 - 创建任务"
+description: "创建 GPT Image 2 图片生成任务，支持多种画质、比例和分辨率选项"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/image2/images"
+---
+
+# 创建图片生成任务
+
+使用 GPT Image 2 API 创建高质量的 AI 图片生成任务，支持多种画质档位、宽高比和分辨率选项。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## 请求参数
+
+<ParamField path="model" type="string" required>
+  模型名称，固定为 `gpt-image-2`
+</ParamField>
+
+<ParamField path="prompt" type="string" required>
+  图片生成提示词
+
+  示例：`"一只可爱的橙色猫咪坐在窗台上看着外面的风景"`
+</ParamField>
+
+<ParamField path="quality" type="string" default="low">
+  画质档位，默认为 `low`
+
+  可选值：
+  - `low` - 低画质
+  - `medium` - 中画质
+  - `high` - 高画质
+</ParamField>
+
+<ParamField path="ratio" type="string">
+  宽高比设置
+
+  可选值：
+  - `1:1` - 正方形（默认）
+  - `16:9` - 宽屏横
+  - `9:16` - 宽屏竖
+  - `4:3` - 标屏横
+  - `3:4` - 标屏竖
+  - `3:2` - 经典横
+  - `2:3` - 经典竖
+  - `5:4` - 近方横
+  - `4:5` - 近方竖
+  - `2:1` - 宽横
+  - `1:2` - 长竖
+  - `21:9` - 超宽横
+  - `9:21` - 超长竖
+</ParamField>
+
+<ParamField path="size" type="string">
+  尺寸设置，与 `resolution` 二选一传入即可。若同时传入，以 `resolution` 为准
+
+  可选值：
+  - `1024x1024` - 正方形
+  - `1536x1024` - 横屏
+  - `1024x1536` - 竖屏
+  - `2048x2048` - 2K 正方形
+  - `2048x1152` - 2K 横屏
+  - `3840x2160` - 4K 横屏
+  - `2160x3840` - 4K 竖屏
+</ParamField>
+
+<ParamField path="resolution" type="string">
+  分辨率设置，与 `size` 二选一传入即可，**优先级高于 `size`**
+
+  可选值：
+  - `1k` - 1K 分辨率
+  - `2k` - 2K 分辨率
+  - `4k` - 4K 分辨率
+</ParamField>
+
+<ParamField path="image_urls" type="array">
+  参考图片URL数组，用于指导图片生成风格
+</ParamField>
+
+## 响应参数
+
+<ResponseField name="id" type="string">
+  图片生成任务的唯一标识符，用于后续查询任务状态
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  对象类型，固定为 `image`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  任务创建时间戳
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  使用的模型名称
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  任务状态：
+  - `queued` - 排队中
+  - `processing` - 处理中
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  错误信息，当 status 为 `failed` 时返回
+</ResponseField>
+
+## 画质档位说明
+
+<CardGroup cols={3}>
+  <Card title="low" icon="image">
+    低画质，快速生成，适合草稿预览
+  </Card>
+  <Card title="medium" icon="sparkles">
+    中画质，平衡速度与质量，适合一般用途
+  </Card>
+  <Card title="high" icon="crown">
+    高画质，最高质量，适合精细创作
+  </Card>
+</CardGroup>
+
+## 注意事项
+
+<Warning>
+**重要提示：**
+- 图片生成为异步处理，需要通过返回的 `id` 查询任务状态和结果
+- `resolution` 和 `size` 二选一传入即可，同时传入时 `resolution` 优先级更高
+- 建议轮询间隔为 2-5 秒，避免频繁请求
+</Warning>
+
+<Tip>
+**最佳实践：**
+1. 使用 `application/json` 格式发送请求
+2. 提示词应该清晰描述所需的图片内容和风格
+3. 参考图片可以帮助指导生成风格，但不是必需的
+4. 选择合适的宽高比或尺寸以匹配你的使用场景
+</Tip>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/image2/images \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "gpt-image-2",
+    "prompt": "一只可爱的橙色猫咪坐在窗台上看着外面的风景",
+    "quality": "high",
+    "ratio": "16:9",
+    "resolution": "2k",
+    "image_urls": []
+  }'
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.List;
+
+HttpClient client = HttpClient.newHttpClient();
+ObjectMapper mapper = new ObjectMapper();
+
+Map<String, Object> requestBody = Map.of(
+    "model", "gpt-image-2",
+    "prompt", "一只可爱的橙色猫咪坐在窗台上看着外面的风景",
+    "quality", "high",
+    "ratio", "16:9",
+    "resolution", "2k",
+    "image_urls", List.of()
+);
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/image2/images"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/image2/images',
+    headers={
+        'Authorization': 'Bearer {{key}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'model': 'gpt-image-2',
+        'prompt': '一只可爱的橙色猫咪坐在窗台上看着外面的风景',
+        'quality': 'high',
+        'ratio': '16:9',
+        'resolution': '2k',
+        'image_urls': []
+    }
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 创建成功
+{
+  "id": "image_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "image",
+  "created": 1774836724,
+  "model": "gpt-image-2",
+  "status": "queued",
+  "error": null
+}
+```
+
+```json 创建失败
+{
+  "id": null,
+  "object": "error",
+  "created": 1774836724,
+  "model": null,
+  "status": "failed",
+  "error": "创建失败"
+}
+```
+
+</ResponseExample>

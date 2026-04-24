@@ -1,0 +1,165 @@
+---
+title: "GPT Image 2 - Query Task"
+description: "Query the status and results of GPT Image 2 image generation tasks"
+api: "GET https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/{id}"
+---
+
+# Query Image Generation Task
+
+Use the task ID to query the status and results of GPT Image 2 image generation tasks.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  Unique identifier for the image generation task, returned from the create task interface
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier for the image generation task
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, always `image.generation`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+  - `completed` - Completed
+  - `failed` - Failed
+</ResponseField>
+
+<ResponseField name="image_url" type="string">
+  Generated image URL, returned when status is `completed`
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when status is `failed`
+</ResponseField>
+
+## Status Flow
+
+<Steps>
+  <Step title="queued">
+    Task created and added to queue, waiting for processing
+  </Step>
+  <Step title="processing">
+    Task is being processed, AI model is generating the image
+  </Step>
+  <Step title="completed">
+    Task completed, image generated successfully, result available via `image_url`
+  </Step>
+</Steps>
+
+## Polling Recommendations
+
+<Info>
+**Polling Strategy:**
+- Recommended polling interval: 2-5 seconds
+- Avoid overly frequent requests to prevent rate limiting
+- Stop polling when status is `completed` or `failed`
+</Info>
+
+## Image URL Information
+
+<Warning>
+**Important:**
+- Generated image URLs typically expire after 24 hours
+- Please download and save images to your storage system promptly
+- URLs will be inaccessible after expiration
+</Warning>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/image_fd35ee52-2a98-44a6-b930-29a88ce9b8fd \
+  --header 'Authorization: Bearer {{key}}'
+```
+
+```java Java
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
+
+HttpClient client = HttpClient.newHttpClient();
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/image_fd35ee52-2a98-44a6-b930-29a88ce9b8fd"))
+    .header("Authorization", "Bearer {{key}}")
+    .GET()
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/image_fd35ee52-2a98-44a6-b930-29a88ce9b8fd',
+    headers={'Authorization': 'Bearer {{key}}'}
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Processing Status
+{
+  "id": "image_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "image.generation",
+  "created": 1774836724,
+  "model": "gpt-image-2",
+  "status": "processing",
+  "image_url": null,
+  "error": null
+}
+```
+
+```json Completed Status
+{
+  "id": "image_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "image.generation",
+  "created": 1774836724,
+  "model": "gpt-image-2",
+  "status": "completed",
+  "image_url": "https://example.com/image.png",
+  "error": null
+}
+```
+
+```json Failed Status
+{
+  "id": "image_fd35ee52-2a98-44a6-b930-29a88ce9b8fd",
+  "object": "image.generation",
+  "created": 1774836724,
+  "model": "gpt-image-2",
+  "status": "failed",
+  "image_url": null,
+  "error": "Generation failed: prompt contains prohibited content"
+}
+```
+
+</ResponseExample>
