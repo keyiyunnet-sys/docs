@@ -56,8 +56,8 @@ Authorization: Bearer {{key}}
   - `9:21` - Ultra-tall portrait
 </ParamField>
 
-<ParamField path="resolution" type="string">
-  Resolution setting. Use either `resolution` or `size`. When using `resolution`, **`ratio` must also be provided**
+<ParamField path="resolution" type="string" default="1k">
+  Resolution setting, defaults to `1k`. Use either `resolution` or `size`. When using `resolution`, **`ratio` must also be provided**
 
   Available options:
   - `1k` - 1K resolution
@@ -68,7 +68,7 @@ Authorization: Bearer {{key}}
 <ParamField path="size" type="string">
   Size setting. When `size` is provided, `resolution` and `ratio` are not required. If both `size` and `resolution` are provided, `size` takes precedence
 
-  Available options:
+  Recommended values:
   - `1024x1024` - Square
   - `1536x1024` - Landscape
   - `1024x1536` - Portrait
@@ -76,6 +76,12 @@ Authorization: Bearer {{key}}
   - `2048x1152` - 2K Landscape
   - `3840x2160` - 4K Landscape
   - `2160x3840` - 4K Portrait
+
+  Size rules:
+  - Maximum side length must be less than or equal to 3840px
+  - Both sides must be multiples of 16px
+  - The ratio of the longer side to the shorter side must not exceed 3:1
+  - Total pixel count must be at least 655,360 and no more than 8,294,400
 </ParamField>
 
 <ParamField path="image_urls" type="array">

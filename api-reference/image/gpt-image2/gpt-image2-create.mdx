@@ -56,8 +56,8 @@ Authorization: Bearer {{key}}
   - `9:21` - 超长竖
 </ParamField>
 
-<ParamField path="resolution" type="string">
-  分辨率设置，与 `size` 二选一传入即可。使用 `resolution` 时**必须同时传入 `ratio`**
+<ParamField path="resolution" type="string" default="1k">
+  分辨率设置，默认为 `1k`，与 `size` 二选一传入即可。使用 `resolution` 时**必须同时传入 `ratio`**
 
   可选值：
   - `1k` - 1K 分辨率
@@ -68,7 +68,7 @@ Authorization: Bearer {{key}}
 <ParamField path="size" type="string">
   尺寸设置。传入 `size` 后，`resolution` 和 `ratio` 可不传。若同时传入 `size` 和 `resolution`，以 `size` 为准
 
-  可选值：
+  建议值：
   - `1024x1024` - 正方形
   - `1536x1024` - 横屏
   - `1024x1536` - 竖屏
@@ -76,6 +76,12 @@ Authorization: Bearer {{key}}
   - `2048x1152` - 2K 横屏
   - `3840x2160` - 4K 横屏
   - `2160x3840` - 4K 竖屏
+
+  尺寸规则：
+  - 最大边长必须小于或等于 3840px
+  - 两条边必须是 16px 的倍数
+  - 长边与短边的比例不得超过 3:1
+  - 总像素数必须至少为 655,360 个，不超过 8,294,400 个
 </ParamField>
 
 <ParamField path="image_urls" type="array">
