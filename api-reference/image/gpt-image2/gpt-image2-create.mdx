@@ -19,7 +19,11 @@ Authorization: Bearer {{key}}
 ## 请求参数
 
 <ParamField path="model" type="string" required>
-  模型名称，固定为 `gpt-image-2`
+  模型名称
+
+  可选值：
+  - `gpt-image-2` - 标准模型，按画质计费
+  - `gpt-image-2-r` - 分辨率模型，按分辨率计费
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -29,7 +33,7 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="quality" type="string" default="low">
-  画质档位，默认为 `low`
+  画质档位，默认为 `low`。支持的模型：`gpt-image-2`
 
   可选值：
   - `low` - 低画质
@@ -63,6 +67,10 @@ Authorization: Bearer {{key}}
   - `1k` - 1K 分辨率
   - `2k` - 2K 分辨率
   - `4k` - 4K 分辨率
+
+  <Warning>
+  4K 仅支持 6 个比例：`16:9` / `9:16` / `2:1` / `1:2` / `21:9` / `9:21`，其它比例 + 4K 因总像素超上限不可用。
+  </Warning>
 </ParamField>
 
 <ParamField path="size" type="string">
@@ -85,7 +93,10 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="image_urls" type="array">
-  参考图片URL数组，用于指导图片生成风格，最多传入 6 张
+  参考图片URL数组，用于指导图片生成风格
+
+  - `gpt-image-2` - 最多 6 张
+  - `gpt-image-2-r` - 最多 16 张
 </ParamField>
 
 ## 响应参数

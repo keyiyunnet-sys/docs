@@ -19,7 +19,11 @@ Authorization: Bearer {{key}}
 ## Request Parameters
 
 <ParamField path="model" type="string" required>
-  Model name, must be `gpt-image-2`
+  Model name
+
+  Available options:
+  - `gpt-image-2` - Standard model, billed by quality level
+  - `gpt-image-2-r` - Resolution model, billed by resolution
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -29,7 +33,7 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="quality" type="string" default="low">
-  Quality level, defaults to `low`
+  Quality level, defaults to `low`. Supported models: `gpt-image-2`
 
   Available options:
   - `low` - Low quality
@@ -63,6 +67,10 @@ Authorization: Bearer {{key}}
   - `1k` - 1K resolution
   - `2k` - 2K resolution
   - `4k` - 4K resolution
+
+  <Warning>
+  4K is only supported for 6 ratios: `16:9` / `9:16` / `2:1` / `1:2` / `21:9` / `9:21`. Other ratios with 4K will fail due to exceeding the total pixel limit.
+  </Warning>
 </ParamField>
 
 <ParamField path="size" type="string">
@@ -85,7 +93,10 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="image_urls" type="array">
-  Array of reference image URLs to guide image generation style, up to 6 images
+  Array of reference image URLs to guide image generation style
+
+  - `gpt-image-2` - Up to 6 images
+  - `gpt-image-2-r` - Up to 16 images
 </ParamField>
 
 ## Response Parameters
