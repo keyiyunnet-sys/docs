@@ -53,7 +53,7 @@ Authorization: Bearer {{key}}
   - `16:9` - 横屏
   - `9:16` - 竖屏
 
-  <Note>分辨率通过 resolution 字段单独指定，ratio 不支持 -1080p/-4K 后缀</Note>
+  <Note>分辨率通过 resolution 字段单独指定，aspect_ratio 不支持 -1080p/-4K 后缀</Note>
 </ParamField>
 
 ### 参考图片模式
@@ -68,7 +68,7 @@ Authorization: Bearer {{key}}
   - `veo_3_1_fast`（最多3张）
   - `veo_3_1_pro`
 
-  <Warning>veo_3_1_fast_stable 仅支持首尾帧模式，不支持 imgUrl 参考图模式</Warning>
+  <Warning>veo_3_1_fast_stable 仅支持首尾帧模式，不支持参考图模式</Warning>
   <Warning>与 `image_urls` 二选一</Warning>
 </ParamField>
 
@@ -82,7 +82,7 @@ Authorization: Bearer {{key}}
   - `veo_3_1_fast`（最多3张）
   - `veo_3_1_pro`
 
-  <Warning>veo_3_1_fast_stable 仅支持首尾帧模式，不支持 imgUrl 参考图模式</Warning>
+  <Warning>veo_3_1_fast_stable 仅支持首尾帧模式，不支持参考图模式</Warning>
   <Warning>与 `input_reference` 二选一</Warning>
 </ParamField>
 
@@ -99,7 +99,7 @@ Authorization: Bearer {{key}}
 
   使用方式：
   - 单独使用：图生视频模式
-  - 搭配 `lastFrameUrl` 使用：首尾帧模式
+  - 搭配 `last_image` 使用：首尾帧模式
 
   <Warning>与参考图片模式互斥</Warning>
 </ParamField>

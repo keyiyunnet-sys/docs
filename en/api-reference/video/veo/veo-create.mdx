@@ -53,7 +53,7 @@ Authorization: Bearer {{key}}
   - `16:9` - Landscape
   - `9:16` - Portrait
 
-  <Note>Resolution is specified separately via the resolution field, ratio does not support -1080p/-4K suffixes</Note>
+  <Note>Resolution is specified separately via the resolution field, aspect_ratio does not support -1080p/-4K suffixes</Note>
 </ParamField>
 
 ### Reference Image Mode
@@ -68,7 +68,7 @@ Authorization: Bearer {{key}}
   - `veo_3_1_fast` (up to 3 images)
   - `veo_3_1_pro`
 
-  <Warning>veo_3_1_fast_stable only supports first/last frame mode, does not support imgUrl reference image mode</Warning>
+  <Warning>veo_3_1_fast_stable only supports first/last frame mode, does not support reference image mode</Warning>
   <Warning>Choose either this or `image_urls`</Warning>
 </ParamField>
 
@@ -82,7 +82,7 @@ Authorization: Bearer {{key}}
   - `veo_3_1_fast` (up to 3 images)
   - `veo_3_1_pro`
 
-  <Warning>veo_3_1_fast_stable only supports first/last frame mode, does not support imgUrl reference image mode</Warning>
+  <Warning>veo_3_1_fast_stable only supports first/last frame mode, does not support reference image mode</Warning>
   <Warning>Choose either this or `input_reference`</Warning>
 </ParamField>
 
@@ -99,7 +99,7 @@ Authorization: Bearer {{key}}
 
   Usage modes:
   - Used alone: Image-to-video mode
-  - Used with `lastFrameUrl`: First/last frame mode
+  - Used with `last_image`: First/last frame mode
 
   <Warning>Mutually exclusive with reference image mode</Warning>
 </ParamField>
