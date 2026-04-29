@@ -16,23 +16,16 @@ api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/veo/videos"
 Authorization: Bearer {{key}}
 ```
 
-## 模型介绍
-
-支持的模型：
-
-- `veo3_1_fast_stable`（稳定版，仅720p）
-- `veo_3_1_fast`（快速版，支持720p/1080p/4k，提示词控制度低，但速度高，适合快速迭代、快速出效果的场景）
-- `veo_3_1_pro`（高质量版，支持720p/1080p/4k，生成速度慢、提示词控制度高，适合追求极致画质、专业级创造、广告及实验性短片）
-
 ## 请求参数
 
 <ParamField path="model" type="string" required>
   模型名称
 
   可选值：
-  - `veo3_1_fast_stable` - 稳定版，仅720p
-  - `veo_3_1_fast` - 快速版，720p/1080p/4k
-  - `veo_3_1_pro` - 高质量版，720p/1080p/4k
+  - `veo_3_1_fast_stable` - 720p/1080p，仅支持首尾帧
+  - `veo_3_1_pro_stable` - 720p/1080p
+  - `veo_3_1_fast` - 快速版，支持720p/1080p/4K
+  - `veo_3_1_pro` - 高质量版，支持720p/1080p/4K
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -42,15 +35,15 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="resolution" type="string">
-  输出分辨率，默认为 `720p`
+  输出分辨率
 
   支持的值：
-  - `720p` - 默认，所有 Veo3.1 模型均支持
-  - `1080p` - 仅 veo_3_1_fast、veo_3_1_pro 支持
-  - `4K` - 仅 veo3_1、veo_3_1_fast、veo_3_1_pro 支持
+  - `720p` - 默认，所有 Veo 模型
+  - `1080p` - 支持 veo_3_1_fast_stable、veo_3_1_pro_stable、veo_3_1_fast、veo_3_1_pro
+  - `4K` - 支持 veo_3_1_fast、veo_3_1_pro
 
   <Note>大小写兼容：支持 720p/720P/4K/4k 等任意格式</Note>
-  <Warning>veo3_1_fast_stable 仅支持 720p</Warning>
+  <Warning>veo_3_1_fast_stable / veo_3_1_pro_stable 不支持 4K</Warning>
 </ParamField>
 
 <ParamField path="aspect_ratio" type="string">
@@ -66,41 +59,59 @@ Authorization: Bearer {{key}}
 ### 参考图片模式
 
 <ParamField path="input_reference" type="array">
-  参考图片 URL，最多支持三张图片用英文逗号隔开 [,]
+  参考图片URL
 
-  支持模型：veo3_1_fast_stable, veo_3_1_fast
+  不可搭配首尾帧使用。
 
-  <Warning>不可搭配首尾帧使用。veo_3_1_pro 不支持参考图模式</Warning>
+  支持模型：
+  - `veo_3_1_pro_stable`（最多3张）
+  - `veo_3_1_fast`（最多3张）
+  - `veo_3_1_pro`
+
+  <Warning>veo_3_1_fast_stable 仅支持首尾帧模式，不支持 imgUrl 参考图模式</Warning>
   <Warning>与 `image_urls` 二选一</Warning>
 </ParamField>
 
 <ParamField path="image_urls" type="array">
-  参考图片 URL，最多支持三张图片用英文逗号隔开 [,]
+  参考图片URL
 
-  支持模型：veo3_1_fast_stable, veo_3_1_fast
+  不可搭配首尾帧使用。
 
-  <Warning>不可搭配首尾帧使用。veo_3_1_pro 不支持参考图模式</Warning>
+  支持模型：
+  - `veo_3_1_pro_stable`（最多3张）
+  - `veo_3_1_fast`（最多3张）
+  - `veo_3_1_pro`
+
+  <Warning>veo_3_1_fast_stable 仅支持首尾帧模式，不支持 imgUrl 参考图模式</Warning>
   <Warning>与 `input_reference` 二选一</Warning>
 </ParamField>
 
 ### 首尾帧模式
 
 <ParamField path="first_image" type="string">
-  首帧图片 URL
+  首帧图片URL
 
-  支持所有 Veo3.1 模型
+  支持模型：
+  - `veo_3_1_fast_stable`
+  - `veo_3_1_pro_stable`
+  - `veo_3_1_fast`
+  - `veo_3_1_pro`
 
   使用方式：
   - 单独使用：图生视频模式
-  - 搭配 last_image 使用：帧转视频模式（仅部分模型支持尾帧）
+  - 搭配 `lastFrameUrl` 使用：首尾帧模式
 
   <Warning>与参考图片模式互斥</Warning>
 </ParamField>
 
 <ParamField path="last_image" type="string">
-  尾帧图片 URL，需搭配 first_image 使用（帧转视频模式）
+  尾帧图片URL，需搭配 `first_image` 使用
 
-  支持模型：veo3_1_fast_stable, veo_3_1_fast, veo_3_1_pro
+  支持模型：
+  - `veo_3_1_fast_stable`
+  - `veo_3_1_pro_stable`
+  - `veo_3_1_fast`
+  - `veo_3_1_pro`
 
   <Warning>必须与 `first_image` 一起使用，与参考图片模式互斥</Warning>
 </ParamField>
@@ -156,7 +167,7 @@ VEO 支持两种互斥的图片引导模式：
 **参数互斥规则：**
 - **参考图片**：`input_reference` 和 `image_urls` 二选一
 - **引导模式**：参考图片模式 OR 首尾帧模式，不能同时使用
-- **模型限制**：veo_3_1_pro 不支持参考图模式，veo3_1_fast_stable 仅支持 720p
+- **模型限制**：veo_3_1_fast_stable 仅支持首尾帧模式，veo_3_1_fast_stable / veo_3_1_pro_stable 不支持 4K
 </Warning>
 
 ## VEO 特性
@@ -169,7 +180,7 @@ VEO 支持两种互斥的图片引导模式：
     支持参考图片和首尾帧两种引导方式
   </Card>
   <Card title="多模型选择" icon="sparkles">
-    提供稳定版、快速版、高质量版三种模型
+    提供 fast_stable、pro_stable、fast、pro 四种模型
   </Card>
   <Card title="灵活控制" icon="sliders">
     首尾帧模式提供精确的开始和结束控制
@@ -181,20 +192,21 @@ VEO 支持两种互斥的图片引导模式：
 1. 视频生成为异步处理，需要通过返回的 `id` 查询任务状态和结果
 2. 在提示词中明确描述所需的视觉效果和风格
 3. 选择合适的模型：
-   - veo3_1_fast_stable：稳定性优先，仅720p
-   - veo_3_1_fast：快速迭代，支持多分辨率
-   - veo_3_1_pro：极致画质，专业级创作
+   - veo_3_1_fast_stable：720p/1080p，仅支持首尾帧
+   - veo_3_1_pro_stable：720p/1080p
+   - veo_3_1_fast：快速版，支持720p/1080p/4K
+   - veo_3_1_pro：高质量版，支持720p/1080p/4K
 4. 选择合适的引导模式：
-   - 参考图片模式：适合风格引导（veo3_1_fast_stable、veo_3_1_fast）
+   - 参考图片模式：适合风格引导（veo_3_1_pro_stable、veo_3_1_fast、veo_3_1_pro）
    - 首尾帧模式：适合精确控制开始和结束（所有模型）
 5. 根据模型选择合适的分辨率
 </Info>
 
 <Tip>
 **引导模式选择建议：**
-- **参考图片模式**：当你想要整体风格一致但允许创意变化时使用（仅 veo3_1_fast_stable、veo_3_1_fast 支持）
+- **参考图片模式**：当你想要整体风格一致但允许创意变化时使用（veo_3_1_pro_stable、veo_3_1_fast、veo_3_1_pro 支持）
 - **首尾帧模式**：当你需要精确控制视频的开始和结束画面时使用（所有模型支持）
-- **分辨率选择**：根据模型能力和需求选择，veo3_1_fast_stable 仅支持 720p
+- **分辨率选择**：根据模型能力和需求选择，veo_3_1_fast_stable / veo_3_1_pro_stable 不支持 4K
 </Tip>
 
 <RequestExample>

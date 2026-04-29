@@ -16,23 +16,16 @@ All requests require a Bearer token in the request header:
 Authorization: Bearer {{key}}
 ```
 
-## Model Overview
-
-Supported models:
-
-- `veo3_1_fast_stable` (Stable version, 720p only)
-- `veo_3_1_fast` (Fast version, supports 720p/1080p/4k, lower prompt control but faster speed, suitable for rapid iteration and quick results)
-- `veo_3_1_pro` (High-quality version, supports 720p/1080p/4k, slower generation speed but higher prompt control, suitable for premium quality, professional creation, advertising and experimental short films)
-
 ## Request Parameters
 
 <ParamField path="model" type="string" required>
   Model name
 
   Available options:
-  - `veo3_1_fast_stable` - Stable version, 720p only
-  - `veo_3_1_fast` - Fast version, 720p/1080p/4k
-  - `veo_3_1_pro` - High-quality version, 720p/1080p/4k
+  - `veo_3_1_fast_stable` - 720p/1080p, first/last frame only
+  - `veo_3_1_pro_stable` - 720p/1080p
+  - `veo_3_1_fast` - Fast version, supports 720p/1080p/4K
+  - `veo_3_1_pro` - High-quality version, supports 720p/1080p/4K
 </ParamField>
 
 <ParamField path="prompt" type="string" required>
@@ -42,15 +35,15 @@ Supported models:
 </ParamField>
 
 <ParamField path="resolution" type="string">
-  Output resolution, defaults to `720p`
+  Output resolution
 
   Supported values:
-  - `720p` - Default, supported by all Veo3.1 models
-  - `1080p` - Only supported by veo_3_1_fast, veo_3_1_pro
-  - `4K` - Only supported by veo3_1, veo_3_1_fast, veo_3_1_pro
+  - `720p` - Default, all Veo models
+  - `1080p` - Supported by veo_3_1_fast_stable, veo_3_1_pro_stable, veo_3_1_fast, veo_3_1_pro
+  - `4K` - Supported by veo_3_1_fast, veo_3_1_pro
 
   <Note>Case insensitive: supports 720p/720P/4K/4k and other formats</Note>
-  <Warning>veo3_1_fast_stable only supports 720p</Warning>
+  <Warning>veo_3_1_fast_stable / veo_3_1_pro_stable do not support 4K</Warning>
 </ParamField>
 
 <ParamField path="aspect_ratio" type="string">
@@ -66,20 +59,30 @@ Supported models:
 ### Reference Image Mode
 
 <ParamField path="input_reference" type="array">
-  Reference image URLs, supports up to three images separated by commas [,]
+  Reference image URLs
 
-  Supported models: veo3_1_fast_stable, veo_3_1_fast
+  Cannot be used with first/last frame mode.
 
-  <Warning>Cannot be used with first/last frame mode. veo_3_1_pro does not support reference image mode</Warning>
+  Supported models:
+  - `veo_3_1_pro_stable` (up to 3 images)
+  - `veo_3_1_fast` (up to 3 images)
+  - `veo_3_1_pro`
+
+  <Warning>veo_3_1_fast_stable only supports first/last frame mode, does not support imgUrl reference image mode</Warning>
   <Warning>Choose either this or `image_urls`</Warning>
 </ParamField>
 
 <ParamField path="image_urls" type="array">
-  Reference image URLs, supports up to three images separated by commas [,]
+  Reference image URLs
 
-  Supported models: veo3_1_fast_stable, veo_3_1_fast
+  Cannot be used with first/last frame mode.
 
-  <Warning>Cannot be used with first/last frame mode. veo_3_1_pro does not support reference image mode</Warning>
+  Supported models:
+  - `veo_3_1_pro_stable` (up to 3 images)
+  - `veo_3_1_fast` (up to 3 images)
+  - `veo_3_1_pro`
+
+  <Warning>veo_3_1_fast_stable only supports first/last frame mode, does not support imgUrl reference image mode</Warning>
   <Warning>Choose either this or `input_reference`</Warning>
 </ParamField>
 
@@ -88,19 +91,27 @@ Supported models:
 <ParamField path="first_image" type="string">
   First frame image URL
 
-  Supported by all Veo3.1 models
+  Supported models:
+  - `veo_3_1_fast_stable`
+  - `veo_3_1_pro_stable`
+  - `veo_3_1_fast`
+  - `veo_3_1_pro`
 
   Usage modes:
   - Used alone: Image-to-video mode
-  - Used with last_image: Frame-to-video mode (only some models support last frame)
+  - Used with `lastFrameUrl`: First/last frame mode
 
   <Warning>Mutually exclusive with reference image mode</Warning>
 </ParamField>
 
 <ParamField path="last_image" type="string">
-  Last frame image URL, must be used with first_image (frame-to-video mode)
+  Last frame image URL, must be used with `first_image`
 
-  Supported models: veo3_1_fast_stable, veo_3_1_fast, veo_3_1_pro
+  Supported models:
+  - `veo_3_1_fast_stable`
+  - `veo_3_1_pro_stable`
+  - `veo_3_1_fast`
+  - `veo_3_1_pro`
 
   <Warning>Must be used with `first_image`, mutually exclusive with reference image mode</Warning>
 </ParamField>
@@ -156,7 +167,7 @@ VEO supports two mutually exclusive image guidance modes:
 **Mutually Exclusive Parameters:**
 - **Reference images**: Choose either `input_reference` or `image_urls`
 - **Guidance modes**: Reference image mode OR first/last frame mode, cannot use both
-- **Model limitations**: veo_3_1_pro does not support reference image mode, veo3_1_fast_stable only supports 720p
+- **Model limitations**: veo_3_1_fast_stable only supports first/last frame mode, veo_3_1_fast_stable / veo_3_1_pro_stable do not support 4K
 </Warning>
 
 ## VEO Features
@@ -169,7 +180,7 @@ VEO supports two mutually exclusive image guidance modes:
     Supports both reference image and first/last frame guidance
   </Card>
   <Card title="Multiple Model Options" icon="sparkles">
-    Provides stable, fast, and high-quality versions
+    Provides fast_stable, pro_stable, fast, and pro models
   </Card>
   <Card title="Flexible Control" icon="sliders">
     First/last frame mode provides precise start and end control
@@ -181,20 +192,21 @@ VEO supports two mutually exclusive image guidance modes:
 1. Video generation is asynchronous, use the returned `id` to query task status and results
 2. Clearly describe desired visual effects and style in the prompt
 3. Choose appropriate model:
-   - veo3_1_fast_stable: Stability priority, 720p only
-   - veo_3_1_fast: Rapid iteration, supports multiple resolutions
-   - veo_3_1_pro: Premium quality, professional creation
+   - veo_3_1_fast_stable: 720p/1080p, first/last frame only
+   - veo_3_1_pro_stable: 720p/1080p
+   - veo_3_1_fast: Fast version, supports 720p/1080p/4K
+   - veo_3_1_pro: High-quality version, supports 720p/1080p/4K
 4. Choose appropriate guidance mode:
-   - Reference image mode: Suitable for style guidance (veo3_1_fast_stable, veo_3_1_fast)
+   - Reference image mode: Suitable for style guidance (veo_3_1_pro_stable, veo_3_1_fast, veo_3_1_pro)
    - First/last frame mode: Suitable for precise start and end control (all models)
 5. Select appropriate resolution based on model capabilities
 </Info>
 
 <Tip>
 **Guidance Mode Selection:**
-- **Reference Image Mode**: Use when you want overall style consistency but allow creative variation (only veo3_1_fast_stable, veo_3_1_fast support)
+- **Reference Image Mode**: Use when you want overall style consistency but allow creative variation (veo_3_1_pro_stable, veo_3_1_fast, veo_3_1_pro support)
 - **First/Last Frame Mode**: Use when you need precise control over video start and end frames (all models support)
-- **Resolution Selection**: Choose based on model capabilities and requirements, veo3_1_fast_stable only supports 720p
+- **Resolution Selection**: Choose based on model capabilities and requirements, veo_3_1_fast_stable / veo_3_1_pro_stable do not support 4K
 </Tip>
 
 <RequestExample>
