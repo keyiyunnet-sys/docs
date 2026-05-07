@@ -38,7 +38,15 @@
               {
                 "group": "文字系列 API",
                 "pages": [
-                  "api-reference/text/gemini-chat"
+                  "api-reference/text/gemini-chat",
+                  {
+                    "group": "llmpower",
+                    "pages": [
+                      "api-reference/text/llmpower-openai-chat",
+                      "api-reference/text/llmpower-gemini-native-chat",
+                      "api-reference/text/llmpower-claude-chat"
+                    ]
+                  }
                 ]
               },
               {

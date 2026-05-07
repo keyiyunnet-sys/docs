@@ -1,0 +1,194 @@
+---
+title: "llmpower Gemini Native API"
+description: "基于 Gemini 原生协议的 llmpower 对话接口，适合直接使用 generateContent 或 streamGenerateContent 协议接入"
+api: "POST http://apillm.globalaiopc.com/gw_llm_power/v1/models/{model}:generateContent"
+---
+
+## 认证
+
+llmpower 对外接口主要使用 `X-User-Id` 模式进行身份识别。
+
+```bash
+X-User-Id: {{YOUR_USER_ID}}
+X-Platform: {{YOUR_PLATFORM}}
+X-Signature: {{YOUR_SIGNATURE}}
+Content-Type: application/json
+```
+
+说明：
+
+- `X-User-Id`：业务用户 ID，必传
+- `X-Platform`：调用平台标识，建议显式传递
+- `X-Signature`：签名值，计算规则为 `hex(HMAC_SHA256(secret, platform + userId))`
+
+## 请求地址
+
+支持以下 Gemini 原生路径：
+
+- `POST /v1/models/{model}:generateContent`
+- `POST /v1/models/{model}:streamGenerateContent`
+
+完整地址示例：
+
+```text
+http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-2.5-pro:generateContent
+```
+
+## 请求参数
+
+<ParamField path="contents" type="array" required>
+  Gemini 原生消息内容数组。每个元素通常包含 `role` 和 `parts`
+</ParamField>
+
+<ParamField path="contents[].role" type="string">
+  消息角色，常见值为 `user` 或 `model`
+</ParamField>
+
+<ParamField path="contents[].parts" type="array" required>
+  消息片段数组。常见为 `text` 对象，也支持 Gemini 原生多模态结构
+</ParamField>
+
+<ParamField path="contents[].parts[].text" type="string">
+  文本内容
+</ParamField>
+
+<ParamField path="generationConfig.temperature" type="number">
+  采样温度
+</ParamField>
+
+<ParamField path="generationConfig.topP" type="number">
+  核采样参数
+</ParamField>
+
+<ParamField path="generationConfig.maxOutputTokens" type="integer">
+  最大输出 token 数
+</ParamField>
+
+<ParamField path="systemInstruction.parts[].text" type="string">
+  系统提示词，可选
+</ParamField>
+
+## 响应说明
+
+接口返回 Gemini 原生风格响应。
+
+<ResponseField name="candidates[].content.parts[].text" type="string">
+  模型生成的文本内容
+</ResponseField>
+
+<ResponseField name="candidates[].finishReason" type="string">
+  生成结束原因
+</ResponseField>
+
+<ResponseField name="usageMetadata.promptTokenCount" type="integer">
+  输入 token 数
+</ResponseField>
+
+<ResponseField name="usageMetadata.candidatesTokenCount" type="integer">
+  输出 token 数
+</ResponseField>
+
+<ResponseField name="usageMetadata.totalTokenCount" type="integer">
+  总 token 数
+</ResponseField>
+
+## 注意事项
+
+<Note>
+1. 路径中的 `{model}` 需要替换为实际模型名，例如 `gemini-2.5-pro`
+2. 流式场景请使用 `:streamGenerateContent`
+3. 只要传了 `X-User-Id`，就必须传 `X-Signature`
+4. `X-Platform` 与签名时使用的 `platform` 值必须一致
+</Note>
+
+<RequestExample>
+
+```bash cURL (generateContent)
+curl --request POST \
+  --url http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-2.5-pro:generateContent \
+  --header 'X-User-Id: {{YOUR_USER_ID}}' \
+  --header 'X-Platform: {{YOUR_PLATFORM}}' \
+  --header 'X-Signature: {{YOUR_SIGNATURE}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "contents": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "text": "请介绍一下人工智能的发展历程"
+          }
+        ]
+      }
+    ],
+    "generationConfig": {
+      "temperature": 0.7,
+      "maxOutputTokens": 1024
+    }
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-2.5-pro:generateContent',
+    headers={
+        'X-User-Id': '{{YOUR_USER_ID}}',
+        'X-Platform': '{{YOUR_PLATFORM}}',
+        'X-Signature': '{{YOUR_SIGNATURE}}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'contents': [
+            {
+                'role': 'user',
+                'parts': [
+                    {'text': '请介绍一下人工智能的发展历程'}
+                ]
+            }
+        ],
+        'generationConfig': {
+            'temperature': 0.7,
+            'maxOutputTokens': 1024
+        }
+    }
+)
+
+print(response.json())
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json generateContent 响应
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "人工智能的发展经历了规则系统、机器学习和大模型三个主要阶段。"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+    }
+  ],
+  "usageMetadata": {
+    "promptTokenCount": 18,
+    "candidatesTokenCount": 24,
+    "totalTokenCount": 42
+  }
+}
+```
+
+```json streamGenerateContent 响应
+{"candidates":[{"content":{"parts":[{"text":"人工智能的发展"}],"role":"model"},"finishReason":null,"index":0}]}
+{"candidates":[{"content":{"parts":[{"text":"经历了多个阶段。"}],"role":"model"},"finishReason":null,"index":0}]}
+```
+
+</ResponseExample>
