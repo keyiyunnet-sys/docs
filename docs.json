@@ -40,7 +40,7 @@
                 "pages": [
                   "api-reference/text/gemini-chat",
                   {
-                    "group": "llmpower",
+                    "group": "LLM文本API",
                     "pages": [
                       "api-reference/text/llmpower-openai-chat",
                       "api-reference/text/llmpower-gemini-native-chat",

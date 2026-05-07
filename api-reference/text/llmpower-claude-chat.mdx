@@ -1,30 +1,48 @@
 ---
-title: "llmpower Claude Messages API"
-description: "基于 Claude Messages 协议的 llmpower 对话接口，适合使用 Anthropic 原生格式接入"
+title: "Claude Messages API"
+description: "基于 Claude Messages 协议的对话接口，适合使用 Anthropic 原生格式接入"
 api: "POST http://apillm.globalaiopc.com/gw_llm_power/v1/messages"
 ---
 
 ## 认证
 
-llmpower 对外接口主要使用 `X-User-Id` 模式进行身份识别。
+使用 `Authorization` 请求头进行身份认证。
 
 ```bash
-X-User-Id: {{YOUR_USER_ID}}
-X-Platform: {{YOUR_PLATFORM}}
-X-Signature: {{YOUR_SIGNATURE}}
+Authorization: Bearer {{YOUR_API_KEY}}
 Content-Type: application/json
 ```
 
 说明：
 
-- `X-User-Id`：业务用户 ID，必传
-- `X-Platform`：调用平台标识，建议显式传递
-- `X-Signature`：签名值，计算规则为 `hex(HMAC_SHA256(secret, platform + userId))`
+- `Authorization`：API 密钥，格式为 `Bearer {{YOUR_API_KEY}}`
+
+## 支持的模型
+
+当前支持以下模型：
+
+- `claude-opus-4-7-hc`
+- `gpt-5.4-hc`
+- `gpt-5.4`
+- `gpt-5.5`
+- `claude-haiku-4-5`
+- `claude-opus-4-6-fd`
+- `claude-haiku-4-5-fd`
+- `claude-opus-4-5`
+- `claude-haiku-4-5-hc`
+- `claude-opus-4-6`
+- `claude-opus-4-6-hc`
+
+模型后缀说明：
+
+- `-fd`：反向代理版本
+- `-hc`：号池版本
+- 无后缀：官方版本
 
 ## 请求参数
 
 <ParamField path="model" type="string" required>
-  要使用的 Claude 模型名称，例如：`claude-3-7-sonnet`、`claude-3-5-haiku`
+  要使用的模型名称，例如：`claude-opus-4-6`、`claude-haiku-4-5`、`claude-opus-4-6-hc`
 </ParamField>
 
 <ParamField path="max_tokens" type="integer" required>
@@ -96,8 +114,7 @@ Content-Type: application/json
 <Note>
 1. Claude 格式请求路径为 `POST /v1/messages`
 2. 流式场景请在请求体中传递 `"stream": true`
-3. 只要传了 `X-User-Id`，就必须传 `X-Signature`
-4. `X-Platform` 与签名时使用的 `platform` 值必须一致
+3. 请使用 `Authorization` 请求头传递 API 密钥
 </Note>
 
 <RequestExample>
@@ -105,12 +122,10 @@ Content-Type: application/json
 ```bash cURL
 curl --request POST \
   --url http://apillm.globalaiopc.com/gw_llm_power/v1/messages \
-  --header 'X-User-Id: {{YOUR_USER_ID}}' \
-  --header 'X-Platform: {{YOUR_PLATFORM}}' \
-  --header 'X-Signature: {{YOUR_SIGNATURE}}' \
+  --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "claude-3-7-sonnet",
+    "model": "claude-opus-4-6",
     "max_tokens": 1024,
     "system": "你是一个专业写作助手",
     "messages": [
@@ -128,13 +143,11 @@ import requests
 response = requests.post(
     'http://apillm.globalaiopc.com/gw_llm_power/v1/messages',
     headers={
-        'X-User-Id': '{{YOUR_USER_ID}}',
-        'X-Platform': '{{YOUR_PLATFORM}}',
-        'X-Signature': '{{YOUR_SIGNATURE}}',
+        'Authorization': 'Bearer {{YOUR_API_KEY}}',
         'Content-Type': 'application/json'
     },
     json={
-        'model': 'claude-3-7-sonnet',
+        'model': 'claude-opus-4-6',
         'max_tokens': 1024,
         'system': '你是一个专业写作助手',
         'messages': [
@@ -164,7 +177,7 @@ print(response.json())
       "text": "当然可以，下面是一段简洁的产品介绍文案。"
     }
   ],
-  "model": "claude-3-7-sonnet",
+  "model": "claude-opus-4-6",
   "stop_reason": "end_turn",
   "usage": {
     "input_tokens": 18,
@@ -175,7 +188,7 @@ print(response.json())
 
 ```json 流式响应
 event: message_start
-data: {"type":"message_start","message":{"id":"msg_01ABC123","type":"message","role":"assistant","model":"claude-3-7-sonnet","content":[]}}
+data: {"type":"message_start","message":{"id":"msg_01ABC123","type":"message","role":"assistant","model":"claude-opus-4-6","content":[]}}
 
 event: content_block_delta
 data: {"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"当然可以"}}

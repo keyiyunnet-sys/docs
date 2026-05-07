@@ -1,25 +1,43 @@
 ---
-title: "llmpower Gemini Native API"
-description: "基于 Gemini 原生协议的 llmpower 对话接口，适合直接使用 generateContent 或 streamGenerateContent 协议接入"
+title: "Gemini Native API"
+description: "基于 Gemini 原生协议的对话接口，适合直接使用 generateContent 或 streamGenerateContent 协议接入"
 api: "POST http://apillm.globalaiopc.com/gw_llm_power/v1/models/{model}:generateContent"
 ---
 
 ## 认证
 
-llmpower 对外接口主要使用 `X-User-Id` 模式进行身份识别。
+使用 `Authorization` 请求头进行身份认证。
 
 ```bash
-X-User-Id: {{YOUR_USER_ID}}
-X-Platform: {{YOUR_PLATFORM}}
-X-Signature: {{YOUR_SIGNATURE}}
+Authorization: Bearer {{YOUR_API_KEY}}
 Content-Type: application/json
 ```
 
 说明：
 
-- `X-User-Id`：业务用户 ID，必传
-- `X-Platform`：调用平台标识，建议显式传递
-- `X-Signature`：签名值，计算规则为 `hex(HMAC_SHA256(secret, platform + userId))`
+- `Authorization`：API 密钥，格式为 `Bearer {{YOUR_API_KEY}}`
+
+## 支持的模型
+
+当前支持以下模型：
+
+- `claude-opus-4-7-hc`
+- `gpt-5.4-hc`
+- `gpt-5.4`
+- `gpt-5.5`
+- `claude-haiku-4-5`
+- `claude-opus-4-6-fd`
+- `claude-haiku-4-5-fd`
+- `claude-opus-4-5`
+- `claude-haiku-4-5-hc`
+- `claude-opus-4-6`
+- `claude-opus-4-6-hc`
+
+模型后缀说明：
+
+- `-fd`：反向代理版本
+- `-hc`：号池版本
+- 无后缀：官方版本
 
 ## 请求地址
 
@@ -31,7 +49,7 @@ Content-Type: application/json
 完整地址示例：
 
 ```text
-http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-2.5-pro:generateContent
+http://apillm.globalaiopc.com/gw_llm_power/v1/models/claude-opus-4-6:generateContent
 ```
 
 ## 请求参数
@@ -95,20 +113,17 @@ http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-2.5-pro:generateCont
 ## 注意事项
 
 <Note>
-1. 路径中的 `{model}` 需要替换为实际模型名，例如 `gemini-2.5-pro`
+1. 路径中的 `{model}` 需要替换为实际模型名，例如 `claude-opus-4-6`
 2. 流式场景请使用 `:streamGenerateContent`
-3. 只要传了 `X-User-Id`，就必须传 `X-Signature`
-4. `X-Platform` 与签名时使用的 `platform` 值必须一致
+3. 请使用 `Authorization` 请求头传递 API 密钥
 </Note>
 
 <RequestExample>
 
 ```bash cURL (generateContent)
 curl --request POST \
-  --url http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-2.5-pro:generateContent \
-  --header 'X-User-Id: {{YOUR_USER_ID}}' \
-  --header 'X-Platform: {{YOUR_PLATFORM}}' \
-  --header 'X-Signature: {{YOUR_SIGNATURE}}' \
+  --url http://apillm.globalaiopc.com/gw_llm_power/v1/models/claude-opus-4-6:generateContent \
+  --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
   --header 'Content-Type: application/json' \
   --data '{
     "contents": [
@@ -132,11 +147,9 @@ curl --request POST \
 import requests
 
 response = requests.post(
-    'http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-2.5-pro:generateContent',
+    'http://apillm.globalaiopc.com/gw_llm_power/v1/models/claude-opus-4-6:generateContent',
     headers={
-        'X-User-Id': '{{YOUR_USER_ID}}',
-        'X-Platform': '{{YOUR_PLATFORM}}',
-        'X-Signature': '{{YOUR_SIGNATURE}}',
+        'Authorization': 'Bearer {{YOUR_API_KEY}}',
         'Content-Type': 'application/json'
     },
     json={

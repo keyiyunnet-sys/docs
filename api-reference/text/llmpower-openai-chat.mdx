@@ -1,32 +1,50 @@
 ---
-title: "llmpower OpenAI Chat API"
-description: "基于 OpenAI 兼容格式的 llmpower 对话接口，适合使用 Chat Completions 协议接入"
+title: "OpenAI Chat API"
+description: "基于 OpenAI 兼容格式的对话接口，适合使用 Chat Completions 协议接入"
 api: "POST http://apillm.globalaiopc.com/gw_llm_power/v1/chat/completions"
 ---
 
 ## 认证
 
-llmpower 对外接口主要使用 `X-User-Id` 模式进行身份识别。
+使用 `Authorization` 请求头进行身份认证。
 
 请求头要求：
 
 ```bash
-X-User-Id: {{YOUR_USER_ID}}
-X-Platform: {{YOUR_PLATFORM}}
-X-Signature: {{YOUR_SIGNATURE}}
+Authorization: Bearer {{YOUR_API_KEY}}
 Content-Type: application/json
 ```
 
 说明：
 
-- `X-User-Id`：业务用户 ID，必传
-- `X-Platform`：调用平台标识，建议显式传递
-- `X-Signature`：签名值，计算规则为 `hex(HMAC_SHA256(secret, platform + userId))`
+- `Authorization`：API 密钥，格式为 `Bearer {{YOUR_API_KEY}}`
+
+## 支持的模型
+
+当前支持以下模型：
+
+- `claude-opus-4-7-hc`
+- `gpt-5.4-hc`
+- `gpt-5.4`
+- `gpt-5.5`
+- `claude-haiku-4-5`
+- `claude-opus-4-6-fd`
+- `claude-haiku-4-5-fd`
+- `claude-opus-4-5`
+- `claude-haiku-4-5-hc`
+- `claude-opus-4-6`
+- `claude-opus-4-6-hc`
+
+模型后缀说明：
+
+- `-fd`：反向代理版本
+- `-hc`：号池版本
+- 无后缀：官方版本
 
 ## 请求参数
 
 <ParamField path="model" type="string" required>
-  要使用的模型名称，例如：`gpt-4.1`、`gemini-2.5-pro`、`claude-3-7-sonnet`
+  要使用的模型名称，例如：`gpt-5.4`、`gpt-5.5`、`claude-opus-4-6`
 </ParamField>
 
 <ParamField path="messages" type="array" required>
@@ -107,9 +125,8 @@ Content-Type: application/json
 
 <Note>
 1. 请求地址固定为 `http://apillm.globalaiopc.com/gw_llm_power`
-2. 只要传了 `X-User-Id`，就必须传 `X-Signature`
-3. `X-Platform` 如果参与签名，请确保与请求头中的值完全一致
-4. 流式响应使用 SSE 返回，结束标志为 `data: [DONE]`
+2. 请使用 `Authorization` 请求头传递 API 密钥
+3. 流式响应使用 SSE 返回，结束标志为 `data: [DONE]`
 </Note>
 
 <RequestExample>
@@ -117,12 +134,10 @@ Content-Type: application/json
 ```bash cURL
 curl --request POST \
   --url http://apillm.globalaiopc.com/gw_llm_power/v1/chat/completions \
-  --header 'X-User-Id: {{YOUR_USER_ID}}' \
-  --header 'X-Platform: {{YOUR_PLATFORM}}' \
-  --header 'X-Signature: {{YOUR_SIGNATURE}}' \
+  --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "gpt-4.1",
+    "model": "gpt-5.4",
     "messages": [
       {
         "role": "system",
@@ -143,13 +158,11 @@ import requests
 response = requests.post(
     'http://apillm.globalaiopc.com/gw_llm_power/v1/chat/completions',
     headers={
-        'X-User-Id': '{{YOUR_USER_ID}}',
-        'X-Platform': '{{YOUR_PLATFORM}}',
-        'X-Signature': '{{YOUR_SIGNATURE}}',
+        'Authorization': 'Bearer {{YOUR_API_KEY}}',
         'Content-Type': 'application/json'
     },
     json={
-        'model': 'gpt-4.1',
+        'model': 'gpt-5.4',
         'messages': [
             {'role': 'system', 'content': '你是一个专业助手'},
             {'role': 'user', 'content': '请介绍一下你自己'}
@@ -170,13 +183,13 @@ print(response.json())
   "id": "chatcmpl-abc123",
   "object": "chat.completion",
   "created": 1761635478,
-  "model": "gpt-4.1",
+  "model": "gpt-5.4",
   "choices": [
     {
       "index": 0,
       "message": {
         "role": "assistant",
-        "content": "你好，我是 llmpower 提供的 AI 助手，很高兴为你服务。"
+        "content": "你好，我是 AI 助手，很高兴为你服务。"
       },
       "finish_reason": "stop"
     }
@@ -190,9 +203,9 @@ print(response.json())
 ```
 
 ```json 流式响应
-data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1761635478,"model":"gpt-4.1","choices":[{"index":0,"delta":{"role":"assistant","content":"你好"},"finish_reason":null}]}
+data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1761635478,"model":"gpt-5.4","choices":[{"index":0,"delta":{"role":"assistant","content":"你好"},"finish_reason":null}]}
 
-data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1761635478,"model":"gpt-4.1","choices":[{"index":0,"delta":{"content":"！"},"finish_reason":null}]}
+data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1761635478,"model":"gpt-5.4","choices":[{"index":0,"delta":{"content":"！"},"finish_reason":null}]}
 
 data: [DONE]
 ```
