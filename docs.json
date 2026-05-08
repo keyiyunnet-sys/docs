@@ -27,10 +27,7 @@
                 "group": "API 介绍",
                 "pages": [
                   "api-reference/introduction",
-                  {
-                    "title": "价格表",
-                    "href": "https://www.kdocs.cn/l/ctOlxIO16Qog"
-                  }
+                  "api-reference/pricing"
                 ]
               },
               {
