@@ -40,17 +40,17 @@ Content-Type: application/json
 
 | 模型 | 图片分析 | 视频分析 |
 | --- | --- | --- |
-| `claude-opus-4-7-hc` | 支持 | 支持 |
-| `gpt-5.4-hc` | 支持 | 支持 |
-| `gpt-5.4` | 支持 | 支持 |
-| `gpt-5.5` | 支持 | 支持 |
+| `claude-opus-4-7-hc` | 支持 | 不支持 |
+| `gpt-5.4-hc` | 支持 | 不支持 |
+| `gpt-5.4` | 支持 | 不支持 |
+| `gpt-5.5` | 支持 | 不支持 |
 | `gemini-3-pro-preview` | 支持 | 支持 |
-| `claude-haiku-4-5` | 支持 | 支持 |
-| `claude-opus-4-6-fd` | 支持 | 支持 |
-| `claude-haiku-4-5-fd` | 支持 | 支持 |
-| `claude-opus-4-5` | 支持 | 支持 |
-| `claude-haiku-4-5-hc` | 支持 | 支持 |
-| `claude-opus-4-6` | 支持 | 支持 |
+| `claude-haiku-4-5` | 支持 | 不支持 |
+| `claude-opus-4-6-fd` | 支持 | 不支持 |
+| `claude-haiku-4-5-fd` | 支持 | 不支持 |
+| `claude-opus-4-5` | 支持 | 不支持 |
+| `claude-haiku-4-5-hc` | 支持 | 不支持 |
+| `claude-opus-4-6` | 支持 | 不支持 |
 | `claude-opus-4-6-hc` | 支持 | 不支持 |
 
 ## 请求参数
@@ -201,7 +201,7 @@ curl --request POST \
   --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "gpt-5.4",
+    "model": "gemini-3-pro-preview",
     "messages": [
       {
         "role": "system",
@@ -215,14 +215,15 @@ curl --request POST \
             "text": "请分析这个视频的内容"
           },
           {
-            "type": "video_url",
-            "video_url": {
+            "type": "image_url",
+            "image_url": {
               "url": "https://kyydata.oss-cn-beijing.aliyuncs.com/ai_sora/2026-04-24/seTGTXQ_1777011903923.mp4"
             }
           }
         ]
       }
-    ]
+    ],
+    "stream": false
   }'
 ```
 

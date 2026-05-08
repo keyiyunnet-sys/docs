@@ -39,7 +39,6 @@
               {
                 "group": "文字系列 API",
                 "pages": [
-                  "api-reference/text/gemini-chat",
                   {
                     "group": "LLM文本API",
                     "pages": [
