@@ -23,23 +23,17 @@ Content-Type: application/json
 
 当前支持以下模型：
 
-- `claude-opus-4-7-hc`
-- `gpt-5.4-hc`
-- `gpt-5.4`
-- `gpt-5.5`
-- `claude-haiku-4-5`
-- `claude-opus-4-6-fd`
-- `claude-haiku-4-5-fd`
-- `claude-opus-4-5`
-- `claude-haiku-4-5-hc`
-- `claude-opus-4-6`
-- `claude-opus-4-6-hc`
-
-模型后缀说明：
-
-- `-fd`：反向代理版本
-- `-hc`：号池版本
-- 无后缀：官方版本
+- `claude-opus-4-7-hc`：Claude Opus 4.7号池
+- `gpt-5.4-hc`：GPT-5.4号池
+- `gpt-5.4`：GPT-5.4
+- `gpt-5.5`：GPT-5.5
+- `claude-haiku-4-5`：Claude Haiku 4.5
+- `claude-opus-4-6-fd`：Claude Opus 4.6反向代理
+- `claude-haiku-4-5-fd`：Claude Haiku 4.5反向代理
+- `claude-opus-4-5`：Claude Opus 4.5
+- `claude-haiku-4-5-hc`：Claude Haiku 4.5号池
+- `claude-opus-4-6`：Claude Opus 4.6
+- `claude-opus-4-6-hc`：Claude Opus 4.6号池
 
 ## 请求参数
 
@@ -131,7 +125,7 @@ Content-Type: application/json
 
 <RequestExample>
 
-```bash cURL
+```bash cURL (纯文本)
 curl --request POST \
   --url http://apillm.globalaiopc.com/gw_llm_power/v1/chat/completions \
   --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
@@ -149,6 +143,37 @@ curl --request POST \
       }
     ],
     "temperature": 0.7
+  }'
+```
+
+```bash cURL (图片分析)
+curl --request POST \
+  --url http://apillm.globalaiopc.com/gw_llm_power/v1/chat/completions \
+  --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "gpt-5.4",
+    "messages": [
+      {
+        "role": "system",
+        "content": "你是一个图片分析专家。"
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "请分析这张图片的内容"
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "https://example.com/image.jpg"
+            }
+          }
+        ]
+      }
+    ]
   }'
 ```
 
