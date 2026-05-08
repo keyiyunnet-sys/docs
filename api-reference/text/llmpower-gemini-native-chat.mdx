@@ -21,33 +21,19 @@ Content-Type: application/json
 
 当前支持以下模型：
 
-- `claude-opus-4-7-hc`：Claude Opus 4.7号池
 - `gpt-5.4-hc`：GPT-5.4号池
 - `gpt-5.4`：GPT-5.4
 - `gpt-5.5`：GPT-5.5
-- `claude-haiku-4-5`：Claude Haiku 4.5
-- `claude-opus-4-6-fd`：Claude Opus 4.6反向代理
-- `claude-haiku-4-5-fd`：Claude Haiku 4.5反向代理
-- `claude-opus-4-5`：Claude Opus 4.5
-- `claude-haiku-4-5-hc`：Claude Haiku 4.5号池
-- `claude-opus-4-6`：Claude Opus 4.6
-- `claude-opus-4-6-hc`：Claude Opus 4.6号池
+- `gemini-3-pro-preview`：官方 Gemini 3 Pro
 
 ### 多模态能力支持
 
 | 模型 | 图片分析 | 视频分析 |
 | --- | --- | --- |
-| `claude-opus-4-7-hc` | 支持 | 支持 |
 | `gpt-5.4-hc` | 支持 | 支持 |
 | `gpt-5.4` | 支持 | 支持 |
 | `gpt-5.5` | 支持 | 支持 |
-| `claude-haiku-4-5` | 支持 | 支持 |
-| `claude-opus-4-6-fd` | 支持 | 支持 |
-| `claude-haiku-4-5-fd` | 支持 | 支持 |
-| `claude-opus-4-5` | 支持 | 支持 |
-| `claude-haiku-4-5-hc` | 支持 | 支持 |
-| `claude-opus-4-6` | 支持 | 支持 |
-| `claude-opus-4-6-hc` | 支持 | 支持 |
+| `gemini-3-pro-preview` | 支持 | 支持 |
 
 ## 请求地址
 
@@ -59,7 +45,7 @@ Content-Type: application/json
 完整地址示例：
 
 ```text
-http://apillm.globalaiopc.com/gw_llm_power/v1/models/claude-opus-4-6:generateContent
+http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3-pro-preview:generateContent
 ```
 
 ## 请求参数
@@ -123,7 +109,7 @@ http://apillm.globalaiopc.com/gw_llm_power/v1/models/claude-opus-4-6:generateCon
 ## 注意事项
 
 <Note>
-1. 路径中的 `{model}` 需要替换为实际模型名，例如 `claude-opus-4-6`
+1. 路径中的 `{model}` 需要替换为实际模型名，例如 `gemini-3-pro-preview`
 2. 流式场景请使用 `:streamGenerateContent`
 3. 请使用 `Authorization` 请求头传递 API 密钥
 </Note>
@@ -132,7 +118,7 @@ http://apillm.globalaiopc.com/gw_llm_power/v1/models/claude-opus-4-6:generateCon
 
 ```bash cURL (generateContent 纯文本)
 curl --request POST \
-  --url http://apillm.globalaiopc.com/gw_llm_power/v1/models/claude-opus-4-6:generateContent \
+  --url http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3-pro-preview:generateContent \
   --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -155,7 +141,7 @@ curl --request POST \
 
 ```bash cURL (generateContent 图片分析)
 curl --request POST \
-  --url http://apillm.globalaiopc.com/gw_llm_power/v1/models/claude-opus-4-6:generateContent \
+  --url http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3-pro-preview:generateContent \
   --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -186,7 +172,7 @@ curl --request POST \
 import requests
 
 response = requests.post(
-    'http://apillm.globalaiopc.com/gw_llm_power/v1/models/claude-opus-4-6:generateContent',
+    'http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3-pro-preview:generateContent',
     headers={
         'Authorization': 'Bearer {{YOUR_API_KEY}}',
         'Content-Type': 'application/json'
