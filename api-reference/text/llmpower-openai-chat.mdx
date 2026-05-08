@@ -35,6 +35,22 @@ Content-Type: application/json
 - `claude-opus-4-6`：Claude Opus 4.6
 - `claude-opus-4-6-hc`：Claude Opus 4.6号池
 
+### 多模态能力支持
+
+| 模型 | 图片分析 | 视频分析 |
+| --- | --- | --- |
+| `claude-opus-4-7-hc` | 支持 | 支持 |
+| `gpt-5.4-hc` | 支持 | 支持 |
+| `gpt-5.4` | 支持 | 支持 |
+| `gpt-5.5` | 支持 | 支持 |
+| `claude-haiku-4-5` | 支持 | 支持 |
+| `claude-opus-4-6-fd` | 支持 | 支持 |
+| `claude-haiku-4-5-fd` | 支持 | 支持 |
+| `claude-opus-4-5` | 支持 | 支持 |
+| `claude-haiku-4-5-hc` | 支持 | 支持 |
+| `claude-opus-4-6` | 支持 | 支持 |
+| `claude-opus-4-6-hc` | 支持 | 支持 |
+
 ## 请求参数
 
 <ParamField path="model" type="string" required>
@@ -169,6 +185,37 @@ curl --request POST \
             "type": "image_url",
             "image_url": {
               "url": "https://example.com/image.jpg"
+            }
+          }
+        ]
+      }
+    ]
+  }'
+```
+
+```bash cURL (视频分析)
+curl --request POST \
+  --url http://apillm.globalaiopc.com/gw_llm_power/v1/chat/completions \
+  --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "gpt-5.4",
+    "messages": [
+      {
+        "role": "system",
+        "content": "你是一个视频分析专家。"
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "请分析这个视频的内容"
+          },
+          {
+            "type": "video_url",
+            "video_url": {
+              "url": "https://kyydata.oss-cn-beijing.aliyuncs.com/ai_sora/2026-04-24/seTGTXQ_1777011903923.mp4"
             }
           }
         ]
