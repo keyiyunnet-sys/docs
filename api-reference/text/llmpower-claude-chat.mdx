@@ -17,6 +17,37 @@ Content-Type: application/json
 
 - `Authorization`：API 密钥，格式为 `Bearer {{YOUR_API_KEY}}`
 
+## 快速导入 CC Switch
+
+<button
+  type="button"
+  onClick={() => {
+    const apiKey = window.prompt('请输入你的 API Key');
+    if (!apiKey) return;
+    const params = new URLSearchParams({
+      resource: 'provider',
+      app: 'claude',
+      name: '客易云LLM',
+      endpoint: 'http://apillm.globalaiopc.com/gw_llm_power',
+      apiKey,
+      model: 'claude-sonnet-4-6',
+      haikuModel: 'claude-haiku-4-5',
+      sonnetModel: 'claude-sonnet-4-6',
+      opusModel: 'claude-opus-4-6',
+      homepage: 'http://apillm.globalaiopc.com/gw_llm_power',
+      enabled: 'true',
+    });
+    window.location.href = `ccswitch://v1/import?${params.toString()}`;
+  }}
+  style={{ display: 'inline-block', padding: '10px 16px', borderRadius: '8px', background: '#2563eb', color: '#ffffff', textDecoration: 'none', fontWeight: 600 }}
+>
+  一键导入 CC Switch
+</button>
+
+<Note>
+点击按钮后，在弹出的小框中输入你的实际 API Key，然后确认导入。
+</Note>
+
 ## 支持的模型
 
 当前支持以下模型：
