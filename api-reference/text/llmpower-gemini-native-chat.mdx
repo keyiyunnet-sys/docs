@@ -21,19 +21,33 @@ Content-Type: application/json
 
 当前支持以下模型：
 
-- `gpt-5.4-hc`：GPT-5.4号池
-- `gpt-5.4`：GPT-5.4
-- `gpt-5.5`：GPT-5.5
-- `gemini-3-pro-preview`：官方 Gemini 3 Pro
+- `gemini-2.5-flash-lite`：Gemini 2.5 Flash Lite 稳定版
+- `gemini-2.5-pro`：Gemini 2.5 Pro 稳定版
+- `gemini-2.5-pro-low`：Gemini 2.5 Pro 低价版
+- `gemini-3-flash-preview`：Gemini 3 Flash Preview 稳定版
+- `gemini-3-flash-preview-low`：Gemini 3 Flash Preview 低价版
+- `gemini-3-pro-preview`：官方 Gemini 3 Pro，官方渠道已不再稳定，存在随时下架风险，建议使用 `gemini-3.1-pro-preview`
+- `gemini-3.1-flash-lite-preview`：Gemini 3.1 Flash Lite Preview 稳定版
+- `gemini-3.1-pro-preview`：Gemini 3.1 Pro Preview 稳定版
+- `gemini-3.1-pro-preview-low`：Gemini 3.1 Pro Preview 低价版
+
+<Warning>
+`gemini-3-pro-preview` 官方渠道已不再稳定，存在随时下架风险。建议优先使用 `gemini-3.1-pro-preview`。
+</Warning>
 
 ### 多模态能力支持
 
 | 模型 | 图片分析 | 视频分析 |
 | --- | --- | --- |
-| `gpt-5.4-hc` | 支持 | 不支持 |
-| `gpt-5.4` | 支持 | 不支持 |
-| `gpt-5.5` | 支持 | 不支持 |
+| `gemini-2.5-flash-lite` | 支持 | 支持 |
+| `gemini-2.5-pro` | 支持 | 支持 |
+| `gemini-2.5-pro-low` | 支持 | 支持 |
+| `gemini-3-flash-preview` | 支持 | 支持 |
+| `gemini-3-flash-preview-low` | 支持 | 支持 |
 | `gemini-3-pro-preview` | 支持 | 支持 |
+| `gemini-3.1-flash-lite-preview` | 支持 | 支持 |
+| `gemini-3.1-pro-preview` | 支持 | 支持 |
+| `gemini-3.1-pro-preview-low` | 支持 | 支持 |
 
 ## 请求地址
 
