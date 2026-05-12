@@ -24,19 +24,30 @@ Content-Type: application/json
 当前支持以下模型：
 
 - `claude-haiku-4-5`：Claude Haiku 4.5 满血版本
+- `claude-haiku-4-5-cc`：Claude Haiku 4.5 CC 代理
 - `claude-haiku-4-5-fd`：Claude Haiku 4.5 kiro 代理
 - `claude-haiku-4-5-hc`：Claude Haiku 4.5 AWS版本
 - `claude-opus-4-5`：Claude Opus 4.5 满血版本
 - `claude-opus-4-5-fd`：Claude Opus 4.5 kiro 代理
 - `claude-opus-4-5-hc`：Claude Opus 4.5 AWS版本
 - `claude-opus-4-6`：Claude Opus 4.6 满血版本
+- `claude-opus-4-6-cc`：Claude Opus 4.6 CC 代理
 - `claude-opus-4-6-fd`：Claude Opus 4.6 kiro 代理
 - `claude-opus-4-6-hc`：Claude Opus 4.6 AWS版本
+- `claude-opus-4-6-high-cc`：Claude Opus 4.6 High CC 代理
+- `claude-opus-4-6-low-cc`：Claude Opus 4.6 Low CC 代理
+- `claude-opus-4-6-max-cc`：Claude Opus 4.6 Max CC 代理
+- `claude-opus-4-6-medium-cc`：Claude Opus 4.6 Medium CC 代理
+- `claude-opus-4-6-thinking-cc`：Claude Opus 4.6 Thinking CC 代理
+- `claude-opus-4-7`：Claude Opus 4.7 满血版本
+- `claude-opus-4-7-cc`：Claude Opus 4.7 CC 代理
+- `claude-opus-4-7-fd`：Claude Opus 4.7 kiro 代理
 - `claude-opus-4-7-hc`：Claude Opus 4.7 AWS版本
 - `claude-sonnet-4-5`：Claude Sonnet 4.5 满血版本
 - `claude-sonnet-4-5-fd`：Claude Sonnet 4.5 kiro 代理
 - `claude-sonnet-4-5-hc`：Claude Sonnet 4.5 AWS版本
 - `claude-sonnet-4-6`：Claude Sonnet 4.6 满血版本
+- `claude-sonnet-4-6-cc`：Claude Sonnet 4.6 CC 代理
 - `claude-sonnet-4-6-fd`：Claude Sonnet 4.6 kiro 代理
 - `claude-sonnet-4-6-hc`：Claude Sonnet 4.6 AWS版本
 - `gemini-2.5-flash-lite`：Gemini 2.5 Flash Lite 稳定版
@@ -44,7 +55,6 @@ Content-Type: application/json
 - `gemini-2.5-pro-low`：Gemini 2.5 Pro 低价版
 - `gemini-3-flash-preview`：Gemini 3 Flash Preview 稳定版
 - `gemini-3-flash-preview-low`：Gemini 3 Flash Preview 低价版
-- `gemini-3-pro-preview`：官方 Gemini 3 Pro，官方渠道已不再稳定，存在随时下架风险，建议使用 `gemini-3.1-pro-preview`
 - `gemini-3.1-flash-lite-preview`：Gemini 3.1 Flash Lite Preview 稳定版
 - `gemini-3.1-pro-preview`：Gemini 3.1 Pro Preview 稳定版
 - `gemini-3.1-pro-preview-low`：Gemini 3.1 Pro Preview 低价版
@@ -62,19 +72,30 @@ Content-Type: application/json
 | 模型 | 图片分析 | 视频分析 |
 | --- | --- | --- |
 | `claude-haiku-4-5` | 支持 | 不支持 |
+| `claude-haiku-4-5-cc` | 支持 | 不支持 |
 | `claude-haiku-4-5-fd` | 支持 | 不支持 |
 | `claude-haiku-4-5-hc` | 支持 | 不支持 |
 | `claude-opus-4-5` | 支持 | 不支持 |
 | `claude-opus-4-5-fd` | 支持 | 不支持 |
 | `claude-opus-4-5-hc` | 支持 | 不支持 |
 | `claude-opus-4-6` | 支持 | 不支持 |
+| `claude-opus-4-6-cc` | 支持 | 不支持 |
 | `claude-opus-4-6-fd` | 支持 | 不支持 |
 | `claude-opus-4-6-hc` | 支持 | 不支持 |
+| `claude-opus-4-6-high-cc` | 支持 | 不支持 |
+| `claude-opus-4-6-low-cc` | 支持 | 不支持 |
+| `claude-opus-4-6-max-cc` | 支持 | 不支持 |
+| `claude-opus-4-6-medium-cc` | 支持 | 不支持 |
+| `claude-opus-4-6-thinking-cc` | 支持 | 不支持 |
+| `claude-opus-4-7` | 支持 | 不支持 |
+| `claude-opus-4-7-cc` | 支持 | 不支持 |
+| `claude-opus-4-7-fd` | 支持 | 不支持 |
 | `claude-opus-4-7-hc` | 支持 | 不支持 |
 | `claude-sonnet-4-5` | 支持 | 不支持 |
 | `claude-sonnet-4-5-fd` | 支持 | 不支持 |
 | `claude-sonnet-4-5-hc` | 支持 | 不支持 |
 | `claude-sonnet-4-6` | 支持 | 不支持 |
+| `claude-sonnet-4-6-cc` | 支持 | 不支持 |
 | `claude-sonnet-4-6-fd` | 支持 | 不支持 |
 | `claude-sonnet-4-6-hc` | 支持 | 不支持 |
 | `gemini-2.5-flash-lite` | 支持 | 支持 |
@@ -82,7 +103,6 @@ Content-Type: application/json
 | `gemini-2.5-pro-low` | 支持 | 支持 |
 | `gemini-3-flash-preview` | 支持 | 支持 |
 | `gemini-3-flash-preview-low` | 支持 | 支持 |
-| `gemini-3-pro-preview` | 支持 | 支持 |
 | `gemini-3.1-flash-lite-preview` | 支持 | 支持 |
 | `gemini-3.1-pro-preview` | 支持 | 支持 |
 | `gemini-3.1-pro-preview-low` | 支持 | 支持 |
@@ -98,7 +118,7 @@ Content-Type: application/json
 ## 请求参数
 
 <ParamField path="model" type="string" required>
-  要使用的模型名称，例如：`gpt-5.4`、`gpt-5.5`、`claude-opus-4-6`
+  要使用的模型名称，例如：`gpt-5.4`、`gpt-5.5`、`claude-opus-4-7`
 </ParamField>
 
 <ParamField path="messages" type="array" required>
@@ -243,7 +263,7 @@ curl --request POST \
   --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "gemini-3-pro-preview",
+    "model": "gemini-3.1-pro-preview",
     "messages": [
       {
         "role": "system",

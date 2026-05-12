@@ -26,8 +26,7 @@
               {
                 "group": "API 介绍",
                 "pages": [
-                  "api-reference/introduction",
-                  "api-reference/pricing"
+                  "api-reference/introduction"
                 ]
               },
               {

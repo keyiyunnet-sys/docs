@@ -50,88 +50,76 @@ Content-Type: application/json
 
 ## 支持的模型
 
-当前支持以下模型：
+当前支持以下 Claude 模型：
 
-- `claude-opus-4-7-hc`：Claude Opus 4.7 AWS版本
 - `claude-haiku-4-5`：Claude Haiku 4.5 满血版本
+- `claude-haiku-4-5-cc`：Claude Haiku 4.5 CC 代理
 - `claude-haiku-4-5-fd`：Claude Haiku 4.5 kiro 代理
 - `claude-haiku-4-5-hc`：Claude Haiku 4.5 AWS版本
 - `claude-opus-4-5`：Claude Opus 4.5 满血版本
 - `claude-opus-4-5-fd`：Claude Opus 4.5 kiro 代理
 - `claude-opus-4-5-hc`：Claude Opus 4.5 AWS版本
 - `claude-opus-4-6`：Claude Opus 4.6 满血版本
+- `claude-opus-4-6-cc`：Claude Opus 4.6 CC 代理
 - `claude-opus-4-6-fd`：Claude Opus 4.6 kiro 代理
 - `claude-opus-4-6-hc`：Claude Opus 4.6 AWS版本
+- `claude-opus-4-6-high-cc`：Claude Opus 4.6 High CC 代理
+- `claude-opus-4-6-low-cc`：Claude Opus 4.6 Low CC 代理
+- `claude-opus-4-6-max-cc`：Claude Opus 4.6 Max CC 代理
+- `claude-opus-4-6-medium-cc`：Claude Opus 4.6 Medium CC 代理
+- `claude-opus-4-6-thinking-cc`：Claude Opus 4.6 Thinking CC 代理
+- `claude-opus-4-7`：Claude Opus 4.7 满血版本
+- `claude-opus-4-7-cc`：Claude Opus 4.7 CC 代理
+- `claude-opus-4-7-fd`：Claude Opus 4.7 kiro 代理
+- `claude-opus-4-7-hc`：Claude Opus 4.7 AWS版本
 - `claude-sonnet-4-5`：Claude Sonnet 4.5 满血版本
 - `claude-sonnet-4-5-fd`：Claude Sonnet 4.5 kiro 代理
 - `claude-sonnet-4-5-hc`：Claude Sonnet 4.5 AWS版本
 - `claude-sonnet-4-6`：Claude Sonnet 4.6 满血版本
+- `claude-sonnet-4-6-cc`：Claude Sonnet 4.6 CC 代理
 - `claude-sonnet-4-6-fd`：Claude Sonnet 4.6 kiro 代理
 - `claude-sonnet-4-6-hc`：Claude Sonnet 4.6 AWS版本
-- `gemini-2.5-flash-lite`：Gemini 2.5 Flash Lite 稳定版
-- `gemini-2.5-pro`：Gemini 2.5 Pro 稳定版
-- `gemini-2.5-pro-low`：Gemini 2.5 Pro 低价版
-- `gemini-3-flash-preview`：Gemini 3 Flash Preview 稳定版
-- `gemini-3-flash-preview-low`：Gemini 3 Flash Preview 低价版
-- `gemini-3-pro-preview`：官方 Gemini 3 Pro，官方渠道已不再稳定，存在随时下架风险，建议使用 `gemini-3.1-pro-preview`
-- `gemini-3.1-flash-lite-preview`：Gemini 3.1 Flash Lite Preview 稳定版
-- `gemini-3.1-pro-preview`：Gemini 3.1 Pro Preview 稳定版
-- `gemini-3.1-pro-preview-low`：Gemini 3.1 Pro Preview 低价版
-- `gpt-5.4`：GPT-5.4 官方版本
-- `gpt-5.4-fd`：GPT-5.4 混合号池 - codex 代理
-- `gpt-5.4-hc`：GPT-5.4 优质号池-官号
-- `gpt-5.4-low`：GPT-5.4 低价版
-- `gpt-5.5`：GPT-5.5 官方版本
-- `gpt-5.5-fd`：GPT-5.5 混合号池 - codex 代理
-- `gpt-5.5-hc`：GPT-5.5 优质号池-官号
-- `gpt-5.5-low`：GPT-5.5 低价版
 
-<Warning>
-Claude Messages API 格式支持调用 Gemini 和 GPT 模型，但当前不支持通过该格式对 Gemini 和 GPT 模型进行图片分析。
-</Warning>
+<Note>
+Claude Messages API 使用 Claude 协议请求体，不适用于 Gemini 官方原生格式。Gemini 官方格式请使用 Gemini Chat API。
+</Note>
 
 ### 多模态能力支持
 
 | 模型 | 图片分析 |
 | --- | --- |
-| `claude-opus-4-7-hc` | 支持 |
 | `claude-haiku-4-5` | 支持 |
+| `claude-haiku-4-5-cc` | 支持 |
 | `claude-haiku-4-5-fd` | 支持 |
 | `claude-haiku-4-5-hc` | 支持 |
 | `claude-opus-4-5` | 支持 |
 | `claude-opus-4-5-fd` | 支持 |
 | `claude-opus-4-5-hc` | 支持 |
 | `claude-opus-4-6` | 支持 |
+| `claude-opus-4-6-cc` | 支持 |
 | `claude-opus-4-6-fd` | 支持 |
 | `claude-opus-4-6-hc` | 支持 |
+| `claude-opus-4-6-high-cc` | 支持 |
+| `claude-opus-4-6-low-cc` | 支持 |
+| `claude-opus-4-6-max-cc` | 支持 |
+| `claude-opus-4-6-medium-cc` | 支持 |
+| `claude-opus-4-6-thinking-cc` | 支持 |
+| `claude-opus-4-7` | 支持 |
+| `claude-opus-4-7-cc` | 支持 |
+| `claude-opus-4-7-fd` | 支持 |
+| `claude-opus-4-7-hc` | 支持 |
 | `claude-sonnet-4-5` | 支持 |
 | `claude-sonnet-4-5-fd` | 支持 |
 | `claude-sonnet-4-5-hc` | 支持 |
 | `claude-sonnet-4-6` | 支持 |
+| `claude-sonnet-4-6-cc` | 支持 |
 | `claude-sonnet-4-6-fd` | 支持 |
 | `claude-sonnet-4-6-hc` | 支持 |
-| `gemini-2.5-flash-lite` | 不支持 |
-| `gemini-2.5-pro` | 不支持 |
-| `gemini-2.5-pro-low` | 不支持 |
-| `gemini-3-flash-preview` | 不支持 |
-| `gemini-3-flash-preview-low` | 不支持 |
-| `gemini-3-pro-preview` | 不支持 |
-| `gemini-3.1-flash-lite-preview` | 不支持 |
-| `gemini-3.1-pro-preview` | 不支持 |
-| `gemini-3.1-pro-preview-low` | 不支持 |
-| `gpt-5.4` | 不支持 |
-| `gpt-5.4-fd` | 不支持 |
-| `gpt-5.4-hc` | 不支持 |
-| `gpt-5.4-low` | 不支持 |
-| `gpt-5.5` | 不支持 |
-| `gpt-5.5-fd` | 不支持 |
-| `gpt-5.5-hc` | 不支持 |
-| `gpt-5.5-low` | 不支持 |
 
 ## 请求参数
 
 <ParamField path="model" type="string" required>
-  要使用的模型名称，例如：`claude-opus-4-6`、`gemini-3.1-pro-preview`、`gpt-5.5`
+  要使用的模型名称，例如：`claude-opus-4-7`、`claude-opus-4-6-thinking-cc`、`claude-sonnet-4-6-cc`
 </ParamField>
 
 <ParamField path="max_tokens" type="integer" required>

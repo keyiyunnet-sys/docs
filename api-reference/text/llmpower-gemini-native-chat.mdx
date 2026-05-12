@@ -26,14 +26,9 @@ Content-Type: application/json
 - `gemini-2.5-pro-low`：Gemini 2.5 Pro 低价版
 - `gemini-3-flash-preview`：Gemini 3 Flash Preview 稳定版
 - `gemini-3-flash-preview-low`：Gemini 3 Flash Preview 低价版
-- `gemini-3-pro-preview`：官方 Gemini 3 Pro，官方渠道已不再稳定，存在随时下架风险，建议使用 `gemini-3.1-pro-preview`
 - `gemini-3.1-flash-lite-preview`：Gemini 3.1 Flash Lite Preview 稳定版
 - `gemini-3.1-pro-preview`：Gemini 3.1 Pro Preview 稳定版
 - `gemini-3.1-pro-preview-low`：Gemini 3.1 Pro Preview 低价版
-
-<Warning>
-`gemini-3-pro-preview` 官方渠道已不再稳定，存在随时下架风险。建议优先使用 `gemini-3.1-pro-preview`。
-</Warning>
 
 ### 多模态能力支持
 
@@ -44,7 +39,6 @@ Content-Type: application/json
 | `gemini-2.5-pro-low` | 支持 | 支持 |
 | `gemini-3-flash-preview` | 支持 | 支持 |
 | `gemini-3-flash-preview-low` | 支持 | 支持 |
-| `gemini-3-pro-preview` | 支持 | 支持 |
 | `gemini-3.1-flash-lite-preview` | 支持 | 支持 |
 | `gemini-3.1-pro-preview` | 支持 | 支持 |
 | `gemini-3.1-pro-preview-low` | 支持 | 支持 |
@@ -59,7 +53,7 @@ Content-Type: application/json
 完整地址示例：
 
 ```text
-http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3-pro-preview:generateContent
+http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3.1-pro-preview:generateContent
 ```
 
 ## 请求参数
@@ -123,7 +117,7 @@ http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3-pro-preview:genera
 ## 注意事项
 
 <Note>
-1. 路径中的 `{model}` 需要替换为实际模型名，例如 `gemini-3-pro-preview`
+1. 路径中的 `{model}` 需要替换为实际模型名，例如 `gemini-3.1-pro-preview`
 2. 流式场景请使用 `:streamGenerateContent`
 3. 请使用 `Authorization` 请求头传递 API 密钥
 </Note>
@@ -132,7 +126,7 @@ http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3-pro-preview:genera
 
 ```bash cURL (generateContent 纯文本)
 curl --request POST \
-  --url http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3-pro-preview:generateContent \
+  --url http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3.1-pro-preview:generateContent \
   --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -155,7 +149,7 @@ curl --request POST \
 
 ```bash cURL (generateContent 图片分析)
 curl --request POST \
-  --url http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3-pro-preview:generateContent \
+  --url http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3.1-pro-preview:generateContent \
   --header 'Authorization: Bearer {{YOUR_API_KEY}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -186,7 +180,7 @@ curl --request POST \
 import requests
 
 response = requests.post(
-    'http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3-pro-preview:generateContent',
+    'http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3.1-pro-preview:generateContent',
     headers={
         'Authorization': 'Bearer {{YOUR_API_KEY}}',
         'Content-Type': 'application/json'
