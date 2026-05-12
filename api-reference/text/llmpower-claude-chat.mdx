@@ -71,6 +71,17 @@ Content-Type: application/json
 - `claude-sonnet-4-6-fd`：Claude Sonnet 4.6 kiro 代理
 - `claude-sonnet-4-6-hc`：Claude Sonnet 4.6 AWS版本
 
+### Claude Messages API 兼容的 GPT 模型
+
+- `gpt-5.4`：GPT-5.4 官方版本
+- `gpt-5.4-fd`：GPT-5.4 混合号池 - codex 代理
+- `gpt-5.4-hc`：GPT-5.4 优质号池-官号
+- `gpt-5.4-low`：GPT-5.4 低价版
+- `gpt-5.5`：GPT-5.5 官方版本
+- `gpt-5.5-fd`：GPT-5.5 混合号池 - codex 代理
+- `gpt-5.5-hc`：GPT-5.5 优质号池-官号
+- `gpt-5.5-low`：GPT-5.5 低价版
+
 ### CC Switch 专用模型
 
 以下模型只能在 CC Switch 中使用，并且只能通过 Claude Messages API 格式调用：
@@ -86,7 +97,7 @@ Content-Type: application/json
 - `claude-sonnet-4-6-cc`：Claude Sonnet 4.6 CC 代理
 
 <Note>
-Claude Messages API 使用 Claude 协议请求体，不适用于 Gemini 官方原生格式。Gemini 官方格式请使用 Gemini Chat API。
+Claude Messages API 使用 Claude 协议请求体，不适用于 Gemini 官方原生格式。Gemini 官方格式请使用 Gemini Chat API。GPT 模型可通过该格式调用，但当前不支持图片识别。
 </Note>
 
 ### 多模态能力支持
@@ -111,6 +122,14 @@ Claude Messages API 使用 Claude 协议请求体，不适用于 Gemini 官方�
 | `claude-sonnet-4-6` | 支持 |
 | `claude-sonnet-4-6-fd` | 支持 |
 | `claude-sonnet-4-6-hc` | 支持 |
+| `gpt-5.4` | 不支持 |
+| `gpt-5.4-fd` | 不支持 |
+| `gpt-5.4-hc` | 不支持 |
+| `gpt-5.4-low` | 不支持 |
+| `gpt-5.5` | 不支持 |
+| `gpt-5.5-fd` | 不支持 |
+| `gpt-5.5-hc` | 不支持 |
+| `gpt-5.5-low` | 不支持 |
 | `claude-haiku-4-5-cc` | 支持 |
 | `claude-opus-4-6-cc` | 支持 |
 | `claude-opus-4-6-high-cc` | 支持 |
@@ -124,7 +143,7 @@ Claude Messages API 使用 Claude 协议请求体，不适用于 Gemini 官方�
 ## 请求参数
 
 <ParamField path="model" type="string" required>
-  要使用的模型名称，例如：`claude-opus-4-7`、`claude-opus-4-6-thinking-cc`、`claude-sonnet-4-6`。`-cc` 后缀模型仅限 CC Switch 使用
+  要使用的模型名称，例如：`claude-opus-4-7`、`gpt-5.5`、`claude-opus-4-6-thinking-cc`。`-cc` 后缀模型仅限 CC Switch 使用
 </ParamField>
 
 <ParamField path="max_tokens" type="integer" required>
