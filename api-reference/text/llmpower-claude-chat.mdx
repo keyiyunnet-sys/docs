@@ -53,32 +53,37 @@ Content-Type: application/json
 当前支持以下 Claude 模型：
 
 - `claude-haiku-4-5`：Claude Haiku 4.5 满血版本
-- `claude-haiku-4-5-cc`：Claude Haiku 4.5 CC 代理
 - `claude-haiku-4-5-fd`：Claude Haiku 4.5 kiro 代理
 - `claude-haiku-4-5-hc`：Claude Haiku 4.5 AWS版本
 - `claude-opus-4-5`：Claude Opus 4.5 满血版本
 - `claude-opus-4-5-fd`：Claude Opus 4.5 kiro 代理
 - `claude-opus-4-5-hc`：Claude Opus 4.5 AWS版本
 - `claude-opus-4-6`：Claude Opus 4.6 满血版本
-- `claude-opus-4-6-cc`：Claude Opus 4.6 CC 代理
 - `claude-opus-4-6-fd`：Claude Opus 4.6 kiro 代理
 - `claude-opus-4-6-hc`：Claude Opus 4.6 AWS版本
-- `claude-opus-4-6-high-cc`：Claude Opus 4.6 High CC 代理
-- `claude-opus-4-6-low-cc`：Claude Opus 4.6 Low CC 代理
-- `claude-opus-4-6-max-cc`：Claude Opus 4.6 Max CC 代理
-- `claude-opus-4-6-medium-cc`：Claude Opus 4.6 Medium CC 代理
-- `claude-opus-4-6-thinking-cc`：Claude Opus 4.6 Thinking CC 代理
 - `claude-opus-4-7`：Claude Opus 4.7 满血版本
-- `claude-opus-4-7-cc`：Claude Opus 4.7 CC 代理
 - `claude-opus-4-7-fd`：Claude Opus 4.7 kiro 代理
 - `claude-opus-4-7-hc`：Claude Opus 4.7 AWS版本
 - `claude-sonnet-4-5`：Claude Sonnet 4.5 满血版本
 - `claude-sonnet-4-5-fd`：Claude Sonnet 4.5 kiro 代理
 - `claude-sonnet-4-5-hc`：Claude Sonnet 4.5 AWS版本
 - `claude-sonnet-4-6`：Claude Sonnet 4.6 满血版本
-- `claude-sonnet-4-6-cc`：Claude Sonnet 4.6 CC 代理
 - `claude-sonnet-4-6-fd`：Claude Sonnet 4.6 kiro 代理
 - `claude-sonnet-4-6-hc`：Claude Sonnet 4.6 AWS版本
+
+### CC Switch 专用模型
+
+以下模型只能在 CC Switch 中使用，并且只能通过 Claude Messages API 格式调用：
+
+- `claude-haiku-4-5-cc`：Claude Haiku 4.5 CC 代理
+- `claude-opus-4-6-cc`：Claude Opus 4.6 CC 代理
+- `claude-opus-4-6-high-cc`：Claude Opus 4.6 High CC 代理
+- `claude-opus-4-6-low-cc`：Claude Opus 4.6 Low CC 代理
+- `claude-opus-4-6-max-cc`：Claude Opus 4.6 Max CC 代理
+- `claude-opus-4-6-medium-cc`：Claude Opus 4.6 Medium CC 代理
+- `claude-opus-4-6-thinking-cc`：Claude Opus 4.6 Thinking CC 代理
+- `claude-opus-4-7-cc`：Claude Opus 4.7 CC 代理
+- `claude-sonnet-4-6-cc`：Claude Sonnet 4.6 CC 代理
 
 <Note>
 Claude Messages API 使用 Claude 协议请求体，不适用于 Gemini 官方原生格式。Gemini 官方格式请使用 Gemini Chat API。
@@ -89,37 +94,37 @@ Claude Messages API 使用 Claude 协议请求体，不适用于 Gemini 官方�
 | 模型 | 图片分析 |
 | --- | --- |
 | `claude-haiku-4-5` | 支持 |
-| `claude-haiku-4-5-cc` | 支持 |
 | `claude-haiku-4-5-fd` | 支持 |
 | `claude-haiku-4-5-hc` | 支持 |
 | `claude-opus-4-5` | 支持 |
 | `claude-opus-4-5-fd` | 支持 |
 | `claude-opus-4-5-hc` | 支持 |
 | `claude-opus-4-6` | 支持 |
-| `claude-opus-4-6-cc` | 支持 |
 | `claude-opus-4-6-fd` | 支持 |
 | `claude-opus-4-6-hc` | 支持 |
-| `claude-opus-4-6-high-cc` | 支持 |
-| `claude-opus-4-6-low-cc` | 支持 |
-| `claude-opus-4-6-max-cc` | 支持 |
-| `claude-opus-4-6-medium-cc` | 支持 |
-| `claude-opus-4-6-thinking-cc` | 支持 |
 | `claude-opus-4-7` | 支持 |
-| `claude-opus-4-7-cc` | 支持 |
 | `claude-opus-4-7-fd` | 支持 |
 | `claude-opus-4-7-hc` | 支持 |
 | `claude-sonnet-4-5` | 支持 |
 | `claude-sonnet-4-5-fd` | 支持 |
 | `claude-sonnet-4-5-hc` | 支持 |
 | `claude-sonnet-4-6` | 支持 |
-| `claude-sonnet-4-6-cc` | 支持 |
 | `claude-sonnet-4-6-fd` | 支持 |
 | `claude-sonnet-4-6-hc` | 支持 |
+| `claude-haiku-4-5-cc` | 支持 |
+| `claude-opus-4-6-cc` | 支持 |
+| `claude-opus-4-6-high-cc` | 支持 |
+| `claude-opus-4-6-low-cc` | 支持 |
+| `claude-opus-4-6-max-cc` | 支持 |
+| `claude-opus-4-6-medium-cc` | 支持 |
+| `claude-opus-4-6-thinking-cc` | 支持 |
+| `claude-opus-4-7-cc` | 支持 |
+| `claude-sonnet-4-6-cc` | 支持 |
 
 ## 请求参数
 
 <ParamField path="model" type="string" required>
-  要使用的模型名称，例如：`claude-opus-4-7`、`claude-opus-4-6-thinking-cc`、`claude-sonnet-4-6-cc`
+  要使用的模型名称，例如：`claude-opus-4-7`、`claude-opus-4-6-thinking-cc`、`claude-sonnet-4-6`。`-cc` 后缀模型仅限 CC Switch 使用
 </ParamField>
 
 <ParamField path="max_tokens" type="integer" required>
