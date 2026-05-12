@@ -1,0 +1,292 @@
+---
+title: "Videos - 创建任务"
+description: "使用 Videos 模型创建视频生成任务，支持纯文生、首尾帧和图视频混合参考"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/videos/videos"
+---
+
+# Videos 创建视频任务
+
+使用 Videos 系列模型创建视频生成任务，支持标准和快速两种模型，并支持纯文生、首尾帧、多图参考、视频参考与图视频混合参考。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## 模型介绍
+
+支持的模型：
+
+- `videos`：标准模型，按次计费
+- `videos_fast`：快速模型，按次计费
+
+## 请求参数
+
+<ParamField body="model" type="string" required>
+  模型名称。
+
+  可选值：
+  - `videos` - 标准模型
+  - `videos_fast` - 快速模型
+</ParamField>
+
+<ParamField body="prompt" type="string" required>
+  视频生成提示词，最大 `1500` 个字符。
+
+  建议避免违规、侵权、涉政、涉黄等高风险内容。
+
+  示例：`"一只可爱的小猫在草地上玩耍"`
+</ParamField>
+
+<ParamField body="duration" type="integer" required>
+  视频时长（秒），范围 `4-15` 秒。
+</ParamField>
+
+<ParamField body="ratio" type="string">
+  输出比例，默认 `16:9`。
+
+  支持的值：
+  - `16:9` - 横屏
+  - `9:16` - 竖屏
+  - `1:1` - 正方形
+</ParamField>
+
+<ParamField body="resolution" type="string">
+  输出分辨率，默认 `720p`。
+
+  当前仅支持：
+  - `720p`
+</ParamField>
+
+### 首尾帧模式
+
+<ParamField body="image" type="string">
+  首帧图片 URL。
+
+  - 仅用于首尾帧场景
+  - 必须搭配 `lastFrameImage` 使用
+
+  <Warning>不能与 `referenceImages` 或 `referenceVideos` 同时使用</Warning>
+</ParamField>
+
+<ParamField body="lastFrameImage" type="string">
+  尾帧图片 URL。
+
+  - 必须搭配 `image` 使用
+
+  <Warning>不能与 `referenceImages` 或 `referenceVideos` 同时使用</Warning>
+</ParamField>
+
+### 引用素材模式
+
+<ParamField body="referenceImages" type="array">
+  参考图片 URL 列表。
+
+  规则说明：
+  - 最多 `4` 张
+  - 每张图片不能超过 `20MB`
+  - 可与 `referenceVideos` 组合形成图视频混合参考
+
+  <Warning>不能与 `image` 或 `lastFrameImage` 同时使用</Warning>
+</ParamField>
+
+<ParamField body="referenceVideos" type="array">
+  参考视频 URL 列表。
+
+  规则说明：
+  - 最多 `3` 个
+  - 总时长不能超过 `15` 秒
+  - 总大小不能超过 `200MB`
+  - 单个参考视频分辨率需在 `720px-2160px` 之间
+  - 单个视频通常下沉为 `video_url`
+  - 多个视频通常下沉为 `video_reference`
+
+  <Warning>不能与 `image` 或 `lastFrameImage` 同时使用</Warning>
+</ParamField>
+
+## 响应参数
+
+<ResponseField name="code" type="string">
+  状态码，`0` 表示成功。
+</ResponseField>
+
+<ResponseField name="msg" type="string">
+  返回信息，失败时通常包含错误原因。
+</ResponseField>
+
+<ResponseField name="data.projectId" type="string">
+  任务标识符。
+
+  你可以将其视为后续查询所需的任务 `id`。
+</ResponseField>
+
+## 参数选择规则
+
+<Warning>
+**互斥规则：**
+- **首尾帧模式**：`image` 和 `lastFrameImage` 必须成对使用
+- **引用素材模式**：`referenceImages`、`referenceVideos` 可单独或组合使用
+- **模式互斥**：首尾帧模式不能与引用素材模式同时使用
+</Warning>
+
+## 使用场景
+
+<CardGroup cols={3}>
+  <Card title="纯文生视频" icon="wand-magic-sparkles">
+    仅传 `prompt`、`model`、`duration` 等基础参数
+  </Card>
+  <Card title="首尾帧视频" icon="film">
+    通过 `image` 和 `lastFrameImage` 精确控制开头与结尾画面
+  </Card>
+  <Card title="图视频混合参考" icon="images">
+    通过 `referenceImages` 与 `referenceVideos` 组合提供更强的素材约束
+  </Card>
+</CardGroup>
+
+## 模型特性
+
+| 模型 | 计费方式 | 时长范围 | 适用场景 |
+|------|----------|----------|----------|
+| `videos` | 按次计费 | 4-15 秒 | 标准质量场景 |
+| `videos_fast` | 按次计费 | 4-15 秒 | 对生成速度更敏感的场景 |
+
+<Info>
+**最佳实践：**
+1. 视频生成为异步处理，请保存创建返回的任务标识符用于后续查询。
+2. 提示词尽量包含具体场景、动作、镜头和风格描述。
+3. 使用首尾帧模式时，确保两张图片在风格和构图上连续。
+4. 使用视频参考时，优先提供清晰、时长较短、主体明确的素材。
+5. 如需更稳定的结果，优先使用 `videos`；如需更快返回，可选择 `videos_fast`。
+</Info>
+
+<Tip>
+**提示词建议：**
+- 描述主体、动作和镜头语言
+- 补充风格词，如“电影感”“写实”“梦幻”
+- 如果有运动轨迹诉求，可直接写明镜头推进、转场或视角变化
+</Tip>
+
+<RequestExample>
+
+```bash cURL - 纯文生视频
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/videos/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "videos",
+    "prompt": "一只可爱的小猫在草地上玩耍，阳光明亮，电影感镜头",
+    "duration": 5,
+    "ratio": "16:9",
+    "resolution": "720p"
+  }'
+```
+
+```bash cURL - 首尾帧模式
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/videos/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "videos_fast",
+    "prompt": "从清晨过渡到黄昏的海边延时镜头",
+    "duration": 8,
+    "image": "https://example.com/sea-morning.jpg",
+    "lastFrameImage": "https://example.com/sea-evening.jpg",
+    "ratio": "16:9"
+  }'
+```
+
+```bash cURL - 图视频混合参考
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/videos/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "videos",
+    "prompt": "角色在咖啡馆中自然对话，画面柔和，带轻微镜头推进",
+    "duration": 10,
+    "referenceImages": [
+      "https://example.com/character-a.jpg",
+      "https://example.com/character-b.jpg"
+    ],
+    "referenceVideos": [
+      "https://example.com/cafe-scene.mp4"
+    ],
+    "ratio": "16:9"
+  }'
+```
+
+```java Java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+HttpClient client = HttpClient.newHttpClient();
+
+String body = """
+{
+  "model": "videos",
+  "prompt": "A cute kitten playing in the grass, cinematic style",
+  "duration": 5,
+  "ratio": "16:9",
+  "resolution": "720p"
+}
+""";
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/videos/videos"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(body))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://zcbservice.aizfw.cn/kyyReactApiServer/v1/videos/videos",
+    headers={
+        "Authorization": "Bearer {{key}}",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "videos",
+        "prompt": "A cute kitten playing in the grass, cinematic style",
+        "duration": 5,
+        "ratio": "16:9",
+        "resolution": "720p",
+    },
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 创建成功
+{
+  "code": "0",
+  "msg": null,
+  "data": {
+    "projectId": "proj_1234567890"
+  }
+}
+```
+
+```json 创建失败
+{
+  "code": "500",
+  "msg": "参数冲突：image/lastFrameImage 首尾帧场景不能与 referenceImages/referenceVideos 同时使用",
+  "data": null
+}
+```
+
+</ResponseExample>

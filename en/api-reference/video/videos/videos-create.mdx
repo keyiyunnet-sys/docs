@@ -1,0 +1,292 @@
+---
+title: "Videos - Create Task"
+description: "Create video generation tasks using Videos models with support for text-only, first/last frame, and mixed image-video references"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/videos/videos"
+---
+
+# Videos Create Video Task
+
+Create video generation tasks using the Videos model family. This API supports standard and fast models, text-to-video, first/last frame control, reference images, reference videos, and mixed image-video guidance.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Model Overview
+
+Supported models:
+
+- `videos` - Standard model, billed per request
+- `videos_fast` - Fast model, billed per request
+
+## Request Parameters
+
+<ParamField path="model" type="string" required>
+  Model name.
+
+  Available values:
+  - `videos` - Standard model
+  - `videos_fast` - Fast model
+</ParamField>
+
+<ParamField path="prompt" type="string" required>
+  Video generation prompt. Maximum length is `1500` characters.
+
+  Avoid prohibited, infringing, political, or explicit content.
+
+  Example: `"A cute kitten playing in the grass"`
+</ParamField>
+
+<ParamField path="duration" type="integer" required>
+  Video duration in seconds. Supported range: `4-15`.
+</ParamField>
+
+<ParamField path="ratio" type="string">
+  Output aspect ratio. Defaults to `16:9`.
+
+  Supported values:
+  - `16:9` - Landscape
+  - `9:16` - Portrait
+  - `1:1` - Square
+</ParamField>
+
+<ParamField path="resolution" type="string">
+  Output resolution. Defaults to `720p`.
+
+  Currently supported:
+  - `720p`
+</ParamField>
+
+### First/Last Frame Mode
+
+<ParamField path="image" type="string">
+  First frame image URL.
+
+  - Only used for first/last frame scenarios
+  - Must be used together with `lastFrameImage`
+
+  <Warning>Cannot be used together with `referenceImages` or `referenceVideos`</Warning>
+</ParamField>
+
+<ParamField path="lastFrameImage" type="string">
+  Last frame image URL.
+
+  - Must be used together with `image`
+
+  <Warning>Cannot be used together with `referenceImages` or `referenceVideos`</Warning>
+</ParamField>
+
+### Reference Material Mode
+
+<ParamField path="referenceImages" type="array">
+  Reference image URL list.
+
+  Rules:
+  - Up to `4` images
+  - Each image must not exceed `20MB`
+  - Can be combined with `referenceVideos` for mixed guidance
+
+  <Warning>Cannot be used together with `image` or `lastFrameImage`</Warning>
+</ParamField>
+
+<ParamField path="referenceVideos" type="array">
+  Reference video URL list.
+
+  Rules:
+  - Up to `3` videos
+  - Total duration must not exceed `15` seconds
+  - Total size must not exceed `200MB`
+  - Each video must have a resolution between `720px` and `2160px`
+  - A single video is typically mapped to `video_url`
+  - Multiple videos are typically mapped to `video_reference`
+
+  <Warning>Cannot be used together with `image` or `lastFrameImage`</Warning>
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="code" type="string">
+  Status code. `0` indicates success.
+</ResponseField>
+
+<ResponseField name="msg" type="string">
+  Response message. Usually contains the error reason on failure.
+</ResponseField>
+
+<ResponseField name="data.projectId" type="string">
+  Task identifier.
+
+  You can treat this value as the task `id` for subsequent status queries.
+</ResponseField>
+
+## Parameter Selection Rules
+
+<Warning>
+**Mutually Exclusive Rules:**
+- **First/last frame mode**: `image` and `lastFrameImage` must be used together
+- **Reference material mode**: `referenceImages` and `referenceVideos` can be used individually or together
+- **Mode exclusivity**: First/last frame mode cannot be combined with reference material mode
+</Warning>
+
+## Use Cases
+
+<CardGroup cols={3}>
+  <Card title="Text to Video" icon="wand-magic-sparkles">
+    Use only `prompt`, `model`, `duration`, and other base parameters
+  </Card>
+  <Card title="First/Last Frame" icon="film">
+    Use `image` and `lastFrameImage` for precise start and end frame control
+  </Card>
+  <Card title="Mixed References" icon="images">
+    Combine `referenceImages` and `referenceVideos` for stronger visual constraints
+  </Card>
+</CardGroup>
+
+## Model Comparison
+
+| Model | Billing | Duration Range | Best For |
+|-------|---------|----------------|----------|
+| `videos` | Per request | 4-15 seconds | Standard quality workflows |
+| `videos_fast` | Per request | 4-15 seconds | Speed-sensitive generation scenarios |
+
+<Info>
+**Best Practices:**
+1. Video generation is asynchronous, so save the returned task identifier for later queries.
+2. Include scene, subject, motion, camera, and style details in the prompt.
+3. In first/last frame mode, make sure the two images are visually continuous.
+4. When using video references, prefer short, clear, and subject-focused source materials.
+5. Use `videos` for more stable results and `videos_fast` when latency matters more.
+</Info>
+
+<Tip>
+**Prompt Suggestions:**
+- Describe the subject, action, and camera movement
+- Add style keywords such as "cinematic", "realistic", or "dreamlike"
+- If you need camera motion or scene transitions, describe them explicitly
+</Tip>
+
+<RequestExample>
+
+```bash cURL - Text to Video
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/videos/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "videos",
+    "prompt": "A cute kitten playing in the grass, bright daylight, cinematic camera",
+    "duration": 5,
+    "ratio": "16:9",
+    "resolution": "720p"
+  }'
+```
+
+```bash cURL - First/Last Frame Mode
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/videos/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "videos_fast",
+    "prompt": "A time-lapse transition from morning to evening by the sea",
+    "duration": 8,
+    "image": "https://example.com/sea-morning.jpg",
+    "lastFrameImage": "https://example.com/sea-evening.jpg",
+    "ratio": "16:9"
+  }'
+```
+
+```bash cURL - Mixed References
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/videos/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "videos",
+    "prompt": "Two characters talking naturally in a coffee shop with a soft push-in camera movement",
+    "duration": 10,
+    "referenceImages": [
+      "https://example.com/character-a.jpg",
+      "https://example.com/character-b.jpg"
+    ],
+    "referenceVideos": [
+      "https://example.com/cafe-scene.mp4"
+    ],
+    "ratio": "16:9"
+  }'
+```
+
+```java Java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+HttpClient client = HttpClient.newHttpClient();
+
+String body = """
+{
+  "model": "videos",
+  "prompt": "A cute kitten playing in the grass, cinematic style",
+  "duration": 5,
+  "ratio": "16:9",
+  "resolution": "720p"
+}
+""";
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/videos/videos"))
+    .header("Authorization", "Bearer {{key}}")
+    .header("Content-Type", "application/json")
+    .POST(HttpRequest.BodyPublishers.ofString(body))
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://zcbservice.aizfw.cn/kyyReactApiServer/v1/videos/videos",
+    headers={
+        "Authorization": "Bearer {{key}}",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "videos",
+        "prompt": "A cute kitten playing in the grass, cinematic style",
+        "duration": 5,
+        "ratio": "16:9",
+        "resolution": "720p",
+    },
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Success
+{
+  "code": "0",
+  "msg": null,
+  "data": {
+    "projectId": "proj_1234567890"
+  }
+}
+```
+
+```json Failure
+{
+  "code": "500",
+  "msg": "Parameter conflict: first/last frame mode cannot be used together with referenceImages/referenceVideos",
+  "data": null
+}
+```
+
+</ResponseExample>

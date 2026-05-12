@@ -1,0 +1,173 @@
+---
+title: "Videos - Query Task"
+description: "Query the status and result of Videos video generation tasks"
+api: "GET https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/{id}"
+---
+
+# Videos Query Video Task
+
+Use the task ID to query the status and result of a Videos video generation task.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  Unique identifier of the video generation task, returned by the create task API.
+
+  <Note>If your integration returns this value as `projectId`, use that value as the `id` here.</Note>
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier of the video generation task.
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, always `video`.
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp.
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used for generation.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+  - `completed` - Completed
+  - `failed` - Failed
+</ResponseField>
+
+<ResponseField name="video_url" type="string">
+  Generated video URL, returned when the task is `completed`.
+</ResponseField>
+
+<ResponseField name="actualDuration" type="number">
+  Actual output duration in seconds, returned when the task is `completed`.
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when the task is `failed`.
+</ResponseField>
+
+## Status Flow
+
+<Steps>
+  <Step title="queued">
+    The task has been created and added to the queue.
+  </Step>
+  <Step title="processing">
+    The Videos model is actively generating the video.
+  </Step>
+  <Step title="completed">
+    The task has completed successfully and the result is available through `video_url`.
+  </Step>
+</Steps>
+
+## Polling Recommendations
+
+<Info>
+**Polling Strategy:**
+- Recommended polling interval: 30-60 seconds
+- Most tasks complete within a few minutes, but complex reference-heavy scenarios may take longer
+- Avoid aggressive polling to reduce the risk of rate limiting
+- Stop polling when the status becomes `completed` or `failed`
+</Info>
+
+## Result Notes
+
+<Warning>
+**Important:**
+- Generated result URLs are usually temporary, so save them promptly
+- Tasks with many reference materials may take longer to complete
+- Invalid prompts or unsupported reference materials may cause task failure
+</Warning>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/proj_1234567890 \
+  --header 'Authorization: Bearer {{key}}'
+```
+
+```java Java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+HttpClient client = HttpClient.newHttpClient();
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/proj_1234567890"))
+    .header("Authorization", "Bearer {{key}}")
+    .GET()
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/proj_1234567890",
+    headers={"Authorization": "Bearer {{key}}"},
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Processing Status
+{
+  "id": "proj_1234567890",
+  "object": "video",
+  "created": 1761635478,
+  "model": "videos",
+  "status": "processing",
+  "video_url": null,
+  "error": null
+}
+```
+
+```json Completed Status
+{
+  "id": "proj_1234567890",
+  "object": "video",
+  "created": 1761635478,
+  "model": "videos_fast",
+  "status": "completed",
+  "video_url": "https://example.com/video.mp4",
+  "actualDuration": 8.0,
+  "error": null
+}
+```
+
+```json Failed Status
+{
+  "id": "proj_1234567890",
+  "object": "video",
+  "created": 1761635478,
+  "model": "videos",
+  "status": "failed",
+  "video_url": null,
+  "error": "Generation failed: reference video resolution is not supported"
+}
+```
+
+</ResponseExample>

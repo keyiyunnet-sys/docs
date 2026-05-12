@@ -110,6 +110,13 @@
                     ]
                   },
                   {
+                    "group": "Videos",
+                    "pages": [
+                      "api-reference/video/videos/videos-create",
+                      "api-reference/video/videos/videos-query"
+                    ]
+                  },
+                  {
                     "group": "Vidu（未上线）",
                     "pages": [
                       "api-reference/video/vidu/vidu-create",
@@ -215,6 +222,13 @@
                     "pages": [
                       "en/api-reference/video/grok/grok-create",
                       "en/api-reference/video/grok/grok-query"
+                    ]
+                  },
+                  {
+                    "group": "Videos",
+                    "pages": [
+                      "en/api-reference/video/videos/videos-create",
+                      "en/api-reference/video/videos/videos-query"
                     ]
                   },
                   {
