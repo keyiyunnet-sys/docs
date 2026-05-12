@@ -51,7 +51,6 @@ Authorization: Bearer {{key}}
   支持的值：
   - `16:9` - 横屏
   - `9:16` - 竖屏
-  - `1:1` - 正方形
 </ParamField>
 
 <ParamField body="resolution" type="string">
@@ -101,8 +100,6 @@ Authorization: Bearer {{key}}
   - 总时长不能超过 `15` 秒
   - 总大小不能超过 `200MB`
   - 单个参考视频分辨率需在 `720px-2160px` 之间
-  - 单个视频通常下沉为 `video_url`
-  - 多个视频通常下沉为 `video_reference`
 
   <Warning>不能与 `image` 或 `lastFrameImage` 同时使用</Warning>
 </ParamField>
@@ -118,9 +115,9 @@ Authorization: Bearer {{key}}
 </ResponseField>
 
 <ResponseField name="data.projectId" type="string">
-  任务标识符。
+  任务 ID。
 
-  你可以将其视为后续查询所需的任务 `id`。
+  用于后续查询任务状态和结果。
 </ResponseField>
 
 ## 参数选择规则
@@ -155,7 +152,7 @@ Authorization: Bearer {{key}}
 
 <Info>
 **最佳实践：**
-1. 视频生成为异步处理，请保存创建返回的任务标识符用于后续查询。
+1. 视频生成为异步处理，请保存创建返回的任务 ID 用于后续查询。
 2. 提示词尽量包含具体场景、动作、镜头和风格描述。
 3. 使用首尾帧模式时，确保两张图片在风格和构图上连续。
 4. 使用视频参考时，优先提供清晰、时长较短、主体明确的素材。

@@ -51,7 +51,6 @@ Supported models:
   Supported values:
   - `16:9` - Landscape
   - `9:16` - Portrait
-  - `1:1` - Square
 </ParamField>
 
 <ParamField path="resolution" type="string">
@@ -101,8 +100,6 @@ Supported models:
   - Total duration must not exceed `15` seconds
   - Total size must not exceed `200MB`
   - Each video must have a resolution between `720px` and `2160px`
-  - A single video is typically mapped to `video_url`
-  - Multiple videos are typically mapped to `video_reference`
 
   <Warning>Cannot be used together with `image` or `lastFrameImage`</Warning>
 </ParamField>
@@ -118,9 +115,9 @@ Supported models:
 </ResponseField>
 
 <ResponseField name="data.projectId" type="string">
-  Task identifier.
+  Task ID.
 
-  You can treat this value as the task `id` for subsequent status queries.
+  Used for subsequent status and result queries.
 </ResponseField>
 
 ## Parameter Selection Rules
@@ -155,7 +152,7 @@ Supported models:
 
 <Info>
 **Best Practices:**
-1. Video generation is asynchronous, so save the returned task identifier for later queries.
+1. Video generation is asynchronous, so save the returned task ID for later queries.
 2. Include scene, subject, motion, camera, and style details in the prompt.
 3. In first/last frame mode, make sure the two images are visually continuous.
 4. When using video references, prefer short, clear, and subject-focused source materials.
