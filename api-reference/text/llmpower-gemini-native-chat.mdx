@@ -19,16 +19,24 @@ Content-Type: application/json
 
 ## 支持的模型
 
-当前支持以下模型：
+当前支持以下模型，已按模型家族与版本类型整理：
 
-- `gemini-2.5-flash-lite`：Gemini 2.5 Flash Lite 稳定版
-- `gemini-2.5-pro`：Gemini 2.5 Pro 稳定版
-- `gemini-2.5-pro-low`：Gemini 2.5 Pro 低价版
-- `gemini-3-flash-preview`：Gemini 3 Flash Preview 稳定版
-- `gemini-3-flash-preview-low`：Gemini 3 Flash Preview 低价版
-- `gemini-3.1-flash-lite-preview`：Gemini 3.1 Flash Lite Preview 稳定版
-- `gemini-3.1-pro-preview`：Gemini 3.1 Pro Preview 稳定版
-- `gemini-3.1-pro-preview-low`：Gemini 3.1 Pro Preview 低价版
+### Gemini
+
+| 基础模型 | 标准 / 稳定版 | 低价版 |
+| --- | --- | --- |
+| Gemini 2.5 Flash Lite | `gemini-2.5-flash-lite` | - |
+| Gemini 2.5 Pro | `gemini-2.5-pro` | `gemini-2.5-pro-low` |
+| Gemini 3 Flash Preview | `gemini-3-flash-preview` | `gemini-3-flash-preview-low` |
+| Gemini 3.1 Flash Lite Preview | `gemini-3.1-flash-lite-preview` | - |
+| Gemini 3.1 Pro Preview | `gemini-3.1-pro-preview` | `gemini-3.1-pro-preview-low` |
+
+### 版本说明
+
+| 后缀 / 类型 | 说明 |
+| --- | --- |
+| 无后缀 | 标准版 / 稳定版 |
+| `-low` | 低价版本 |
 
 ### 多模态能力支持
 
