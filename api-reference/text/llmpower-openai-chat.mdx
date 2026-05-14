@@ -25,31 +25,31 @@ Content-Type: application/json
 
 ### Claude
 
-| 基础模型 | 满血版 | AWS 版 | 号池 / 反代版 |
-| --- | --- | --- | --- |
-| Claude Haiku 4.5 | `claude-haiku-4-5` | `claude-haiku-4-5-hc` | `claude-haiku-4-5-fd` |
-| Claude Opus 4.5 | `claude-opus-4-5` | `claude-opus-4-5-hc` | `claude-opus-4-5-fd` |
-| Claude Opus 4.6 | `claude-opus-4-6` | `claude-opus-4-6-hc` | `claude-opus-4-6-fd` |
-| Claude Opus 4.7 | `claude-opus-4-7` | `claude-opus-4-7-hc` | `claude-opus-4-7-fd` |
-| Claude Sonnet 4.5 | `claude-sonnet-4-5` | `claude-sonnet-4-5-hc` | `claude-sonnet-4-5-fd` |
-| Claude Sonnet 4.6 | `claude-sonnet-4-6` | `claude-sonnet-4-6-hc` | `claude-sonnet-4-6-fd` |
+| 满血版 | AWS 版 | 号池 / 反代版 |
+| --- | --- | --- |
+| `claude-haiku-4-5` | `claude-haiku-4-5-hc` | `claude-haiku-4-5-fd` |
+| `claude-opus-4-5` | `claude-opus-4-5-hc` | `claude-opus-4-5-fd` |
+| `claude-opus-4-6` | `claude-opus-4-6-hc` | `claude-opus-4-6-fd` |
+| `claude-opus-4-7` | `claude-opus-4-7-hc` | `claude-opus-4-7-fd` |
+| `claude-sonnet-4-5` | `claude-sonnet-4-5-hc` | `claude-sonnet-4-5-fd` |
+| `claude-sonnet-4-6` | `claude-sonnet-4-6-hc` | `claude-sonnet-4-6-fd` |
 
 ### Gemini
 
-| 基础模型 | 标准 / 稳定版 | 低价版 |
-| --- | --- | --- |
-| Gemini 2.5 Flash Lite | `gemini-2.5-flash-lite` | - |
-| Gemini 2.5 Pro | `gemini-2.5-pro` | `gemini-2.5-pro-low` |
-| Gemini 3 Flash Preview | `gemini-3-flash-preview` | `gemini-3-flash-preview-low` |
-| Gemini 3.1 Flash Lite Preview | `gemini-3.1-flash-lite-preview` | - |
-| Gemini 3.1 Pro Preview | `gemini-3.1-pro-preview` | `gemini-3.1-pro-preview-low` |
+| 标准 / 稳定版 | 低价版 |
+| --- | --- |
+| `gemini-2.5-flash-lite` | - |
+| `gemini-2.5-pro` | `gemini-2.5-pro-low` |
+| `gemini-3-flash-preview` | `gemini-3-flash-preview-low` |
+| `gemini-3.1-flash-lite-preview` | - |
+| `gemini-3.1-pro-preview` | `gemini-3.1-pro-preview-low` |
 
 ### GPT
 
-| 基础模型 | 满血 / 官方版 | 优质号池 | 混合号池 / 反代版 | 低价版 |
-| --- | --- | --- | --- | --- |
-| GPT-5.4 | `gpt-5.4` | `gpt-5.4-hc` | `gpt-5.4-fd` | `gpt-5.4-low` |
-| GPT-5.5 | `gpt-5.5` | `gpt-5.5-hc` | `gpt-5.5-fd` | `gpt-5.5-low` |
+| 满血 / 官方版 | 优质号池 | 混合号池 / 反代版 | 低价版 |
+| --- | --- | --- | --- |
+| `gpt-5.4` | `gpt-5.4-hc` | `gpt-5.4-fd` | `gpt-5.4-low` |
+| `gpt-5.5` | `gpt-5.5-hc` | `gpt-5.5-fd` | `gpt-5.5-low` |
 
 ### 版本说明
 
@@ -62,42 +62,22 @@ Content-Type: application/json
 
 ### 多模态能力支持
 
-| 模型 | 图片分析 | 视频分析 |
-| --- | --- | --- |
-| `claude-haiku-4-5` | 支持 | 不支持 |
-| `claude-haiku-4-5-fd` | 支持 | 不支持 |
-| `claude-haiku-4-5-hc` | 支持 | 不支持 |
-| `claude-opus-4-5` | 支持 | 不支持 |
-| `claude-opus-4-5-fd` | 支持 | 不支持 |
-| `claude-opus-4-5-hc` | 支持 | 不支持 |
-| `claude-opus-4-6` | 支持 | 不支持 |
-| `claude-opus-4-6-fd` | 支持 | 不支持 |
-| `claude-opus-4-6-hc` | 支持 | 不支持 |
-| `claude-opus-4-7` | 支持 | 不支持 |
-| `claude-opus-4-7-fd` | 支持 | 不支持 |
-| `claude-opus-4-7-hc` | 支持 | 不支持 |
-| `claude-sonnet-4-5` | 支持 | 不支持 |
-| `claude-sonnet-4-5-fd` | 支持 | 不支持 |
-| `claude-sonnet-4-5-hc` | 支持 | 不支持 |
-| `claude-sonnet-4-6` | 支持 | 不支持 |
-| `claude-sonnet-4-6-fd` | 支持 | 不支持 |
-| `claude-sonnet-4-6-hc` | 支持 | 不支持 |
-| `gemini-2.5-flash-lite` | 支持 | 支持 |
-| `gemini-2.5-pro` | 支持 | 支持 |
-| `gemini-2.5-pro-low` | 支持 | 支持 |
-| `gemini-3-flash-preview` | 支持 | 支持 |
-| `gemini-3-flash-preview-low` | 支持 | 支持 |
-| `gemini-3.1-flash-lite-preview` | 支持 | 支持 |
-| `gemini-3.1-pro-preview` | 支持 | 支持 |
-| `gemini-3.1-pro-preview-low` | 支持 | 支持 |
-| `gpt-5.4` | 支持 | 不支持 |
-| `gpt-5.4-fd` | 支持 | 不支持 |
-| `gpt-5.4-hc` | 支持 | 不支持 |
-| `gpt-5.4-low` | 支持 | 不支持 |
-| `gpt-5.5` | 支持 | 不支持 |
-| `gpt-5.5-fd` | 支持 | 不支持 |
-| `gpt-5.5-hc` | 支持 | 不支持 |
-| `gpt-5.5-low` | 支持 | 不支持 |
+#### 图片分析
+
+全部支持，无需区分。
+
+#### 视频分析
+
+仅以下模型支持：
+
+- `gemini-2.5-flash-lite`
+- `gemini-2.5-pro`
+- `gemini-2.5-pro-low`
+- `gemini-3-flash-preview`
+- `gemini-3-flash-preview-low`
+- `gemini-3.1-flash-lite-preview`
+- `gemini-3.1-pro-preview`
+- `gemini-3.1-pro-preview-low`
 
 ## 请求参数
 
