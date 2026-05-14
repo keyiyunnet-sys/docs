@@ -4,6 +4,23 @@ description: "基于 Claude Messages 协议的对话接口，适合使用 Anthro
 api: "POST http://apillm.globalaiopc.com/gw_llm_power/v1/messages"
 ---
 
+<div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '16px', marginBottom: '20px', flexWrap: 'wrap' }}>
+  <div>
+    <strong>baseUrl：</strong>
+    <code>http://apillm.globalaiopc.com/gw_llm_power</code>
+  </div>
+  <button
+    type="button"
+    onClick={() => {
+      navigator.clipboard.writeText('http://apillm.globalaiopc.com/gw_llm_power');
+      window.alert('baseUrl 已复制');
+    }}
+    style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '8px', background: '#2563eb', color: '#ffffff', fontWeight: 600, border: 'none', cursor: 'pointer' }}
+  >
+    复制
+  </button>
+</div>
+
 ## 认证
 
 使用 `Authorization` 请求头进行身份认证。
@@ -16,7 +33,6 @@ Content-Type: application/json
 说明：
 
 - `Authorization`：API 密钥，格式为 `Bearer {{YOUR_API_KEY}}`
-- `baseUrl`：`http://apillm.globalaiopc.com/gw_llm_power`
 
 ## 快速导入 CC Switch
 
