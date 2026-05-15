@@ -24,7 +24,7 @@ Authorization: Bearer {{key}}
 <ParamField path="id" type="string" required>
   Unique identifier of the video generation task, returned by the create task API.
 
-  <Note>The create API returns this value as `projectId`. Use that value as the `id` here.</Note>
+  <Note>The create API returns the field `id` directly. Use that value as the `id` here.</Note>
 </ParamField>
 
 ## Response Parameters
@@ -102,7 +102,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL
 curl --request GET \
-  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/proj_1234567890 \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_1234567890 \
   --header 'Authorization: Bearer {{key}}'
 ```
 
@@ -115,7 +115,7 @@ import java.net.http.HttpResponse;
 HttpClient client = HttpClient.newHttpClient();
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/proj_1234567890"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_1234567890"))
     .header("Authorization", "Bearer {{key}}")
     .GET()
     .build();
@@ -127,7 +127,7 @@ HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.o
 import requests
 
 response = requests.get(
-    "https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/proj_1234567890",
+    "https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_1234567890",
     headers={"Authorization": "Bearer {{key}}"},
 )
 ```
@@ -138,7 +138,7 @@ response = requests.get(
 
 ```json Processing Status
 {
-  "id": "proj_1234567890",
+  "id": "video_1234567890",
   "object": "video",
   "created": 1761635478,
   "model": "videos",
@@ -150,7 +150,7 @@ response = requests.get(
 
 ```json Completed Status
 {
-  "id": "proj_1234567890",
+  "id": "video_1234567890",
   "object": "video",
   "created": 1761635478,
   "model": "videos_fast",
@@ -163,7 +163,7 @@ response = requests.get(
 
 ```json Failed Status
 {
-  "id": "proj_1234567890",
+  "id": "video_1234567890",
   "object": "video",
   "created": 1761635478,
   "model": "videos",

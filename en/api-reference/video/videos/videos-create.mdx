@@ -54,6 +54,7 @@ Supported models:
   Supported values:
   - `16:9` - Landscape
   - `9:16` - Portrait
+  - `1:1` - Square
 </ParamField>
 
 <ParamField path="resolution" type="string">
@@ -109,18 +110,32 @@ Supported models:
 
 ## Response Parameters
 
-<ResponseField name="code" type="string">
-  Status code. `0` indicates success.
+<ResponseField name="id" type="string">
+  Unique identifier for the video generation task, used for subsequent status queries.
 </ResponseField>
 
-<ResponseField name="msg" type="string">
-  Response message. Usually contains the error reason on failure.
+<ResponseField name="object" type="string">
+  Object type, always `video`.
 </ResponseField>
 
-<ResponseField name="data.projectId" type="string">
-  Task ID.
+<ResponseField name="created" type="integer">
+  Task creation timestamp.
+</ResponseField>
 
-  Used for subsequent status and result queries.
+<ResponseField name="model" type="string">
+  Model name used for generation.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+  - `completed` - Completed
+  - `failed` - Failed
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when the task is `failed`.
 </ResponseField>
 
 ## Parameter Selection Rules
@@ -155,7 +170,7 @@ Supported models:
 
 <Info>
 **Best Practices:**
-1. Video generation is asynchronous, so save the returned task ID for later queries.
+1. Video generation is asynchronous, so save the returned `id` for later queries.
 2. Include scene, subject, motion, camera, and style details in the prompt.
 3. In first/last frame mode, make sure the two images are visually continuous.
 4. When using video references, prefer short, clear, and subject-focused source materials.
@@ -273,19 +288,23 @@ response = requests.post(
 
 ```json Success
 {
-  "code": "0",
-  "msg": null,
-  "data": {
-    "projectId": "proj_1234567890"
-  }
+  "id": "video_1234567890",
+  "object": "video",
+  "created": 1774836724,
+  "model": "videos",
+  "status": "queued",
+  "error": null
 }
 ```
 
 ```json Failure
 {
-  "code": "500",
-  "msg": "Parameter conflict: first/last frame mode cannot be used together with referenceImages/referenceVideos",
-  "data": null
+  "id": null,
+  "object": "error",
+  "created": 1774836724,
+  "model": null,
+  "status": "failed",
+  "error": "Parameter conflict: first/last frame mode cannot be used together with referenceImages/referenceVideos"
 }
 ```
 

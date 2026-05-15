@@ -24,7 +24,7 @@ Authorization: Bearer {{key}}
 <ParamField path="id" type="string" required>
   视频生成任务的唯一标识符，从创建任务接口返回。
 
-  <Note>创建接口返回字段名为 `projectId`，查询时请将该值作为这里的 `id` 使用。</Note>
+  <Note>创建接口直接返回字段 `id`，查询时请将该值作为这里的 `id` 使用。</Note>
 </ParamField>
 
 ## 响应参数
@@ -102,7 +102,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL
 curl --request GET \
-  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/proj_sd2manxue_1234567890 \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_sd2manxue_1234567890 \
   --header 'Authorization: Bearer {{key}}'
 ```
 
@@ -115,7 +115,7 @@ import java.net.http.HttpResponse;
 HttpClient client = HttpClient.newHttpClient();
 
 HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/proj_sd2manxue_1234567890"))
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_sd2manxue_1234567890"))
     .header("Authorization", "Bearer {{key}}")
     .GET()
     .build();
@@ -127,7 +127,7 @@ HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.o
 import requests
 
 response = requests.get(
-    "https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/proj_sd2manxue_1234567890",
+    "https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_sd2manxue_1234567890",
     headers={"Authorization": "Bearer {{key}}"},
 )
 ```
@@ -138,7 +138,7 @@ response = requests.get(
 
 ```json 处理中状态
 {
-  "id": "proj_sd2manxue_1234567890",
+  "id": "video_sd2manxue_1234567890",
   "object": "video",
   "created": 1761635478,
   "model": "sd2_manxue_1080p",
@@ -150,7 +150,7 @@ response = requests.get(
 
 ```json 已完成状态
 {
-  "id": "proj_sd2manxue_1234567890",
+  "id": "video_sd2manxue_1234567890",
   "object": "video",
   "created": 1761635478,
   "model": "sd2_manxue_2k",
@@ -163,7 +163,7 @@ response = requests.get(
 
 ```json 失败状态
 {
-  "id": "proj_sd2manxue_1234567890",
+  "id": "video_sd2manxue_1234567890",
   "object": "video",
   "created": 1761635478,
   "model": "sd2_manxue_4k",

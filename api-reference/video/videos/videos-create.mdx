@@ -54,6 +54,7 @@ Authorization: Bearer {{key}}
   支持的值：
   - `16:9` - 横屏
   - `9:16` - 竖屏
+  - `1:1` - 正方形
 </ParamField>
 
 <ParamField body="resolution" type="string">
@@ -109,18 +110,32 @@ Authorization: Bearer {{key}}
 
 ## 响应参数
 
-<ResponseField name="code" type="string">
-  状态码，`0` 表示成功。
+<ResponseField name="id" type="string">
+  视频生成任务的唯一标识符，用于后续查询任务状态。
 </ResponseField>
 
-<ResponseField name="msg" type="string">
-  返回信息，失败时通常包含错误原因。
+<ResponseField name="object" type="string">
+  对象类型，固定为 `video`。
 </ResponseField>
 
-<ResponseField name="data.projectId" type="string">
-  任务 ID。
+<ResponseField name="created" type="integer">
+  任务创建时间戳。
+</ResponseField>
 
-  用于后续查询任务状态和结果。
+<ResponseField name="model" type="string">
+  使用的模型名称。
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  任务状态：
+  - `queued` - 排队中
+  - `processing` - 处理中
+  - `completed` - 已完成
+  - `failed` - 失败
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  错误信息，当状态为 `failed` 时返回。
 </ResponseField>
 
 ## 参数选择规则
@@ -155,7 +170,7 @@ Authorization: Bearer {{key}}
 
 <Info>
 **最佳实践：**
-1. 视频生成为异步处理，请保存创建返回的任务 ID 用于后续查询。
+1. 视频生成为异步处理，请保存创建返回的 `id` 用于后续查询。
 2. 提示词尽量包含具体场景、动作、镜头和风格描述。
 3. 使用首尾帧模式时，确保两张图片在风格和构图上连续。
 4. 使用视频参考时，优先提供清晰、时长较短、主体明确的素材。
@@ -273,19 +288,23 @@ response = requests.post(
 
 ```json 创建成功
 {
-  "code": "0",
-  "msg": null,
-  "data": {
-    "projectId": "proj_1234567890"
-  }
+  "id": "video_1234567890",
+  "object": "video",
+  "created": 1774836724,
+  "model": "videos",
+  "status": "queued",
+  "error": null
 }
 ```
 
 ```json 创建失败
 {
-  "code": "500",
-  "msg": "参数冲突：image/lastFrameImage 首尾帧场景不能与 referenceImages/referenceVideos 同时使用",
-  "data": null
+  "id": null,
+  "object": "error",
+  "created": 1774836724,
+  "model": null,
+  "status": "failed",
+  "error": "参数冲突：image/lastFrameImage 首尾帧场景不能与 referenceImages/referenceVideos 同时使用"
 }
 ```
 
