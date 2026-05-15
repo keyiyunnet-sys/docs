@@ -1,0 +1,93 @@
+---
+title: "Sd2 Manxue - Query Asset Audit Status"
+description: "Batch query asset audit status for sd2_manxue"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/asset/sd2Manxue/assetStatus"
+---
+import ApiBaseUrlEn from '/snippets/api-base-url-en.mdx';
+
+# Sd2 Manxue Query Asset Audit Status
+
+Batch query the audit status of submitted `sd2_manxue` assets.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+<ApiBaseUrlEn />
+
+## Request Parameters
+
+<ParamField body="assetIds" type="array" required>
+  Asset ID list to query.
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="code" type="string">
+  Status code. `0` indicates success.
+</ResponseField>
+
+<ResponseField name="msg" type="string">
+  Response message. On failure, this usually contains the error reason.
+</ResponseField>
+
+<ResponseField name="data.items" type="array">
+  List of successful asset status results.
+</ResponseField>
+
+<ResponseField name="data.failedItems" type="array">
+  List of failed asset lookups. May be empty.
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/asset/sd2Manxue/assetStatus \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "assetIds": [
+      "asset_img_001",
+      "asset_video_001"
+    ]
+  }'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Success
+{
+  "code": "0",
+  "msg": null,
+  "data": {
+    "items": [
+      {
+        "assetId": "asset_img_001",
+        "status": "Active"
+      },
+      {
+        "assetId": "asset_video_001",
+        "status": "Processing"
+      }
+    ],
+    "failedItems": []
+  }
+}
+```
+
+```json Validation Error
+{
+  "code": "500",
+  "msg": "assetIds cannot be empty",
+  "data": null
+}
+```
+
+</ResponseExample>

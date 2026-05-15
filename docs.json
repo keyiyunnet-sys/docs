@@ -102,6 +102,15 @@
                     ]
                   },
                   {
+                    "group": "sd2_manxue",
+                    "pages": [
+                      "api-reference/video/sd2-manxue/sd2-manxue-create",
+                      "api-reference/video/sd2-manxue/sd2-manxue-query",
+                      "api-reference/video/sd2-manxue/sd2-manxue-asset-upload",
+                      "api-reference/video/sd2-manxue/sd2-manxue-asset-status"
+                    ]
+                  },
+                  {
                     "group": "Grok",
                     "pages": [
                       "api-reference/video/grok/grok-create",
@@ -214,6 +223,15 @@
                       "en/api-reference/video/seedance2/seedance2-asset-delete",
                       "en/api-reference/video/seedance2/seedance2-create",
                       "en/api-reference/video/seedance2/seedance2-query"
+                    ]
+                  },
+                  {
+                    "group": "sd2_manxue",
+                    "pages": [
+                      "en/api-reference/video/sd2-manxue/sd2-manxue-create",
+                      "en/api-reference/video/sd2-manxue/sd2-manxue-query",
+                      "en/api-reference/video/sd2-manxue/sd2-manxue-asset-upload",
+                      "en/api-reference/video/sd2-manxue/sd2-manxue-asset-status"
                     ]
                   },
                   {

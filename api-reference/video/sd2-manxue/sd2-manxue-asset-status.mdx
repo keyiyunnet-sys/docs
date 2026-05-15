@@ -1,0 +1,153 @@
+---
+title: "Sd2 Manxue - 查询素材审核状态"
+description: "批量查询 sd2_manxue 素材审核状态"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/asset/sd2Manxue/assetStatus"
+---
+import ApiBaseUrlZh from '/snippets/api-base-url-zh.mdx';
+
+# Sd2 Manxue 批量查询素材审核状态
+
+批量查询已提交审核的 `sd2_manxue` 素材状态。可用于判断素材是否已经通过审核并可在视频生成任务中使用。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+<ApiBaseUrlZh />
+
+## 请求参数
+
+<ParamField body="assetIds" type="array" required>
+  需要查询状态的素材 ID 列表。
+
+  示例：
+  - `asset_img_001`
+  - `asset_video_001`
+</ParamField>
+
+## 响应参数
+
+<ResponseField name="code" type="string">
+  状态码，`0` 表示成功。
+</ResponseField>
+
+<ResponseField name="msg" type="string">
+  返回信息。失败时返回错误原因。
+</ResponseField>
+
+<ResponseField name="data.items" type="array">
+  查询成功的素材状态列表。
+</ResponseField>
+
+<ResponseField name="data.items[].assetId" type="string">
+  素材 ID。
+</ResponseField>
+
+<ResponseField name="data.items[].status" type="string">
+  当前审核状态。
+
+  常见值：
+  - `Active` - 审核通过，可直接使用
+  - `Processing` - 审核中
+  - `Failed` - 审核失败
+</ResponseField>
+
+<ResponseField name="data.failedItems" type="array">
+  查询失败的素材列表，可能为空。
+</ResponseField>
+
+<ResponseField name="data.failedItems[].assetId" type="string">
+  查询失败的素材 ID。
+</ResponseField>
+
+<ResponseField name="data.failedItems[].errorMessage" type="string">
+  查询失败原因。
+</ResponseField>
+
+<Info>
+当素材状态为 `Active` 时，建议在生成任务中使用 `asset://{assetId}` 的形式引用素材。
+</Info>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/asset/sd2Manxue/assetStatus \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "assetIds": [
+      "asset_img_001",
+      "asset_video_001"
+    ]
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://zcbservice.aizfw.cn/kyyReactApiServer/asset/sd2Manxue/assetStatus",
+    headers={
+        "Authorization": "Bearer {{key}}",
+        "Content-Type": "application/json",
+    },
+    json={
+        "assetIds": ["asset_img_001", "asset_video_001"],
+    },
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 查询成功
+{
+  "code": "0",
+  "msg": null,
+  "data": {
+    "items": [
+      {
+        "assetId": "asset_img_001",
+        "status": "Active"
+      },
+      {
+        "assetId": "asset_video_001",
+        "status": "Processing"
+      }
+    ],
+    "failedItems": []
+  }
+}
+```
+
+```json 部分查询失败
+{
+  "code": "0",
+  "msg": null,
+  "data": {
+    "items": [],
+    "failedItems": [
+      {
+        "assetId": "asset_invalid",
+        "errorMessage": "查询失败"
+      }
+    ]
+  }
+}
+```
+
+```json 参数错误
+{
+  "code": "500",
+  "msg": "assetIds 不能为空",
+  "data": null
+}
+```
+
+</ResponseExample>

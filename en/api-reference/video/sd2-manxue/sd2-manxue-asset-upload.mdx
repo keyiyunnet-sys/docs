@@ -1,0 +1,112 @@
+---
+title: "Sd2 Manxue - Submit Asset Audit"
+description: "Submit batch asset audit requests for sd2_manxue images, videos, and audio files"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/asset/sd2Manxue/assetUpload"
+---
+import ApiBaseUrlEn from '/snippets/api-base-url-en.mdx';
+
+# Sd2 Manxue Submit Asset Audit
+
+Submit a batch asset audit request for `sd2_manxue` images, videos, and audio files.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+<ApiBaseUrlEn />
+
+## Request Parameters
+
+<ParamField body="imageUrls" type="array">
+  Image URL list to audit.
+</ParamField>
+
+<ParamField body="videoUrls" type="array">
+  Video URL list to audit.
+</ParamField>
+
+<ParamField body="audioUrls" type="array">
+  Audio URL list to audit.
+</ParamField>
+
+<Warning>
+At least one non-empty array must be provided in `imageUrls`, `videoUrls`, or `audioUrls`.
+</Warning>
+
+## Response Parameters
+
+<ResponseField name="code" type="string">
+  Status code. `0` indicates success.
+</ResponseField>
+
+<ResponseField name="msg" type="string">
+  Response message. On failure, this usually contains the error reason.
+</ResponseField>
+
+<ResponseField name="data.items" type="array">
+  List of successfully submitted assets.
+</ResponseField>
+
+<ResponseField name="data.failedItems" type="array">
+  List of failed assets. May be empty.
+</ResponseField>
+
+<Note>
+This API returns the upstream audit provider `data` object. Additional fields may be included if the provider extends the payload.
+</Note>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/asset/sd2Manxue/assetUpload \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "imageUrls": [
+      "https://example.com/portrait.jpg"
+    ],
+    "videoUrls": [
+      "https://example.com/reference.mp4"
+    ],
+    "audioUrls": [
+      "https://example.com/bgm.mp3"
+    ]
+  }'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Success
+{
+  "code": "0",
+  "msg": null,
+  "data": {
+    "items": [
+      {
+        "assetType": "Image",
+        "originalUrl": "https://example.com/portrait.jpg",
+        "assetId": "asset_img_001",
+        "status": "submitted"
+      }
+    ],
+    "failedItems": []
+  }
+}
+```
+
+```json Failure
+{
+  "code": "500",
+  "msg": "At least one non-empty array must be provided in imageUrls, videoUrls, or audioUrls",
+  "data": null
+}
+```
+
+</ResponseExample>

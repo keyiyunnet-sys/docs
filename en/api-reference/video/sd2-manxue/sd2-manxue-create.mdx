@@ -1,0 +1,171 @@
+---
+title: "Sd2 Manxue - Create Task"
+description: "Create sd2_manxue video generation tasks with text-only, first frame, first/last frame, and mixed references"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/sd2_manxue/videos"
+---
+import ApiBaseUrlEn from '/snippets/api-base-url-en.mdx';
+
+# Sd2 Manxue Create Video Task
+
+Create an `sd2_manxue` video generation task. This API supports text-only generation, first frame mode, first/last frame mode, and mixed image, video, and audio references.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+<ApiBaseUrlEn />
+
+## Request Parameters
+
+<ParamField body="prompt" type="string" required>
+  Video generation prompt.
+</ParamField>
+
+<ParamField body="model" type="string" required>
+  Model name used to determine the output resolution.
+
+  Available values:
+  - `sd2_manxue_720p`
+  - `sd2_manxue_1080p`
+  - `sd2_manxue_2k`
+  - `sd2_manxue_4k`
+</ParamField>
+
+<ParamField body="duration" type="integer">
+  Video duration in seconds. Defaults to `5`. Supported range: `4-15`.
+</ParamField>
+
+<ParamField body="ratio" type="string">
+  Output aspect ratio. Defaults to `16:9`.
+
+  Supported values:
+  - `21:9`
+  - `16:9`
+  - `4:3`
+  - `1:1`
+  - `3:4`
+  - `9:16`
+</ParamField>
+
+<ParamField body="image" type="string">
+  First frame image URL.
+
+  Rules:
+  - Can be used alone for first frame mode
+  - When combined with `lastFrameImage`, it becomes first/last frame mode
+  - Cannot be used together with `referenceImages`, `referenceVideos`, or `referenceAudios`
+</ParamField>
+
+<ParamField body="lastFrameImage" type="string">
+  Last frame image URL.
+
+  <Note>Must be used together with `image`</Note>
+</ParamField>
+
+<ParamField body="referenceImages" type="array">
+  Reference image URL list.
+
+  Rules:
+  - Up to `9` images
+  - Cannot be used together with `image` or `lastFrameImage`
+</ParamField>
+
+<ParamField body="referenceVideos" type="array">
+  Reference video URL list.
+
+  Rules:
+  - Up to `3` videos
+  - Total duration must not exceed `15` seconds
+  - Total size must not exceed `500MB`
+  - Cannot be used together with `image` or `lastFrameImage`
+</ParamField>
+
+<ParamField body="referenceAudios" type="array">
+  Reference audio URL list.
+
+  Rules:
+  - Up to `3` audio files
+  - Total duration must not exceed `15` seconds
+  - Total size must not exceed `500MB`
+  - Cannot be used together with `image` or `lastFrameImage`
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="code" type="string">
+  Status code. `0` indicates success.
+</ResponseField>
+
+<ResponseField name="msg" type="string">
+  Response message. On failure, this usually contains the error reason.
+</ResponseField>
+
+<ResponseField name="data.projectId" type="string">
+  System task ID used for follow-up result queries.
+</ResponseField>
+
+## Parameter Rules
+
+<Warning>
+- `lastFrameImage` cannot be used alone and must be paired with `image`
+- `referenceImages`, `referenceVideos`, and `referenceAudios` can be used separately or together
+- Any `reference*` field is mutually exclusive with `image` / `lastFrameImage`
+</Warning>
+
+<RequestExample>
+
+```bash cURL - Text Only
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/sd2_manxue/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "sd2_manxue_1080p",
+    "prompt": "A girl jogging through a rainy neon-lit street with a cinematic push-in shot",
+    "duration": 5,
+    "ratio": "16:9"
+  }'
+```
+
+```bash cURL - First/Last Frame
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/sd2_manxue/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "sd2_manxue_2k",
+    "prompt": "A time-lapse transition from morning to evening by the sea",
+    "duration": 8,
+    "image": "https://example.com/sea-morning.jpg",
+    "lastFrameImage": "https://example.com/sea-evening.jpg",
+    "ratio": "16:9"
+  }'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Success
+{
+  "code": "0",
+  "msg": null,
+  "data": {
+    "projectId": "proj_sd2manxue_1234567890"
+  }
+}
+```
+
+```json Failure
+{
+  "code": "500",
+  "msg": "Parameter conflict: referenceImages/referenceVideos/referenceAudios cannot be used together with image/lastFrameImage",
+  "data": null
+}
+```
+
+</ResponseExample>

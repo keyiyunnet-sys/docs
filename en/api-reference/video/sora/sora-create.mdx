@@ -1,12 +1,13 @@
 ---
 title: "Sora - Create Task"
-description: "Create video generation tasks using Sora models with support for various durations and resolutions"
+description: "Create video generation tasks using Sora models with support for 4, 8, and 12 second durations and multiple resolutions"
 api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/sora/videos"
 ---
+import ApiBaseUrlEn from '/snippets/api-base-url-en.mdx';
 
 # Sora Create Video Task
 
-Create high-quality video generation tasks using Sora's advanced AI models with support for multiple models and duration options.
+Create high-quality video generation tasks using Sora's advanced AI models. Current duration options are `4`, `8`, and `12` seconds.
 
 ## Authentication
 
@@ -16,16 +17,13 @@ All requests require a Bearer token in the request header:
 Authorization: Bearer {{key}}
 ```
 
+<ApiBaseUrlEn />
+
 ## Request Parameters
 
 <ParamField path="model" type="string" required>
   Model name, available options:
 
-[//]: # (- `sora2Stable` - Supports 10 or 15 seconds)
-
-[//]: # (- `openAiSora2` - Supports 4, 8, 12 seconds)
-
-[//]: # (- `openAiSora2Stable` - Supports 4, 8, 12 seconds)
   - `openAiSora2Plus` - Supports 4, 8, 12 seconds
   - `openAiSora2Pro`  - Supports 4, 8, 12 seconds
 </ParamField>
@@ -57,13 +55,13 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="duration" type="integer">
-  Video duration in seconds, supports 10 and 15
+  Video duration in seconds. Supported values: `4`, `8`, `12`
 
   <Note>Use either this or `seconds`, not both</Note>
 </ParamField>
 
 <ParamField path="seconds" type="integer">
-  Video duration in seconds, supports 10 and 15
+  Video duration in seconds. Supported values: `4`, `8`, `12`
 
   <Note>Use either this or `duration`, not both</Note>
 </ParamField>
@@ -121,17 +119,11 @@ Authorization: Bearer {{key}}
 ## Model Features
 
 <CardGroup cols={2}>
-  <Card title="sora2Stable" icon="shield-check">
-    Stable version model, supports 10 or 15 seconds with more stable output
-  </Card>
-  <Card title="openAiSora2" icon="video">
-    OpenAI Sora2 model, supports 4, 8, 12 second video generation
-  </Card>
-  <Card title="openAiSora2Stable" icon="check-circle">
-    OpenAI Sora2 stable version, supports 4, 8, 12 seconds with more stable output
-  </Card>
   <Card title="openAiSora2Plus" icon="star">
     OpenAI Sora2 Plus version, supports 4, 8, 12 seconds, enhanced model
+  </Card>
+  <Card title="openAiSora2Pro" icon="sparkles">
+    OpenAI Sora2 Pro version, supports 4, 8, 12 seconds for higher-quality generation
   </Card>
 </CardGroup>
 
@@ -148,10 +140,8 @@ Authorization: Bearer {{key}}
 
 | Model | Supported Durations |
 |-------|-------------------|
-| sora2Stable | 10 seconds, 15 seconds |
-| openAiSora2 | 4 seconds, 8 seconds, 12 seconds |
-| openAiSora2Stable | 4 seconds, 8 seconds, 12 seconds |
 | openAiSora2Plus | 4 seconds, 8 seconds, 12 seconds |
+| openAiSora2Pro | 4 seconds, 8 seconds, 12 seconds |
 
 <Info>
 **Best Practices:**
@@ -177,10 +167,10 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "sora-2",
+    "model": "openAiSora2Plus",
     "prompt": "A cat dancing in the rain, cinematic style",
     "aspect_ratio": "16:9",
-    "seconds": 10,
+    "seconds": 8,
     "input_reference": [
       "https://example.com/reference1.jpg"
   }'
@@ -199,10 +189,10 @@ HttpClient client = HttpClient.newHttpClient();
 ObjectMapper mapper = new ObjectMapper();
 
 Map<String, Object> requestBody = Map.of(
-    "model", "sora-2",
+    "model", "openAiSora2Plus",
     "prompt", "A cat dancing in the rain, cinematic style",
     "aspect_ratio", "16:9",
-    "seconds", 10,
+    "seconds", 8,
     "input_reference", List.of(
         "https://example.com/reference1.jpg"
     )
@@ -228,10 +218,10 @@ response = requests.post(
         'Content-Type': 'application/json'
     },
     json={
-        'model': 'sora-2',
+        'model': 'openAiSora2Plus',
         'prompt': 'A cat dancing in the rain, cinematic style',
         'aspect_ratio': '16:9',
-        'seconds': 10,
+        'seconds': 8,
         'input_reference': [
             'https://example.com/reference1.jpg'
         ]
@@ -248,7 +238,7 @@ response = requests.post(
   "id": "sora_abc123def456",
   "object": "video.generation",
   "created": 1761635478,
-  "model": "sora-2",
+  "model": "openAiSora2Plus",
   "status": "queued"
 }
 ```

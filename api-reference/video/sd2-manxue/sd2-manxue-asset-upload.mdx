@@ -1,0 +1,163 @@
+---
+title: "Sd2 Manxue - 提交素材审核"
+description: "批量提交 sd2_manxue 图片、视频、音频素材审核任务"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/asset/sd2Manxue/assetUpload"
+---
+import ApiBaseUrlZh from '/snippets/api-base-url-zh.mdx';
+
+# Sd2 Manxue 批量提交素材审核
+
+批量提交 `sd2_manxue` 素材审核任务。适用于涉及人脸、虚拟人像或需要先入库审核的图片、视频、音频素材。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+<ApiBaseUrlZh />
+
+## 请求参数
+
+<ParamField body="imageUrls" type="array">
+  待审核图片 URL 列表。
+
+  图片建议宽高比在 `0.4 ~ 2.5` 之间，宽高建议在 `300 ~ 6000 px` 之间。
+</ParamField>
+
+<ParamField body="videoUrls" type="array">
+  待审核视频 URL 列表。
+</ParamField>
+
+<ParamField body="audioUrls" type="array">
+  待审核音频 URL 列表。
+</ParamField>
+
+<Warning>
+`imageUrls`、`videoUrls`、`audioUrls` 至少传一个非空数组。
+</Warning>
+
+## 响应参数
+
+<ResponseField name="code" type="string">
+  状态码，`0` 表示成功。
+</ResponseField>
+
+<ResponseField name="msg" type="string">
+  返回信息。失败时返回错误原因。
+</ResponseField>
+
+<ResponseField name="data.items" type="array">
+  提交成功的素材列表。
+</ResponseField>
+
+<ResponseField name="data.items[].assetType" type="string">
+  素材类型，可能为 `Image`、`Video`、`Audio`。
+</ResponseField>
+
+<ResponseField name="data.items[].originalUrl" type="string">
+  原始素材 URL。
+</ResponseField>
+
+<ResponseField name="data.items[].assetId" type="string">
+  返回的素材 ID。
+</ResponseField>
+
+<ResponseField name="data.items[].status" type="string">
+  提交状态。成功时通常为 `submitted`。
+</ResponseField>
+
+<ResponseField name="data.failedItems" type="array">
+  提交失败的素材列表，可能为空。
+</ResponseField>
+
+## 使用流程
+
+<Steps>
+  <Step title="提交审核">
+    调用当前接口，获取每个素材对应的 `assetId`。
+  </Step>
+  <Step title="查询状态">
+    调用素材审核状态接口，确认素材状态是否变为 `Active`。
+  </Step>
+  <Step title="引用素材">
+    在创建视频任务时，使用 `asset://{assetId}` 的形式引用审核通过的素材。
+  </Step>
+</Steps>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/asset/sd2Manxue/assetUpload \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "imageUrls": [
+      "https://example.com/portrait.jpg"
+    ],
+    "videoUrls": [
+      "https://example.com/reference.mp4"
+    ],
+    "audioUrls": [
+      "https://example.com/bgm.mp3"
+    ]
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://zcbservice.aizfw.cn/kyyReactApiServer/asset/sd2Manxue/assetUpload",
+    headers={
+        "Authorization": "Bearer {{key}}",
+        "Content-Type": "application/json",
+    },
+    json={
+        "imageUrls": ["https://example.com/portrait.jpg"],
+        "videoUrls": ["https://example.com/reference.mp4"],
+        "audioUrls": ["https://example.com/bgm.mp3"],
+    },
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 提交成功
+{
+  "code": "0",
+  "msg": null,
+  "data": {
+    "items": [
+      {
+        "assetType": "Image",
+        "originalUrl": "https://example.com/portrait.jpg",
+        "assetId": "asset_img_001",
+        "status": "submitted"
+      },
+      {
+        "assetType": "Video",
+        "originalUrl": "https://example.com/reference.mp4",
+        "assetId": "asset_video_001",
+        "status": "submitted"
+      }
+    ],
+    "failedItems": []
+  }
+}
+```
+
+```json 参数错误
+{
+  "code": "500",
+  "msg": "imageUrls、videoUrls、audioUrls 至少传一个非空数组",
+  "data": null
+}
+```
+
+</ResponseExample>
