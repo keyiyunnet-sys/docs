@@ -1,0 +1,176 @@
+---
+title: "Sd2 Manxue - 查询任务"
+description: "查询 sd2_manxue 视频生成任务的状态和结果"
+api: "GET https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/{id}"
+---
+import ApiBaseUrlZh from '/snippets/api-base-url-zh.mdx';
+
+# Sd2 Manxue 查询视频任务
+
+使用任务 ID 查询 `sd2_manxue` 视频生成任务的状态和结果。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+<ApiBaseUrlZh />
+
+## 路径参数
+
+<ParamField path="id" type="string" required>
+  视频生成任务的唯一标识符，从创建任务接口返回。
+
+  <Note>创建接口返回字段名为 `projectId`，查询时请将该值作为这里的 `id` 使用。</Note>
+</ParamField>
+
+## 响应参数
+
+<ResponseField name="id" type="string">
+  视频生成任务的唯一标识符。
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  对象类型，固定为 `video`。
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  任务创建时间戳。
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  使用的模型名称，例如 `sd2_manxue_1080p`。
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  任务状态：
+  - `queued` - 排队中
+  - `processing` - 处理中
+  - `completed` - 已完成
+  - `failed` - 失败
+</ResponseField>
+
+<ResponseField name="video_url" type="string">
+  生成的视频 URL，当状态为 `completed` 时返回。
+</ResponseField>
+
+<ResponseField name="actualDuration" type="number">
+  视频实际输出时长（秒），当状态为 `completed` 时返回。
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  错误信息，当状态为 `failed` 时返回。
+</ResponseField>
+
+## 状态流程
+
+<Steps>
+  <Step title="queued">
+    任务已创建并进入队列，等待处理。
+  </Step>
+  <Step title="processing">
+    `sd2_manxue` 模型正在生成视频。
+  </Step>
+  <Step title="completed">
+    任务完成，可通过 `video_url` 获取结果。
+  </Step>
+</Steps>
+
+## 轮询建议
+
+<Info>
+**轮询策略：**
+- 建议轮询间隔：30-60 秒
+- 一般在数分钟内可完成，涉及多素材参考时可能更久
+- 不要过于频繁轮询，避免触发限流
+- 当状态为 `completed` 或 `failed` 时停止轮询
+</Info>
+
+## 结果说明
+
+<Warning>
+**重要提示：**
+- 生成结果通常为临时下载地址，请及时保存
+- 使用较多参考图片、视频、音频时，处理时间通常会更长
+- 若提示词或参考素材不符合平台要求，任务可能直接失败
+</Warning>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/proj_sd2manxue_1234567890 \
+  --header 'Authorization: Bearer {{key}}'
+```
+
+```java Java
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+HttpClient client = HttpClient.newHttpClient();
+
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/proj_sd2manxue_1234567890"))
+    .header("Authorization", "Bearer {{key}}")
+    .GET()
+    .build();
+
+HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/proj_sd2manxue_1234567890",
+    headers={"Authorization": "Bearer {{key}}"},
+)
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 处理中状态
+{
+  "id": "proj_sd2manxue_1234567890",
+  "object": "video",
+  "created": 1761635478,
+  "model": "sd2_manxue_1080p",
+  "status": "processing",
+  "video_url": null,
+  "error": null
+}
+```
+
+```json 已完成状态
+{
+  "id": "proj_sd2manxue_1234567890",
+  "object": "video",
+  "created": 1761635478,
+  "model": "sd2_manxue_2k",
+  "status": "completed",
+  "video_url": "https://example.com/video.mp4",
+  "actualDuration": 8.0,
+  "error": null
+}
+```
+
+```json 失败状态
+{
+  "id": "proj_sd2manxue_1234567890",
+  "object": "video",
+  "created": 1761635478,
+  "model": "sd2_manxue_4k",
+  "status": "failed",
+  "video_url": null,
+  "error": "Generation failed: reference video duration exceeds the limit"
+}
+```
+
+</ResponseExample>
