@@ -103,18 +103,32 @@ Authorization: Bearer {{key}}
 
 ## 响应参数
 
-<ResponseField name="code" type="string">
-  状态码，`0` 表示成功。
+<ResponseField name="id" type="string">
+  视频生成任务的唯一标识符，用于后续查询任务状态
 </ResponseField>
 
-<ResponseField name="msg" type="string">
-  返回信息。失败时通常返回错误原因。
+<ResponseField name="object" type="string">
+  对象类型，固定为 `video`
 </ResponseField>
 
-<ResponseField name="data.projectId" type="string">
-  系统任务 ID。
+<ResponseField name="created" type="integer">
+  任务创建时间戳
+</ResponseField>
 
-  请保存该值，用于后续查询生成结果。
+<ResponseField name="model" type="string">
+  使用的模型名称
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  任务状态：
+  - `queued` - 排队中
+  - `processing` - 处理中
+  - `completed` - 已完成
+  - `failed` - 失败
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  错误信息，当 status 为 `failed` 时返回
 </ResponseField>
 
 ## 参数选择规则
@@ -137,7 +151,7 @@ Authorization: Bearer {{key}}
 
 <Info>
 **最佳实践：**
-1. 创建任务为异步处理，请保存返回的 `projectId`。
+1. 创建任务为异步处理，请保存返回的 `id`。
 2. 提示词尽量包含主体、动作、镜头和风格描述。
 3. 使用首尾帧模式时，建议两张图片在风格和构图上连续。
 4. 使用参考视频或参考音频时，优先提供时长较短、主体清晰的素材。
@@ -221,19 +235,23 @@ response = requests.post(
 
 ```json 创建成功
 {
-  "code": "0",
-  "msg": null,
-  "data": {
-    "projectId": "proj_sd2manxue_1234567890"
-  }
+  "id": "video_sd2manxue_1234567890",
+  "object": "video",
+  "created": 1774836724,
+  "model": "sd2_manxue_1080p",
+  "status": "queued",
+  "error": null
 }
 ```
 
 ```json 创建失败
 {
-  "code": "500",
-  "msg": "参数冲突：referenceImages/referenceVideos/referenceAudios 与 image/lastFrameImage 不能同时使用",
-  "data": null
+  "id": null,
+  "object": "error",
+  "created": 1774836724,
+  "model": null,
+  "status": "failed",
+  "error": "参数冲突：referenceImages/referenceVideos/referenceAudios 与 image/lastFrameImage 不能同时使用"
 }
 ```
 

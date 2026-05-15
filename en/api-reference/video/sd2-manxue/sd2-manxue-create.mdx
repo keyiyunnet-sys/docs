@@ -96,16 +96,32 @@ Authorization: Bearer {{key}}
 
 ## Response Parameters
 
-<ResponseField name="code" type="string">
-  Status code. `0` indicates success.
+<ResponseField name="id" type="string">
+  Unique identifier for the video generation task, used for subsequent status queries
 </ResponseField>
 
-<ResponseField name="msg" type="string">
-  Response message. On failure, this usually contains the error reason.
+<ResponseField name="object" type="string">
+  Object type, always `video`
 </ResponseField>
 
-<ResponseField name="data.projectId" type="string">
-  System task ID used for follow-up result queries.
+<ResponseField name="created" type="integer">
+  Task creation timestamp
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+  - `completed` - Completed
+  - `failed` - Failed
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when status is `failed`
 </ResponseField>
 
 ## Parameter Rules
@@ -152,19 +168,23 @@ curl --request POST \
 
 ```json Success
 {
-  "code": "0",
-  "msg": null,
-  "data": {
-    "projectId": "proj_sd2manxue_1234567890"
-  }
+  "id": "video_sd2manxue_1234567890",
+  "object": "video",
+  "created": 1774836724,
+  "model": "sd2_manxue_1080p",
+  "status": "queued",
+  "error": null
 }
 ```
 
 ```json Failure
 {
-  "code": "500",
-  "msg": "Parameter conflict: referenceImages/referenceVideos/referenceAudios cannot be used together with image/lastFrameImage",
-  "data": null
+  "id": null,
+  "object": "error",
+  "created": 1774836724,
+  "model": null,
+  "status": "failed",
+  "error": "Parameter conflict: referenceImages/referenceVideos/referenceAudios cannot be used together with image/lastFrameImage"
 }
 ```
 
