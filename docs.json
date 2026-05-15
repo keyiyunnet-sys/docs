@@ -118,6 +118,13 @@
                     ]
                   },
                   {
+                    "group": "StarVideos",
+                    "pages": [
+                      "api-reference/video/starvideos/starvideos-create",
+                      "api-reference/video/starvideos/starvideos-query"
+                    ]
+                  },
+                  {
                     "group": "Videos",
                     "pages": [
                       "api-reference/video/videos/videos-create",
@@ -239,6 +246,13 @@
                     "pages": [
                       "en/api-reference/video/grok/grok-create",
                       "en/api-reference/video/grok/grok-query"
+                    ]
+                  },
+                  {
+                    "group": "StarVideos",
+                    "pages": [
+                      "en/api-reference/video/starvideos/starvideos-create",
+                      "en/api-reference/video/starvideos/starvideos-query"
                     ]
                   },
                   {

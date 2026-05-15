@@ -1,0 +1,157 @@
+---
+title: "StarVideos - 查询任务"
+description: "查询 StarVideos 视频生成任务的状态和结果"
+api: "GET https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/{id}"
+---
+import ApiBaseUrlZh from '/snippets/api-base-url-zh.mdx';
+
+# StarVideos 查询视频任务
+
+使用任务 ID 查询 `StarVideos` 视频生成任务的状态和结果。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+<ApiBaseUrlZh />
+
+## 路径参数
+
+<ParamField path="id" type="string" required>
+  任务 ID。
+
+  <Note>这里的 `{id}` 取值来自创建接口返回的 `id`。</Note>
+</ParamField>
+
+## 响应参数
+
+<ResponseField name="id" type="string">
+  视频生成任务的唯一标识符。
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  对象类型，固定为 `video`。
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  任务创建时间戳。
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  使用的模型名称。
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  任务状态：
+  - `queued` - 排队中
+  - `processing` - 处理中
+  - `completed` - 已完成
+  - `failed` - 失败
+</ResponseField>
+
+<ResponseField name="video_url" type="string">
+  生成的视频 URL。当状态为 `completed` 时返回。
+</ResponseField>
+
+<ResponseField name="actualDuration" type="number">
+  视频实际输出时长（秒）。当状态为 `completed` 时返回。
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  错误信息。当状态为 `failed` 时返回。
+</ResponseField>
+
+## 状态说明
+
+<Steps>
+  <Step title="queued">
+    任务已创建并进入队列，等待处理。
+  </Step>
+  <Step title="processing">
+    任务处理中，StarVideos 模型正在生成视频。
+  </Step>
+  <Step title="completed">
+    任务完成，可通过 `video_url` 获取结果。
+  </Step>
+</Steps>
+
+## 轮询建议
+
+<Info>
+**轮询策略：**
+- 建议轮询间隔：30-60 秒
+- 当 `status` 变为 `completed` 或 `failed` 时停止轮询
+- 结果地址可能为临时链接，建议尽快保存
+</Info>
+
+<Warning>
+**重要提示：**
+- 查询接口中的 `{id}` 必须使用创建接口返回的 `id`
+- 生成结果通常为临时下载地址，请及时保存
+</Warning>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_starvideos_1234567890 \
+  --header 'Authorization: Bearer {{key}}'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_starvideos_1234567890",
+    headers={"Authorization": "Bearer {{key}}"}
+)
+
+print(response.json())
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Processing
+{
+  "id": "video_starvideos_1234567890",
+  "object": "video",
+  "created": 1774836724,
+  "model": "starvideos_v3",
+  "status": "processing",
+  "video_url": null,
+  "error": null
+}
+```
+
+```json Completed
+{
+  "id": "video_starvideos_1234567890",
+  "object": "video",
+  "created": 1774836724,
+  "model": "starvideos_v3",
+  "status": "completed",
+  "video_url": "https://example.com/starvideos-result.mp4",
+  "actualDuration": 5,
+  "error": null
+}
+```
+
+```json Failed
+{
+  "id": "video_starvideos_1234567890",
+  "object": "video",
+  "created": 1774836724,
+  "model": "starvideos_v3",
+  "status": "failed",
+  "video_url": null,
+  "error": "Generation failed"
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,193 @@
+---
+title: "StarVideos - Create Task"
+description: "Create StarVideos video generation tasks with text-only, single-image, and first/last frame modes"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/startVideo/v1/starvideos/videos"
+---
+import ApiBaseUrlEn from '/snippets/api-base-url-en.mdx';
+
+# StarVideos Create Video Task
+
+Create a `StarVideos` video generation task. This API supports text-to-video, single-image-to-video, and first/last frame video generation.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+<ApiBaseUrlEn />
+
+## Request Parameters
+
+<ParamField body="prompt" type="string" required>
+  Video generation prompt.
+
+  Example: `"A cyberpunk city at night with a slow camera push-in"`
+</ParamField>
+
+<ParamField body="model" type="string" required>
+  Model name. The current value is fixed to `starvideos_v3`.
+</ParamField>
+
+<ParamField body="duration" type="integer">
+  Video duration in seconds. Defaults to `5`. Supported range: `3-15`.
+</ParamField>
+
+<ParamField body="ratio" type="string">
+  Output aspect ratio. Defaults to `16:9`.
+
+  Available values:
+  - `16:9`
+  - `9:16`
+</ParamField>
+
+<ParamField body="images" type="array">
+  Reference image URL list. Only the first `2` images are used.
+
+  Rules:
+  - No `images`: text-to-video
+  - `1` image: single-image-to-video
+  - `2` images: first/last frame mode
+
+  <Note>If more than 2 images are provided, only the first 2 take effect.</Note>
+</ParamField>
+
+## Modes
+
+<CardGroup cols={3}>
+  <Card title="Text to Video" icon="wand-magic-sparkles">
+    Do not provide `images`. The result is generated only from the prompt.
+  </Card>
+  <Card title="Single Image" icon="image">
+    Provide 1 image to strengthen subject and style control.
+  </Card>
+  <Card title="First/Last Frame" icon="film">
+    Provide 2 images as the start frame and end frame.
+  </Card>
+</CardGroup>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier for the video generation task, used for subsequent status queries.
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, always `video`.
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp.
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used for generation.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+  - `completed` - Completed
+  - `failed` - Failed
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message returned when the task status is `failed`.
+</ResponseField>
+
+## Constraints
+
+<Warning>
+**Key constraints:**
+- `model` currently only supports `starvideos_v3`
+- `duration` must be between `3` and `15` seconds
+- `ratio` only supports `16:9` or `9:16`
+- only the first `2` items in `images` are used
+</Warning>
+
+<Info>
+**Best practices:**
+1. Task creation is asynchronous, so save the returned `id`.
+2. Include subject, action, camera, and style details in your prompt.
+3. In first/last frame mode, keep the 2 images visually consistent.
+4. Image URLs must be publicly accessible when the request is sent.
+</Info>
+
+<RequestExample>
+
+```bash cURL - Text to Video
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/startVideo/v1/starvideos/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "prompt": "A cyberpunk city at night with a slow camera push-in",
+    "model": "starvideos_v3",
+    "duration": 5,
+    "ratio": "16:9"
+  }'
+```
+
+```bash cURL - Single Image
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/startVideo/v1/starvideos/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "prompt": "A girl turns around and smiles in a flower field",
+    "model": "starvideos_v3",
+    "duration": 5,
+    "ratio": "9:16",
+    "images": [
+      "https://example.com/girl-flower.jpg"
+    ]
+  }'
+```
+
+```bash cURL - First/Last Frame
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/startVideo/v1/starvideos/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "prompt": "A time-lapse transition from morning to evening by the sea",
+    "model": "starvideos_v3",
+    "duration": 8,
+    "ratio": "16:9",
+    "images": [
+      "https://example.com/sea-morning.jpg",
+      "https://example.com/sea-evening.jpg"
+    ]
+  }'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Success
+{
+  "id": "video_starvideos_1234567890",
+  "object": "video",
+  "created": 1774836724,
+  "model": "starvideos_v3",
+  "status": "queued",
+  "error": null
+}
+```
+
+```json Failure
+{
+  "id": null,
+  "object": "error",
+  "created": 1774836724,
+  "model": "starvideos_v3",
+  "status": "failed",
+  "error": "ratio only supports 16:9 or 9:16, current: 1:1"
+}
+```
+
+</ResponseExample>

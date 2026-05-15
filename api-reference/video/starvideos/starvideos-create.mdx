@@ -1,0 +1,213 @@
+---
+title: "StarVideos - 创建任务"
+description: "创建 StarVideos 视频生成任务，支持文生视频、单图生视频和首尾帧视频"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/startVideo/v1/starvideos/videos"
+---
+import ApiBaseUrlZh from '/snippets/api-base-url-zh.mdx';
+
+# StarVideos 创建视频任务
+
+创建 `StarVideos` 视频生成任务。该接口支持纯文生、单图生视频，以及首尾帧视频 3 种模式。
+
+## 认证
+
+所有请求都需要在请求头中包含 Bearer token：
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+<ApiBaseUrlZh />
+
+## 请求参数
+
+<ParamField body="prompt" type="string" required>
+  视频生成提示词。
+
+  示例：`"赛博朋克城市夜景，镜头慢慢推进"`
+</ParamField>
+
+<ParamField body="model" type="string" required>
+  模型名称，当前固定为 `starvideos_v3`。
+</ParamField>
+
+<ParamField body="duration" type="integer">
+  视频时长，单位为秒。默认 `5`，允许范围 `3-15`。
+</ParamField>
+
+<ParamField body="ratio" type="string">
+  输出比例。默认 `16:9`。
+
+  可选值：
+  - `16:9` - 横屏
+  - `9:16` - 竖屏
+</ParamField>
+
+<ParamField body="images" type="array">
+  参考图 URL 数组，最多使用前 `2` 张。
+
+  使用规则：
+  - 不传 `images`：按文生视频处理
+  - 传 `1` 张图：按单图生视频处理
+  - 传 `2` 张图：按首尾帧视频处理
+
+  <Note>超过 2 张时，仅前 2 张生效</Note>
+</ParamField>
+
+## 模式说明
+
+<CardGroup cols={3}>
+  <Card title="文生视频" icon="wand-magic-sparkles">
+    不传 `images`，仅依赖 `prompt` 生成视频
+  </Card>
+  <Card title="单图生视频" icon="image">
+    传入 1 张参考图，增强主体和风格控制
+  </Card>
+  <Card title="首尾帧视频" icon="film">
+    传入 2 张参考图，分别作为首帧和尾帧
+  </Card>
+</CardGroup>
+
+## 响应参数
+
+<ResponseField name="id" type="string">
+  视频生成任务的唯一标识符，用于后续查询任务状态。
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  对象类型，固定为 `video`。
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  任务创建时间戳。
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  使用的模型名称。
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  任务状态：
+  - `queued` - 排队中
+  - `processing` - 处理中
+  - `completed` - 已完成
+  - `failed` - 失败
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  错误信息。当任务状态为 `failed` 时返回。
+</ResponseField>
+
+## 参数约束
+
+<Warning>
+**关键约束：**
+- `model` 当前仅支持 `starvideos_v3`
+- `duration` 必须在 `3-15` 秒之间
+- `ratio` 仅支持 `16:9` 或 `9:16`
+- `images` 最多使用前 `2` 张
+</Warning>
+
+<Info>
+**最佳实践：**
+1. 创建任务为异步处理，请保存返回的 `id`。
+2. 提示词建议同时包含主体、动作、镜头和风格信息。
+3. 首尾帧模式下，建议两张图片在风格和主体上保持连贯。
+4. 单图或双图 URL 需要为可访问的公网地址。
+</Info>
+
+<RequestExample>
+
+```bash cURL - 文生视频
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/startVideo/v1/starvideos/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "prompt": "赛博朋克城市夜景，镜头慢慢推进",
+    "model": "starvideos_v3",
+    "duration": 5,
+    "ratio": "16:9"
+  }'
+```
+
+```bash cURL - 单图生视频
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/startVideo/v1/starvideos/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "prompt": "女孩在花海中转身微笑，镜头轻微推进",
+    "model": "starvideos_v3",
+    "duration": 5,
+    "ratio": "9:16",
+    "images": [
+      "https://example.com/girl-flower.jpg"
+    ]
+  }'
+```
+
+```bash cURL - 首尾帧视频
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/startVideo/v1/starvideos/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "prompt": "从清晨海边过渡到黄昏海边的延时镜头",
+    "model": "starvideos_v3",
+    "duration": 8,
+    "ratio": "16:9",
+    "images": [
+      "https://example.com/sea-morning.jpg",
+      "https://example.com/sea-evening.jpg"
+    ]
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://zcbservice.aizfw.cn/kyyReactApiServer/startVideo/v1/starvideos/videos",
+    headers={
+        "Authorization": "Bearer {{key}}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "prompt": "赛博朋克城市夜景，镜头慢慢推进",
+        "model": "starvideos_v3",
+        "duration": 5,
+        "ratio": "16:9"
+    }
+)
+
+print(response.json())
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Success
+{
+  "id": "video_starvideos_1234567890",
+  "object": "video",
+  "created": 1774836724,
+  "model": "starvideos_v3",
+  "status": "queued",
+  "error": null
+}
+```
+
+```json Failure
+{
+  "id": null,
+  "object": "error",
+  "created": 1774836724,
+  "model": "starvideos_v3",
+  "status": "failed",
+  "error": "ratio 仅允许 16:9 或 9:16，当前: 1:1"
+}
+```
+
+</ResponseExample>

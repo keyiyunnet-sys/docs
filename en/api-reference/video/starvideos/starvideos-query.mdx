@@ -1,0 +1,157 @@
+---
+title: "StarVideos - Query Task"
+description: "Query the status and result of StarVideos video generation tasks"
+api: "GET https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/{id}"
+---
+import ApiBaseUrlEn from '/snippets/api-base-url-en.mdx';
+
+# StarVideos Query Video Task
+
+Use the task ID to query the status and result of a `StarVideos` video generation task.
+
+## Authentication
+
+All requests require a Bearer token in the request header:
+
+```bash
+Authorization: Bearer {{key}}
+```
+
+<ApiBaseUrlEn />
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  Task ID.
+
+  <Note>The `{id}` value comes from the `id` returned by the create task API.</Note>
+</ParamField>
+
+## Response Parameters
+
+<ResponseField name="id" type="string">
+  Unique identifier of the video generation task.
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type, always `video`.
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Task creation timestamp.
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used for generation.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Task status:
+  - `queued` - Queued
+  - `processing` - Processing
+  - `completed` - Completed
+  - `failed` - Failed
+</ResponseField>
+
+<ResponseField name="video_url" type="string">
+  Generated video URL, returned when the task is `completed`.
+</ResponseField>
+
+<ResponseField name="actualDuration" type="number">
+  Actual output duration in seconds, returned when the task is `completed`.
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  Error message, returned when the task is `failed`.
+</ResponseField>
+
+## Status Flow
+
+<Steps>
+  <Step title="queued">
+    The task has been created and added to the queue.
+  </Step>
+  <Step title="processing">
+    The StarVideos model is actively generating the video.
+  </Step>
+  <Step title="completed">
+    The task completed successfully and the result is available through `video_url`.
+  </Step>
+</Steps>
+
+## Polling Recommendations
+
+<Info>
+**Polling strategy:**
+- Recommended polling interval: 30-60 seconds
+- Stop polling when `status` becomes `completed` or `failed`
+- Result URLs may be temporary, so save them promptly
+</Info>
+
+<Warning>
+**Important:**
+- The `{id}` path parameter must use the `id` returned by the create API
+- Generated result URLs are usually temporary, so save them promptly
+</Warning>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_starvideos_1234567890 \
+  --header 'Authorization: Bearer {{key}}'
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_starvideos_1234567890",
+    headers={"Authorization": "Bearer {{key}}"}
+)
+
+print(response.json())
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Processing
+{
+  "id": "video_starvideos_1234567890",
+  "object": "video",
+  "created": 1774836724,
+  "model": "starvideos_v3",
+  "status": "processing",
+  "video_url": null,
+  "error": null
+}
+```
+
+```json Completed
+{
+  "id": "video_starvideos_1234567890",
+  "object": "video",
+  "created": 1774836724,
+  "model": "starvideos_v3",
+  "status": "completed",
+  "video_url": "https://example.com/starvideos-result.mp4",
+  "actualDuration": 5,
+  "error": null
+}
+```
+
+```json Failed
+{
+  "id": "video_starvideos_1234567890",
+  "object": "video",
+  "created": 1774836724,
+  "model": "starvideos_v3",
+  "status": "failed",
+  "video_url": null,
+  "error": "Generation failed"
+}
+```
+
+</ResponseExample>
