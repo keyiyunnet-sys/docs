@@ -1,7 +1,7 @@
 ---
 title: "StarVideos - Create Task"
 description: "Create StarVideos video generation tasks with text-only, single-image, and first/last frame modes"
-api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/startVideo/v1/starvideos/videos"
+api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/starvideos/videos"
 ---
 import ApiBaseUrlEn from '/snippets/api-base-url-en.mdx';
 
@@ -120,7 +120,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL - Text to Video
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyReactApiServer/startVideo/v1/starvideos/videos \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/starvideos/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -133,7 +133,7 @@ curl --request POST \
 
 ```bash cURL - Single Image
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyReactApiServer/startVideo/v1/starvideos/videos \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/starvideos/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -149,7 +149,7 @@ curl --request POST \
 
 ```bash cURL - First/Last Frame
 curl --request POST \
-  --url https://zcbservice.aizfw.cn/kyyReactApiServer/startVideo/v1/starvideos/videos \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/starvideos/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
