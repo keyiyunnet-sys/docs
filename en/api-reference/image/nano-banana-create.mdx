@@ -1,5 +1,5 @@
 ---
-title: "Navo Banana - Create Task"
+title: "Nano Banana - Create Task"
 description: "Create image generation tasks with support for multiple models and resolution options"
 api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/banana/images"
 ---
@@ -7,7 +7,7 @@ import ApiBaseUrlEn from '/snippets/api-base-url-en.mdx';
 
 # Create Image Generation Task
 
-Use the Navo Banana API to create high-quality AI image generation tasks with support for multiple models and resolution options.
+Use the Nano Banana API to create high-quality AI image generation tasks with support for multiple models and resolution options.
 
 ## Authentication
 
@@ -72,7 +72,7 @@ Authorization: Bearer {{key}}
 </ResponseField>
 
 <ResponseField name="object" type="string">
-    Object type, always `navobanana`
+    Object type, always `nanobanana`
 </ResponseField>
 
 <ResponseField name="created" type="integer">
@@ -196,9 +196,9 @@ Authorization: Bearer {{key}}
     ```json Creation Success
     {
         "id": "abc123def456",
-        "object": "navobanana",
+        "object": "image",
         "created": 1761635478,
-        "model": "navobanana",
+        "model": "nano-banana-2",
         "status": "queued"
     }
     ```

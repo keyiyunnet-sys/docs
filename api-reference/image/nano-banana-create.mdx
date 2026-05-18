@@ -1,5 +1,5 @@
 ---
-title: "Navo Banana - 创建任务"
+title: "Nano Banana - 创建任务"
 description: "创建图片生成任务，支持多种模型和分辨率选项"
 api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/banana/images"
 ---
@@ -7,7 +7,7 @@ import ApiBaseUrlZh from '/snippets/api-base-url-zh.mdx';
 
 # 创建图片生成任务
 
-使用 Navo Banana API 创建高质量的 AI 图片生成任务，支持多种模型和分辨率选项。
+使用 Nano Banana API 创建高质量的 AI 图片生成任务，支持多种模型和分辨率选项。
 
 ## 认证
 
@@ -71,7 +71,7 @@ Authorization: Bearer {{key}}
 </ResponseField>
 
 <ResponseField name="object" type="string">
-  对象类型，固定为 `navobanana`
+  对象类型，固定为 `nanobanana`
 </ResponseField>
 
 <ResponseField name="created" type="integer">
@@ -197,7 +197,7 @@ response = requests.post(
   "id": "abc123def456",
   "object": "image",
   "created": 1761635478,
-  "model": "navobanana",
+  "model": "nano-banana-2",
   "status": "queued"
 }
 ```

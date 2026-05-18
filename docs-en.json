@@ -35,10 +35,10 @@
             "group": "Image Series API",
             "pages": [
               {
-                "group": "Navo Banana",
+                "group": "Nano Banana",
                 "pages": [
-                  "en/api-reference/image/navo-banana-create",
-                  "en/api-reference/image/navo-banana-query"
+                  "en/api-reference/image/nano-banana-create",
+                  "en/api-reference/image/nano-banana-query"
                 ]
               }
             ]

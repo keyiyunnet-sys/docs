@@ -1,5 +1,5 @@
 ---
-title: "Navo Banana - Query Task"
+title: "Nano Banana - Query Task"
 description: "Query the status and results of image generation tasks"
 api: "GET https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/{id}"
 ---
@@ -134,7 +134,7 @@ response = requests.get(
   "id": "abc123def456",
   "object": "image.generation",
   "created": 1761635478,
-  "model": "NanoBanana2",
+    "model": "nano-banana-2",
   "status": "processing",
   "image_url": null,
   "error": null
@@ -146,7 +146,7 @@ response = requests.get(
   "id": "abc123def456",
   "object": "image.generation",
   "created": 1761635478,
-  "model": "NanoBanana2",
+    "model": "nano-banana-2",
   "status": "completed",
   "image_url": "https://example.com/image.png",
   "error": null
@@ -158,7 +158,7 @@ response = requests.get(
   "id": "abc123def456",
   "object": "image.generation",
   "created": 1761635478,
-  "model": "NanoBanana2",
+    "model": "nano-banana-2",
   "status": "failed",
   "image_url": null,
   "error": "Generation failed: prompt contains prohibited content"
