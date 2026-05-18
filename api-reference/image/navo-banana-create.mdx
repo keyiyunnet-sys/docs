@@ -61,7 +61,7 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="image_urls" type="array">
-  参考图片URL数组，用于指导图片生成风格
+  参考图片URL数组，用于指导图片生成风格，最多 6 张
 </ParamField>
 
 ## 响应参数
@@ -119,7 +119,7 @@ Authorization: Bearer {{key}}
 **最佳实践：**
 1. 使用 `application/json` 格式发送请求
 2. 提示词应该清晰描述所需的图片内容和风格
-3. 参考图片可以帮助指导生成风格，但不是必需的
+3. 参考图片可以帮助指导生成风格，但不是必需的；最多支持 6 张
 4. 选择合适的宽高比以匹配你的使用场景
 </Tip>
 
@@ -214,3 +214,4 @@ response = requests.post(
 ```
 
 </ResponseExample>
+

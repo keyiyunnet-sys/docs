@@ -66,22 +66,29 @@ Supported models:
 
 ### First/Last Frame Mode
 
-<ParamField path="image" type="string">
+<ParamField path="first_image" type="string">
   First frame image URL.
 
   - Only used for first/last frame scenarios
-  - Must be used together with `lastFrameImage`
+  - Must be used together with `last_image`
 
   <Warning>Cannot be used together with `referenceImages` or `referenceVideos`</Warning>
 </ParamField>
 
-<ParamField path="lastFrameImage" type="string">
+<ParamField path="last_image" type="string">
   Last frame image URL.
 
-  - Must be used together with `image`
+  - Must be used together with `first_image`
 
   <Warning>Cannot be used together with `referenceImages` or `referenceVideos`</Warning>
 </ParamField>
+
+<Info>
+**Compatibility notes:**
+- The legacy fields `image` and `lastFrameImage` are still supported
+- When both new and legacy fields are provided, `first_image` / `last_image` take priority
+- If both new and legacy fields are provided with different values, the API returns a parameter conflict
+</Info>
 
 ### Reference Material Mode
 
@@ -142,7 +149,7 @@ Supported models:
 
 <Warning>
 **Mutually Exclusive Rules:**
-- **First/last frame mode**: `image` and `lastFrameImage` must be used together
+- **First/last frame mode**: `first_image` and `last_image` must be used together
 - **Reference material mode**: `referenceImages` and `referenceVideos` can be used individually or together
 - **Mode exclusivity**: First/last frame mode cannot be combined with reference material mode
 </Warning>
@@ -154,7 +161,7 @@ Supported models:
     Use only `prompt`, `model`, `duration`, and other base parameters
   </Card>
   <Card title="First/Last Frame" icon="film">
-    Use `image` and `lastFrameImage` for precise start and end frame control
+    Use `first_image` and `last_image` for precise start and end frame control
   </Card>
   <Card title="Mixed References" icon="images">
     Combine `referenceImages` and `referenceVideos` for stronger visual constraints
@@ -209,8 +216,8 @@ curl --request POST \
     "model": "videos_fast",
     "prompt": "A time-lapse transition from morning to evening by the sea",
     "duration": 8,
-    "image": "https://example.com/sea-morning.jpg",
-    "lastFrameImage": "https://example.com/sea-evening.jpg",
+    "first_image": "https://example.com/sea-morning.jpg",
+    "last_image": "https://example.com/sea-evening.jpg",
     "ratio": "16:9"
   }'
 ```

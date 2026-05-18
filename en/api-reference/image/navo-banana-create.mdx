@@ -62,7 +62,7 @@ Authorization: Bearer {{key}}
 </ParamField>
 
 <ParamField path="image_urls" type="array">
-    Array of reference image URLs to guide image generation style
+    Array of reference image URLs to guide image generation style, up to 6 images
 </ParamField>
 
 ## Response Parameters
@@ -120,7 +120,7 @@ Authorization: Bearer {{key}}
     **Best Practices:**
     1. Use `application/json` format for requests
     2. Prompts should clearly describe the desired image content and style
-    3. Reference images can help guide generation style but are not required
+    3. Reference images can help guide generation style but are not required; up to 6 images are supported
     4. Choose appropriate aspect ratio to match your use case
 </Tip>
 
@@ -215,3 +215,5 @@ Authorization: Bearer {{key}}
     ```
 
 </ResponseExample>
+
+

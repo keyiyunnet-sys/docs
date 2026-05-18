@@ -43,28 +43,53 @@ Authorization: Bearer {{key}}
   - `9:16` - 竖屏
 </ParamField>
 
+<ParamField body="image_urls" type="array">
+  单图输入字段，图生视频时传 `1` 张图片 URL。
+
+  使用规则：
+  - 不传 `image_urls`：按文生视频处理
+  - 传 `1` 张图：按单图生视频处理
+
+  <Note>`image_urls` 仅用于单图输入；首尾帧请使用 `first_image` 与 `last_image`。</Note>
+</ParamField>
+
+<ParamField body="first_image" type="string">
+  首帧图片 URL，仅首尾帧视频模式使用。
+</ParamField>
+
+<ParamField body="last_image" type="string">
+  尾帧图片 URL，仅首尾帧视频模式使用，必须搭配 `first_image`。
+</ParamField>
+
 <ParamField body="images" type="array">
-  参考图 URL 数组，最多使用前 `2` 张。
+  兼容旧字段：参考图 URL 数组。
 
   使用规则：
   - 不传 `images`：按文生视频处理
   - 传 `1` 张图：按单图生视频处理
   - 传 `2` 张图：按首尾帧视频处理
 
-  <Note>超过 2 张时，仅前 2 张生效</Note>
+  <Note>超过 2 张时，仅前 2 张生效。</Note>
 </ParamField>
+
+<Info>
+**兼容说明：**
+- 历史字段 `images` 仍可继续使用
+- 同时传新旧字段时，优先按新字段处理
+- 同时传新旧字段且值不一致时，接口会返回参数冲突
+</Info>
 
 ## 模式说明
 
 <CardGroup cols={3}>
   <Card title="文生视频" icon="wand-magic-sparkles">
-    不传 `images`，仅依赖 `prompt` 生成视频
+    不传图片字段，仅依赖 `prompt` 生成视频
   </Card>
   <Card title="单图生视频" icon="image">
-    传入 1 张参考图，增强主体和风格控制
+    传入 `image_urls`，增强主体和风格控制
   </Card>
   <Card title="首尾帧视频" icon="film">
-    传入 2 张参考图，分别作为首帧和尾帧
+    传入 `first_image` 和 `last_image`，分别作为首帧和尾帧
   </Card>
 </CardGroup>
 
@@ -105,6 +130,8 @@ Authorization: Bearer {{key}}
 - `model` 当前仅支持 `starvideos_v3`
 - `duration` 必须在 `3-15` 秒之间
 - `ratio` 仅支持 `16:9` 或 `9:16`
+- `image_urls` 仅支持 `1` 张图片
+- `first_image` 与 `last_image` 必须成对传入
 - `images` 最多使用前 `2` 张
 </Warning>
 
@@ -114,6 +141,7 @@ Authorization: Bearer {{key}}
 2. 提示词建议同时包含主体、动作、镜头和风格信息。
 3. 首尾帧模式下，建议两张图片在风格和主体上保持连贯。
 4. 单图或双图 URL 需要为可访问的公网地址。
+5. 已接入历史字段 `images` 的调用方可以继续使用旧字段。
 </Info>
 
 <RequestExample>
@@ -141,7 +169,7 @@ curl --request POST \
     "model": "starvideos_v3",
     "duration": 5,
     "ratio": "9:16",
-    "images": [
+    "image_urls": [
       "https://example.com/girl-flower.jpg"
     ]
   }'
@@ -157,10 +185,8 @@ curl --request POST \
     "model": "starvideos_v3",
     "duration": 8,
     "ratio": "16:9",
-    "images": [
-      "https://example.com/sea-morning.jpg",
-      "https://example.com/sea-evening.jpg"
-    ]
+    "first_image": "https://example.com/sea-morning.jpg",
+    "last_image": "https://example.com/sea-evening.jpg"
   }'
 ```
 

@@ -51,19 +51,26 @@ Authorization: Bearer {{key}}
   - `9:16`
 </ParamField>
 
-<ParamField body="image" type="string">
+<ParamField body="first_image" type="string">
   First frame image URL.
 
   Rules:
+  - Primary field for first-frame and first/last-frame modes
   - Can be used alone for first frame mode
-  - When combined with `lastFrameImage`, it becomes first/last frame mode
+  - When combined with `last_image`, it becomes first/last frame mode
+  - Compatible with the legacy field `image`
   - Cannot be used together with `referenceImages`, `referenceVideos`, or `referenceAudios`
 </ParamField>
 
-<ParamField body="lastFrameImage" type="string">
+<ParamField body="last_image" type="string">
   Last frame image URL.
 
-  <Note>Must be used together with `image`</Note>
+  Rules:
+  - Primary field for first/last frame mode
+  - Must be used together with `first_image`
+  - Compatible with the legacy field `lastFrameImage`
+
+  <Note>When both legacy and current fields are provided, `first_image` and `last_image` take precedence. Conflicting values return a parameter conflict error.</Note>
 </ParamField>
 
 <ParamField body="referenceImages" type="array">
@@ -71,7 +78,7 @@ Authorization: Bearer {{key}}
 
   Rules:
   - Up to `9` images
-  - Cannot be used together with `image` or `lastFrameImage`
+  - Cannot be used together with `first_image`, `last_image`, or the legacy fields `image`, `lastFrameImage`
 </ParamField>
 
 <ParamField body="referenceVideos" type="array">
@@ -81,7 +88,7 @@ Authorization: Bearer {{key}}
   - Up to `3` videos
   - Total duration must not exceed `15` seconds
   - Total size must not exceed `500MB`
-  - Cannot be used together with `image` or `lastFrameImage`
+  - Cannot be used together with `first_image`, `last_image`, or the legacy fields `image`, `lastFrameImage`
 </ParamField>
 
 <ParamField body="referenceAudios" type="array">
@@ -91,7 +98,7 @@ Authorization: Bearer {{key}}
   - Up to `3` audio files
   - Total duration must not exceed `15` seconds
   - Total size must not exceed `500MB`
-  - Cannot be used together with `image` or `lastFrameImage`
+  - Cannot be used together with `first_image`, `last_image`, or the legacy fields `image`, `lastFrameImage`
 </ParamField>
 
 ## Response Parameters
@@ -127,9 +134,14 @@ Authorization: Bearer {{key}}
 ## Parameter Rules
 
 <Warning>
-- `lastFrameImage` cannot be used alone and must be paired with `image`
+- `last_image` cannot be used alone and must be paired with `first_image`
 - `referenceImages`, `referenceVideos`, and `referenceAudios` can be used separately or together
-- Any `reference*` field is mutually exclusive with `image` / `lastFrameImage`
+- Any `reference*` field is mutually exclusive with `first_image` / `last_image`
+
+Compatibility:
+- Legacy fields `image` and `lastFrameImage` are still accepted
+- When both legacy and current fields are provided, current fields take precedence
+- If both sets are provided with different values, the API returns a parameter conflict error
 </Warning>
 
 <RequestExample>
@@ -156,8 +168,8 @@ curl --request POST \
     "model": "sd2_manxue_2k",
     "prompt": "A time-lapse transition from morning to evening by the sea",
     "duration": 8,
-    "image": "https://example.com/sea-morning.jpg",
-    "lastFrameImage": "https://example.com/sea-evening.jpg",
+    "first_image": "https://example.com/sea-morning.jpg",
+    "last_image": "https://example.com/sea-evening.jpg",
     "ratio": "16:9"
   }'
 ```
@@ -184,7 +196,7 @@ curl --request POST \
   "created": 1774836724,
   "model": null,
   "status": "failed",
-  "error": "Parameter conflict: referenceImages/referenceVideos/referenceAudios cannot be used together with image/lastFrameImage"
+  "error": "Parameter conflict: referenceImages/referenceVideos/referenceAudios cannot be used together with first_image/last_image"
 }
 ```
 

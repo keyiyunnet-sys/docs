@@ -66,22 +66,29 @@ Authorization: Bearer {{key}}
 
 ### 首尾帧模式
 
-<ParamField body="image" type="string">
+<ParamField body="first_image" type="string">
   首帧图片 URL。
 
   - 仅用于首尾帧场景
-  - 必须搭配 `lastFrameImage` 使用
+  - 必须搭配 `last_image` 使用
 
   <Warning>不能与 `referenceImages` 或 `referenceVideos` 同时使用</Warning>
 </ParamField>
 
-<ParamField body="lastFrameImage" type="string">
+<ParamField body="last_image" type="string">
   尾帧图片 URL。
 
-  - 必须搭配 `image` 使用
+  - 必须搭配 `first_image` 使用
 
   <Warning>不能与 `referenceImages` 或 `referenceVideos` 同时使用</Warning>
 </ParamField>
+
+<Info>
+**兼容说明：**
+- 历史字段 `image` 和 `lastFrameImage` 仍可继续使用
+- 同时传新旧字段时，优先按 `first_image` / `last_image` 处理
+- 同时传新旧字段且值不一致时，接口会返回参数冲突
+</Info>
 
 ### 引用素材模式
 
@@ -142,7 +149,7 @@ Authorization: Bearer {{key}}
 
 <Warning>
 **互斥规则：**
-- **首尾帧模式**：`image` 和 `lastFrameImage` 必须成对使用
+- **首尾帧模式**：`first_image` 和 `last_image` 必须成对使用
 - **引用素材模式**：`referenceImages`、`referenceVideos` 可单独或组合使用
 - **模式互斥**：首尾帧模式不能与引用素材模式同时使用
 </Warning>
@@ -154,7 +161,7 @@ Authorization: Bearer {{key}}
     仅传 `prompt`、`model`、`duration` 等基础参数
   </Card>
   <Card title="首尾帧视频" icon="film">
-    通过 `image` 和 `lastFrameImage` 精确控制开头与结尾画面
+    通过 `first_image` 和 `last_image` 精确控制开头与结尾画面
   </Card>
   <Card title="图视频混合参考" icon="images">
     通过 `referenceImages` 与 `referenceVideos` 组合提供更强的素材约束
@@ -209,8 +216,8 @@ curl --request POST \
     "model": "videos_fast",
     "prompt": "从清晨过渡到黄昏的海边延时镜头",
     "duration": 8,
-    "image": "https://example.com/sea-morning.jpg",
-    "lastFrameImage": "https://example.com/sea-evening.jpg",
+    "first_image": "https://example.com/sea-morning.jpg",
+    "last_image": "https://example.com/sea-evening.jpg",
     "ratio": "16:9"
   }'
 ```

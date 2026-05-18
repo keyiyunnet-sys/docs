@@ -43,8 +43,26 @@ Authorization: Bearer {{key}}
   - `9:16`
 </ParamField>
 
+<ParamField body="image_urls" type="array">
+  Single-image input field. Provide `1` image URL for image-to-video generation.
+
+  Rules:
+  - No `image_urls`: text-to-video
+  - `1` image: single-image-to-video
+
+  <Note>`image_urls` is only for single-image input. Use `first_image` and `last_image` for first/last frame mode.</Note>
+</ParamField>
+
+<ParamField body="first_image" type="string">
+  First frame image URL for first/last frame mode.
+</ParamField>
+
+<ParamField body="last_image" type="string">
+  Last frame image URL for first/last frame mode. Must be used together with `first_image`.
+</ParamField>
+
 <ParamField body="images" type="array">
-  Reference image URL list. Only the first `2` images are used.
+  Legacy reference image list.
 
   Rules:
   - No `images`: text-to-video
@@ -54,17 +72,24 @@ Authorization: Bearer {{key}}
   <Note>If more than 2 images are provided, only the first 2 take effect.</Note>
 </ParamField>
 
+<Info>
+**Compatibility notes:**
+- The legacy field `images` is still supported
+- When both new and legacy fields are provided, the new fields take priority
+- If both new and legacy fields are provided with different values, the API returns a parameter conflict
+</Info>
+
 ## Modes
 
 <CardGroup cols={3}>
   <Card title="Text to Video" icon="wand-magic-sparkles">
-    Do not provide `images`. The result is generated only from the prompt.
+    Do not provide image input fields. The result is generated only from the prompt.
   </Card>
   <Card title="Single Image" icon="image">
-    Provide 1 image to strengthen subject and style control.
+    Provide `image_urls` to strengthen subject and style control.
   </Card>
   <Card title="First/Last Frame" icon="film">
-    Provide 2 images as the start frame and end frame.
+    Provide `first_image` and `last_image` as the start frame and end frame.
   </Card>
 </CardGroup>
 
@@ -105,6 +130,8 @@ Authorization: Bearer {{key}}
 - `model` currently only supports `starvideos_v3`
 - `duration` must be between `3` and `15` seconds
 - `ratio` only supports `16:9` or `9:16`
+- `image_urls` supports exactly `1` image
+- `first_image` and `last_image` must be provided together
 - only the first `2` items in `images` are used
 </Warning>
 
@@ -114,6 +141,7 @@ Authorization: Bearer {{key}}
 2. Include subject, action, camera, and style details in your prompt.
 3. In first/last frame mode, keep the 2 images visually consistent.
 4. Image URLs must be publicly accessible when the request is sent.
+5. Existing integrations using the legacy `images` field can continue to use it.
 </Info>
 
 <RequestExample>
@@ -141,7 +169,7 @@ curl --request POST \
     "model": "starvideos_v3",
     "duration": 5,
     "ratio": "9:16",
-    "images": [
+    "image_urls": [
       "https://example.com/girl-flower.jpg"
     ]
   }'
@@ -157,10 +185,8 @@ curl --request POST \
     "model": "starvideos_v3",
     "duration": 8,
     "ratio": "16:9",
-    "images": [
-      "https://example.com/sea-morning.jpg",
-      "https://example.com/sea-evening.jpg"
-    ]
+    "first_image": "https://example.com/sea-morning.jpg",
+    "last_image": "https://example.com/sea-evening.jpg"
   }'
 ```
 

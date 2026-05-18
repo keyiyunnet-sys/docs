@@ -53,21 +53,28 @@ Authorization: Bearer {{key}}
   - `9:16`
 </ParamField>
 
-<ParamField body="image" type="string">
+<ParamField body="first_image" type="string">
   首帧图片 URL。
 
   使用规则：
+  - 首帧 / 首尾帧场景主字段
   - 可单独用于首帧模式
-  - 搭配 `lastFrameImage` 时表示首尾帧模式
+  - 搭配 `last_image` 时表示首尾帧模式
+  - 兼容旧字段 `image`
   - 不能与 `referenceImages`、`referenceVideos`、`referenceAudios` 同时使用
 
   图片建议宽高比在 `0.4 ~ 2.5` 之间，宽高建议在 `300 ~ 6000 px` 之间。
 </ParamField>
 
-<ParamField body="lastFrameImage" type="string">
+<ParamField body="last_image" type="string">
   尾帧图片 URL。
 
-  <Note>必须搭配 `image` 使用</Note>
+  使用规则：
+  - 首尾帧场景主字段
+  - 必须搭配 `first_image` 使用
+  - 兼容旧字段 `lastFrameImage`
+
+  <Note>当新旧字段同时传入时，以 `first_image`、`last_image` 为准；若值不一致会报参数冲突</Note>
 </ParamField>
 
 <ParamField body="referenceImages" type="array">
@@ -75,7 +82,7 @@ Authorization: Bearer {{key}}
 
   规则说明：
   - 最多 `9` 张
-  - 不能与 `image`、`lastFrameImage` 同时使用
+  - 不能与 `first_image`、`last_image` 及兼容字段 `image`、`lastFrameImage` 同时使用
   - 图片建议宽高比在 `0.4 ~ 2.5` 之间，宽高建议在 `300 ~ 6000 px` 之间
 
   <Note>涉及人脸或虚拟人像素材时，建议先调用素材审核接口并使用 `asset://{assetId}` 形式引用</Note>
@@ -88,7 +95,7 @@ Authorization: Bearer {{key}}
   - 最多 `3` 个
   - 总时长不超过 `15` 秒
   - 总大小不超过 `500MB`
-  - 不能与 `image`、`lastFrameImage` 同时使用
+  - 不能与 `first_image`、`last_image` 及兼容字段 `image`、`lastFrameImage` 同时使用
 </ParamField>
 
 <ParamField body="referenceAudios" type="array">
@@ -98,7 +105,7 @@ Authorization: Bearer {{key}}
   - 最多 `3` 个
   - 总时长不超过 `15` 秒
   - 总大小不超过 `500MB`
-  - 不能与 `image`、`lastFrameImage` 同时使用
+  - 不能与 `first_image`、`last_image` 及兼容字段 `image`、`lastFrameImage` 同时使用
 </ParamField>
 
 ## 响应参数
@@ -135,9 +142,14 @@ Authorization: Bearer {{key}}
 
 <Warning>
 **互斥规则：**
-- `lastFrameImage` 不能单独使用，必须与 `image` 成对出现
+- `last_image` 不能单独使用，必须与 `first_image` 成对出现
 - `referenceImages`、`referenceVideos`、`referenceAudios` 可单独或组合使用
-- `image` / `lastFrameImage` 与任意 `reference*` 参数不能同时使用
+- `first_image` / `last_image` 与任意 `reference*` 参数不能同时使用
+
+兼容说明：
+- 历史字段 `image`、`lastFrameImage` 仍可兼容使用
+- 当新旧字段同时传入时，新字段优先
+- 当新旧字段同时传入且值不一致时，接口会直接返回参数冲突
 </Warning>
 
 ## 模型与分辨率
@@ -182,8 +194,8 @@ curl --request POST \
     "model": "sd2_manxue_2k",
     "prompt": "从清晨过渡到黄昏的海边延时镜头",
     "duration": 8,
-    "image": "https://example.com/sea-morning.jpg",
-    "lastFrameImage": "https://example.com/sea-evening.jpg",
+    "first_image": "https://example.com/sea-morning.jpg",
+    "last_image": "https://example.com/sea-evening.jpg",
     "ratio": "16:9"
   }'
 ```
@@ -251,7 +263,7 @@ response = requests.post(
   "created": 1774836724,
   "model": null,
   "status": "failed",
-  "error": "参数冲突：referenceImages/referenceVideos/referenceAudios 与 image/lastFrameImage 不能同时使用"
+  "error": "参数冲突：referenceImages/referenceVideos/referenceAudios 与 first_image/last_image 不能同时使用"
 }
 ```
 
