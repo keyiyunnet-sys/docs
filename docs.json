@@ -118,7 +118,7 @@
                     ]
                   },
                   {
-                    "group": "StarVideos",
+                    "group": "StarVideos（暂不可用）",
                     "pages": [
                       "api-reference/video/starvideos/starvideos-create",
                       "api-reference/video/starvideos/starvideos-query"
@@ -249,7 +249,7 @@
                     ]
                   },
                   {
-                    "group": "StarVideos",
+                    "group": "StarVideos (Temporarily Unavailable)",
                     "pages": [
                       "en/api-reference/video/starvideos/starvideos-create",
                       "en/api-reference/video/starvideos/starvideos-query"
@@ -337,3 +337,4 @@
   },
   "css": ["styles.css"]
 }
+
