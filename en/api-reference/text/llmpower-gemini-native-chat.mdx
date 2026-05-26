@@ -1,0 +1,150 @@
+---
+title: "Gemini Native API"
+description: "Gemini native interface for direct generateContent and streamGenerateContent integrations"
+api: "POST http://apillm.globalaiopc.com/gw_llm_power/v1/models/{model}:generateContent"
+---
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '16px', marginBottom: '20px', flexWrap: 'wrap' }}>
+  <div>
+    <strong>baseUrl:</strong>
+    <code>http://apillm.globalaiopc.com/gw_llm_power</code>
+  </div>
+  <button
+    type="button"
+    onClick={() => {
+      navigator.clipboard.writeText('http://apillm.globalaiopc.com/gw_llm_power');
+      window.alert('baseUrl copied');
+    }}
+    style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '8px', background: '#2563eb', color: '#ffffff', fontWeight: 600, border: 'none', cursor: 'pointer' }}
+  >
+    Copy
+  </button>
+</div>
+
+Compatible with the Gemini official documentation. You can integrate directly with the following reference:
+
+- Gemini generateContent: <https://ai.google.dev/api/generate-content>
+
+## Authentication
+
+Use the `Authorization` header for authentication.
+
+```bash
+Authorization: Bearer {{YOUR_API_KEY}}
+Content-Type: application/json
+```
+
+Notes:
+
+- `Authorization`: API key in the format `Bearer {{YOUR_API_KEY}}`
+
+## Supported Models
+
+The following models are supported, organized by model family and version type:
+
+### Gemini
+
+| Standard / Stable Version | Official Version | Low-cost Version |
+| --- | --- | --- |
+| `gemini-2.5-flash-lite` | - | - |
+| `gemini-2.5-pro` | `gemini-2.5-pro-official` | `gemini-2.5-pro-low` |
+| `gemini-3-flash-preview` | `gemini-3-flash-preview-official` | `gemini-3-flash-preview-low` |
+| `gemini-3.1-flash-lite-preview` | - | - |
+| `gemini-3.1-pro-preview` | `gemini-3.1-pro-preview-official` | `gemini-3.1-pro-preview-low` |
+
+### Version Notes
+
+| Suffix / Type | Description |
+| --- | --- |
+| no suffix | Standard / stable version |
+| `-official` | Official version |
+| `-low` | Low-cost version |
+
+### Multimodal Support
+
+#### Image Analysis
+
+All models support image analysis.
+
+#### Video Analysis
+
+All models support video analysis.
+
+## Request Path
+
+The following Gemini native paths are supported:
+
+- `POST /v1/models/{model}:generateContent`
+- `POST /v1/models/{model}:streamGenerateContent`
+
+Example full URL:
+
+```text
+http://apillm.globalaiopc.com/gw_llm_power/v1/models/gemini-3.1-pro-preview:generateContent
+```
+
+## Request Parameters
+
+<ParamField path="contents" type="array" required>
+  Gemini native message content array. Each item usually contains `role` and `parts`
+</ParamField>
+
+<ParamField path="contents[].role" type="string">
+  Message role, commonly `user` or `model`
+</ParamField>
+
+<ParamField path="contents[].parts" type="array" required>
+  Message part array. Commonly text objects, also supports Gemini native multimodal structures
+</ParamField>
+
+<ParamField path="contents[].parts[].text" type="string">
+  Text content
+</ParamField>
+
+<ParamField path="generationConfig.temperature" type="number">
+  Sampling temperature
+</ParamField>
+
+<ParamField path="generationConfig.topP" type="number">
+  Nucleus sampling parameter
+</ParamField>
+
+<ParamField path="generationConfig.maxOutputTokens" type="integer">
+  Maximum output token count
+</ParamField>
+
+<ParamField path="systemInstruction.parts[].text" type="string">
+  Optional system prompt
+</ParamField>
+
+## Response
+
+Returns a Gemini native-style response.
+
+<ResponseField name="candidates[].content.parts[].text" type="string">
+  Generated text content
+</ResponseField>
+
+<ResponseField name="candidates[].finishReason" type="string">
+  Generation stop reason
+</ResponseField>
+
+<ResponseField name="usageMetadata.promptTokenCount" type="integer">
+  Input token count
+</ResponseField>
+
+<ResponseField name="usageMetadata.candidatesTokenCount" type="integer">
+  Output token count
+</ResponseField>
+
+<ResponseField name="usageMetadata.totalTokenCount" type="integer">
+  Total token count
+</ResponseField>
+
+## Notes
+
+<Note>
+1. Replace `{model}` in the path with the actual model name, for example `gemini-3.1-pro-preview`
+2. For streaming responses, use `:streamGenerateContent`
+3. Pass the API key using the `Authorization` header
+</Note>

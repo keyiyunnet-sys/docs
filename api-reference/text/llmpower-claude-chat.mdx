@@ -101,16 +101,17 @@ Content-Type: application/json
 
 ### Claude Messages API 兼容的 GPT 模型
 
-| 满血 / 官方版 | 优质号池 | 混合号池 / 反代版 | 低价版 |
-| --- | --- | --- | --- |
-| `gpt-5.4` | `gpt-5.4-hc` | `gpt-5.4-fd` | `gpt-5.4-low` |
-| `gpt-5.5` | `gpt-5.5-hc` | `gpt-5.5-fd` | `gpt-5.5-low` |
+| 满血版 | 官方版 | 优质号池 | 混合号池 / 反代版 | 低价版 |
+| --- | --- | --- | --- | --- |
+| `gpt-5.4` | `gpt-5.4-official` | `gpt-5.4-hc` | `gpt-5.4-fd` | `gpt-5.4-low` |
+| `gpt-5.5` | `gpt-5.5-official` | `gpt-5.5-hc` | `gpt-5.5-fd` | `gpt-5.5-low` |
 
 ### 版本说明
 
 | 后缀 / 类型 | 说明 |
 | --- | --- |
 | 无后缀 | 满血版 / 官方标准版 |
+| `-official` | 官方版 |
 | `-hc` | AWS 版或优质号池版本 |
 | `-fd` | 号池 / 反代版本 |
 | `-low` | 低价版本 |
@@ -126,10 +127,12 @@ Claude Messages API 使用 Claude 协议请求体，不适用于 Gemini 官方�
 仅以下模型不支持：
 
 - `gpt-5.4`
+- `gpt-5.4-official`
 - `gpt-5.4-fd`
 - `gpt-5.4-hc`
 - `gpt-5.4-low`
 - `gpt-5.5`
+- `gpt-5.5-official`
 - `gpt-5.5-fd`
 - `gpt-5.5-hc`
 - `gpt-5.5-low`

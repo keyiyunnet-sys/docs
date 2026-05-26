@@ -1,0 +1,217 @@
+---
+title: "Claude Messages API"
+description: "Claude Messages interface based on the Anthropic native request format"
+api: "POST http://apillm.globalaiopc.com/gw_llm_power/v1/messages"
+---
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '16px', marginBottom: '20px', flexWrap: 'wrap' }}>
+  <div>
+    <strong>baseUrl:</strong>
+    <code>http://apillm.globalaiopc.com/gw_llm_power</code>
+  </div>
+  <button
+    type="button"
+    onClick={() => {
+      navigator.clipboard.writeText('http://apillm.globalaiopc.com/gw_llm_power');
+      window.alert('baseUrl copied');
+    }}
+    style={{ display: 'inline-block', padding: '6px 12px', borderRadius: '8px', background: '#2563eb', color: '#ffffff', fontWeight: 600, border: 'none', cursor: 'pointer' }}
+  >
+    Copy
+  </button>
+</div>
+
+Compatible with the Anthropic official documentation. You can integrate directly with the following reference:
+
+- Anthropic Messages API: <https://docs.anthropic.com/en/api/messages>
+
+## Authentication
+
+Use the `Authorization` header for authentication.
+
+```bash
+Authorization: Bearer {{YOUR_API_KEY}}
+Content-Type: application/json
+```
+
+Notes:
+
+- `Authorization`: API key in the format `Bearer {{YOUR_API_KEY}}`
+
+## Import to CC Switch
+
+<Accordion title="Import to CC Switch">
+  <label style={{ display: 'grid', gap: '6px', marginBottom: '12px' }}>
+    <span>API Key</span>
+    <input id="ccswitch-api-key" type="password" placeholder="Enter your API Key" style={{ padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '8px' }} />
+  </label>
+
+  The following model configuration will be used after import:
+  - Primary model: `gpt-5.4-low`
+  - Fallback model: `gpt-5.5-low`
+
+  <button
+    type="button"
+    onClick={() => {
+      const apiKey = document.getElementById('ccswitch-api-key')?.value?.trim();
+
+      if (!apiKey) {
+        window.alert('Please enter an API Key.');
+        return;
+      }
+
+      const params = new URLSearchParams({
+        resource: 'provider',
+        app: 'claude',
+        name: '客易云LLM (gpt-5.4-low)',
+        endpoint: 'http://apillm.globalaiopc.com/gw_llm_power',
+        apiKey,
+        model: 'gpt-5.4-low',
+        haikuModel: 'gpt-5.5-low',
+        sonnetModel: 'gpt-5.4-low',
+        opusModel: 'gpt-5.4-low',
+        homepage: 'http://apillm.globalaiopc.com/gw_llm_power',
+        enabled: 'true',
+      });
+      window.location.href = `ccswitch://v1/import?${params.toString()}`;
+    }}
+    style={{ display: 'inline-block', padding: '10px 16px', borderRadius: '8px', background: '#2563eb', color: '#ffffff', fontWeight: 600, border: 'none', cursor: 'pointer' }}
+  >
+    Confirm
+  </button>
+</Accordion>
+
+<Note>
+After clicking "Import to CC Switch", you can enter your API Key on the page and choose models from the four dropdowns. The default uses `gpt-5.4-low` first.
+</Note>
+
+## Supported Models
+
+The following models are supported, organized by model family and version type:
+
+### Claude
+
+| Full Version | AWS Version | Account Pool / Proxy Version |
+| --- | --- | --- |
+| `claude-haiku-4-5` | `claude-haiku-4-5-hc` | `claude-haiku-4-5-fd` |
+| `claude-opus-4-5` | `claude-opus-4-5-hc` | `claude-opus-4-5-fd` |
+| `claude-opus-4-6` | `claude-opus-4-6-hc` | `claude-opus-4-6-fd` |
+| `claude-opus-4-7` | `claude-opus-4-7-hc` | `claude-opus-4-7-fd` |
+| `claude-sonnet-4-5` | `claude-sonnet-4-5-hc` | `claude-sonnet-4-5-fd` |
+| `claude-sonnet-4-6` | `claude-sonnet-4-6-hc` | `claude-sonnet-4-6-fd` |
+
+### GPT Models Compatible with Claude Messages API
+
+| Full Version | Official Version | Premium Account Pool | Mixed Account Pool / Proxy Version | Low-cost Version |
+| --- | --- | --- | --- | --- |
+| `gpt-5.4` | `gpt-5.4-official` | `gpt-5.4-hc` | `gpt-5.4-fd` | `gpt-5.4-low` |
+| `gpt-5.5` | `gpt-5.5-official` | `gpt-5.5-hc` | `gpt-5.5-fd` | `gpt-5.5-low` |
+
+### Version Notes
+
+| Suffix / Type | Description |
+| --- | --- |
+| no suffix | Full version / official standard version |
+| `-official` | Official version |
+| `-hc` | AWS version or premium account pool version |
+| `-fd` | Account pool / proxy version |
+| `-low` | Low-cost version |
+
+<Note>
+Claude Messages API uses the Claude request schema and is not suitable for the official Gemini native format. For Gemini native requests, use the Gemini Native API. GPT models can be called through this format, but image recognition is currently not supported for them.
+</Note>
+
+### Multimodal Support
+
+#### Image Analysis
+
+Only the following models do not support image analysis:
+
+- `gpt-5.4`
+- `gpt-5.4-official`
+- `gpt-5.4-fd`
+- `gpt-5.4-hc`
+- `gpt-5.4-low`
+- `gpt-5.5`
+- `gpt-5.5-official`
+- `gpt-5.5-fd`
+- `gpt-5.5-hc`
+- `gpt-5.5-low`
+
+## Request Parameters
+
+<ParamField path="model" type="string" required>
+  Model name to use, for example: `claude-opus-4-7` or `gpt-5.5`
+</ParamField>
+
+<ParamField path="max_tokens" type="integer" required>
+  Maximum number of tokens allowed for this request
+</ParamField>
+
+<ParamField path="messages" type="array" required>
+  Message array in Claude Messages format
+</ParamField>
+
+<ParamField path="messages[].role" type="string" required>
+  Message role, commonly `user` or `assistant`
+</ParamField>
+
+<ParamField path="messages[].content" type="string/array" required>
+  Message content. Can be a string or a Claude native content block array
+</ParamField>
+
+<ParamField path="system" type="string">
+  Optional system prompt
+</ParamField>
+
+<ParamField path="stream" type="boolean">
+  Whether to enable streaming responses. When enabled, Claude-style streaming events are returned
+</ParamField>
+
+<ParamField path="temperature" type="number">
+  Sampling temperature
+</ParamField>
+
+## Response
+
+Returns a Claude Messages-style response.
+
+<ResponseField name="id" type="string">
+  Unique response identifier
+</ResponseField>
+
+<ResponseField name="type" type="string">
+  Response type, usually `message`
+</ResponseField>
+
+<ResponseField name="role" type="string">
+  Returned message role, usually `assistant`
+</ResponseField>
+
+<ResponseField name="content[].type" type="string">
+  Content block type, commonly `text`
+</ResponseField>
+
+<ResponseField name="content[].text" type="string">
+  Generated text content
+</ResponseField>
+
+<ResponseField name="stop_reason" type="string">
+  Generation stop reason
+</ResponseField>
+
+<ResponseField name="usage.input_tokens" type="integer">
+  Input token count
+</ResponseField>
+
+<ResponseField name="usage.output_tokens" type="integer">
+  Output token count
+</ResponseField>
+
+## Notes
+
+<Note>
+1. The Claude-format request path is `POST /v1/messages`
+2. For streaming responses, pass `"stream": true` in the request body
+3. Pass the API key using the `Authorization` header
+</Note>

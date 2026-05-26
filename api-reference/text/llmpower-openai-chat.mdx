@@ -56,26 +56,27 @@ Content-Type: application/json
 
 ### Gemini
 
-| 标准 / 稳定版 | 低价版 |
-| --- | --- |
-| `gemini-2.5-flash-lite` | - |
-| `gemini-2.5-pro` | `gemini-2.5-pro-low` |
-| `gemini-3-flash-preview` | `gemini-3-flash-preview-low` |
-| `gemini-3.1-flash-lite-preview` | - |
-| `gemini-3.1-pro-preview` | `gemini-3.1-pro-preview-low` |
+| 标准 / 稳定版 | 官方版 | 低价版 |
+| --- | --- | --- |
+| `gemini-2.5-flash-lite` | - | - |
+| `gemini-2.5-pro` | `gemini-2.5-pro-official` | `gemini-2.5-pro-low` |
+| `gemini-3-flash-preview` | `gemini-3-flash-preview-official` | `gemini-3-flash-preview-low` |
+| `gemini-3.1-flash-lite-preview` | - | - |
+| `gemini-3.1-pro-preview` | `gemini-3.1-pro-preview-official` | `gemini-3.1-pro-preview-low` |
 
 ### GPT
 
-| 满血 / 官方版 | 优质号池 | 混合号池 / 反代版 | 低价版 |
-| --- | --- | --- | --- |
-| `gpt-5.4` | `gpt-5.4-hc` | `gpt-5.4-fd` | `gpt-5.4-low` |
-| `gpt-5.5` | `gpt-5.5-hc` | `gpt-5.5-fd` | `gpt-5.5-low` |
+| 满血版 | 官方版 | 优质号池 | 混合号池 / 反代版 | 低价版 |
+| --- | --- | --- | --- | --- |
+| `gpt-5.4` | `gpt-5.4-official` | `gpt-5.4-hc` | `gpt-5.4-fd` | `gpt-5.4-low` |
+| `gpt-5.5` | `gpt-5.5-official` | `gpt-5.5-hc` | `gpt-5.5-fd` | `gpt-5.5-low` |
 
 ### 版本说明
 
 | 后缀 / 类型 | 说明 |
 | --- | --- |
 | 无后缀 | 满血版 / 官方标准版 |
+| `-official` | 官方版 |
 | `-hc` | AWS 版或优质号池版本 |
 | `-fd` | 号池 / 反代版本 |
 | `-low` | 低价版本 |
@@ -92,11 +93,14 @@ Content-Type: application/json
 
 - `gemini-2.5-flash-lite`
 - `gemini-2.5-pro`
+- `gemini-2.5-pro-official`
 - `gemini-2.5-pro-low`
 - `gemini-3-flash-preview`
+- `gemini-3-flash-preview-official`
 - `gemini-3-flash-preview-low`
 - `gemini-3.1-flash-lite-preview`
 - `gemini-3.1-pro-preview`
+- `gemini-3.1-pro-preview-official`
 - `gemini-3.1-pro-preview-low`
 
 ## 请求参数
