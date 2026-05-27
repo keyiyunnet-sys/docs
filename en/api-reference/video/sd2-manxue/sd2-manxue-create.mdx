@@ -33,6 +33,8 @@ Authorization: Bearer {{key}}
   - `sd2_manxue_1080p`
   - `sd2_manxue_2k`
   - `sd2_manxue_4k`
+  - `sd2_manxue_fast_720p`
+  - `sd2_manxue_fast_1080p`
 </ParamField>
 
 <ParamField body="duration" type="integer">
@@ -144,6 +146,21 @@ Compatibility:
 - If both sets are provided with different values, the API returns a parameter conflict error
 </Warning>
 
+## Model and Resolution
+
+| Model | Output Resolution | Recommended Usage |
+|------|-------------------|-------------------|
+| `sd2_manxue_720p` | `720p` | Speed-oriented baseline quality |
+| `sd2_manxue_1080p` | `1080p` | Standard HD generation |
+| `sd2_manxue_2k` | `2k` | Higher-detail video output |
+| `sd2_manxue_4k` | `4k` | Highest quality scenarios |
+| `sd2_manxue_fast_720p` | `720p` | Fast series for speed-priority HD generation |
+| `sd2_manxue_fast_1080p` | `1080p` | Fast series for speed-priority high-definition output |
+
+<Note>
+Standard `sd2_manxue_*` models generate directly at the matching resolution. `sd2_manxue_fast_*` models are the fast series. You still pass the public model name through the `model` field, and the API submits the task with the matching fast-series capability.
+</Note>
+
 <RequestExample>
 
 ```bash cURL - Text Only
@@ -170,6 +187,19 @@ curl --request POST \
     "duration": 8,
     "first_image": "https://example.com/sea-morning.jpg",
     "last_image": "https://example.com/sea-evening.jpg",
+    "ratio": "16:9"
+  }'
+```
+
+```bash cURL - Fast Series
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/sd2_manxue/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "sd2_manxue_fast_720p",
+    "prompt": "Traffic light trails crossing a city at night with a quick dive and smooth push-in shot",
+    "duration": 5,
     "ratio": "16:9"
   }'
 ```

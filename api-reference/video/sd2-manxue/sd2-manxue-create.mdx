@@ -35,6 +35,8 @@ Authorization: Bearer {{key}}
   - `sd2_manxue_1080p` - 输出 `1080p`
   - `sd2_manxue_2k` - 输出 `2k`
   - `sd2_manxue_4k` - 输出 `4k`
+  - `sd2_manxue_fast_720p` - fast 系列，输出 `720p`
+  - `sd2_manxue_fast_1080p` - fast 系列，输出 `1080p`
 </ParamField>
 
 <ParamField body="duration" type="integer">
@@ -160,6 +162,8 @@ Authorization: Bearer {{key}}
 | `sd2_manxue_1080p` | `1080p` | 常规高清生成 |
 | `sd2_manxue_2k` | `2k` | 更高精度的视频内容 |
 | `sd2_manxue_4k` | `4k` | 对画质要求最高的场景 |
+| `sd2_manxue_fast_720p` | `720p` | fast 系列，适合速度优先的常规高清场景 |
+| `sd2_manxue_fast_1080p` | `1080p` | fast 系列，适合速度优先的高清输出场景 |
 
 <Info>
 **最佳实践：**
@@ -169,6 +173,10 @@ Authorization: Bearer {{key}}
 4. 使用参考视频或参考音频时，优先提供时长较短、主体清晰的素材。
 5. 涉及人脸或虚拟人像的参考素材，建议先完成素材审核。
 </Info>
+
+<Note>
+普通系列 `sd2_manxue_*` 直接按对应分辨率生成；`sd2_manxue_fast_*` 为 fast 系列模型，用户侧仍通过 `model` 字段传模型名，接口会按对应分辨率和 fast 系列能力提交任务。
+</Note>
 
 <RequestExample>
 
@@ -219,6 +227,19 @@ curl --request POST \
     "referenceAudios": [
       "https://example.com/cafe-bgm.mp3"
     ],
+    "ratio": "16:9"
+  }'
+```
+
+```bash cURL - Fast 系列
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/sd2_manxue/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "sd2_manxue_fast_720p",
+    "prompt": "城市夜景中车辆流光穿梭，镜头快速俯冲后平稳推进",
+    "duration": 5,
     "ratio": "16:9"
   }'
 ```
