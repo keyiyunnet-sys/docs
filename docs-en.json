@@ -30,8 +30,7 @@
             "pages": [
               "en/api-reference/text/llmpower-openai-chat",
               "en/api-reference/text/llmpower-gemini-native-chat",
-              "en/api-reference/text/llmpower-claude-chat",
-              "en/api-reference/text/gemini-chat"
+              "en/api-reference/text/llmpower-claude-chat"
             ]
           },
           {
