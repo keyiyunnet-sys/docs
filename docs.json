@@ -1,13 +1,12 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "客易云文档",
+  "name": "API 文档",
   "colors": {
     "primary": "#3B82F6",
     "light": "#60A5FA",
     "dark": "#1E40AF"
   },
-  "favicon": "/logo/kyy_logo.svg",
   "layout": "api",
   "api": {
     "playground": {
@@ -292,10 +291,6 @@
     "global": {
       "anchors": []
     }
-  },
-  "logo": {
-    "light": "/logo/kyy_name_logo_light.svg",
-    "dark": "/logo/kyy_name_logo_dark.svg"
   },
   "navbar": {
     "links": [],
