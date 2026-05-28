@@ -24,9 +24,10 @@ Authorization: Bearer {{key}}
 
 支持的模型：
 
-- `grok_video3`：可变时长 `6-30` 秒，支持 `480p` / `720p` 分辨率，按秒计费
-- `grok_video3_pro`：固定 `10` 秒视频，不支持手动指定分辨率
-- `grok_video3_max`：支持 `6 / 10 / 12 / 16 / 20 / 30` 秒，支持 `480p` / `720p`，默认 `9:16` + `720p`
+- `grok_video3`：可变时长 `6-30` 秒，支持 `480p` / `720p` 分辨率，按秒计费，默认 `10` 秒 + `16:9` + `720p`
+- `grok_video3_pro`：固定 `10` 秒视频，默认按 `16:9` + `720p` 处理
+- `grok_video3_max`：支持 `6 / 10 / 12 / 16 / 20 / 30` 秒，支持 `480p` / `720p`，默认 `10` 秒 + `16:9` + `720p`
+- `grok_video3_stable`：支持 `6` / `10` 秒，支持 `480p` / `720p`，按次计费 `0.4` 元/次，默认 `10` 秒 + `16:9` + `720p`
 
 ## 请求参数
 
@@ -37,6 +38,7 @@ Authorization: Bearer {{key}}
   - `grok_video3` - 可变时长 `6-30` 秒（按秒计费）
   - `grok_video3_pro` - 固定 `10` 秒
   - `grok_video3_max` - 支持更多固定时长和更严格的参考图约束
+  - `grok_video3_stable` - 支持 `6` / `10` 秒
 </ParamField>
 
 <ParamField body="prompt" type="string" required>
@@ -49,9 +51,10 @@ Authorization: Bearer {{key}}
   视频时长（秒）。
 
   规则说明：
-  - `grok_video3`：支持 `6-30` 秒，默认 `6` 秒
+  - `grok_video3`：支持 `6-30` 秒，默认 `10` 秒
   - `grok_video3_pro`：固定 `10` 秒，无需设置
   - `grok_video3_max`：仅支持 `6`、`10`、`12`、`16`、`20`、`30` 秒，默认 `10` 秒
+  - `grok_video3_stable`：仅支持 `6` 或 `10` 秒，默认 `10` 秒
 </ParamField>
 
 <ParamField body="aspect_ratio" type="string">
@@ -59,17 +62,19 @@ Authorization: Bearer {{key}}
 
   规则说明：
   - `grok_video3`：支持 `16:9`、`9:16`、`1:1`、`3:2`、`2:3`，默认 `16:9`
-  - `grok_video3_pro`：默认 `9:16`
-  - `grok_video3_max`：仅支持 `16:9`、`9:16`、`1:1`，默认 `9:16`
+  - `grok_video3_pro`：默认 `16:9`
+  - `grok_video3_max`：仅支持 `16:9`、`9:16`、`1:1`，默认 `16:9`
+  - `grok_video3_stable`：支持 `16:9`、`9:16`、`3:2`、`2:3`、`1:1`，默认 `16:9`
 </ParamField>
 
 <ParamField body="resolution" type="string">
   输出分辨率。
 
   规则说明：
-  - `grok_video3`：支持 `480p`、`720p`，默认 `480p`
-  - `grok_video3_pro`：不支持手动指定，按默认配置处理
+  - `grok_video3`：支持 `480p`、`720p`，默认 `720p`
+  - `grok_video3_pro`：默认按 `720p` 处理
   - `grok_video3_max`：支持 `480p`、`720p`，默认 `720p`
+  - `grok_video3_stable`：支持 `480p`、`720p`，默认 `720p`
 </ParamField>
 
 <ParamField body="image_urls" type="array">
@@ -79,6 +84,7 @@ Authorization: Bearer {{key}}
   - `grok_video3`：最多支持 `7` 张参考图片
   - `grok_video3_pro`：支持参考图片
   - `grok_video3_max`：最多支持 `5` 张参考图片，且必须是公网 URL
+  - `grok_video3_stable`：最多支持 `7` 张参考图片，且必须是公网 URL
 
   示例：`["https://example.com/image1.jpg", "https://example.com/image2.jpg"]`
 </ParamField>
@@ -116,23 +122,26 @@ Authorization: Bearer {{key}}
 - 不传 `image_urls` 时为文生视频
 - 传入 `image_urls` 时为图生视频
 - `grok_video3_max` 的比例、时长、分辨率约束最严格，建议优先按枚举值直接传入
+- `grok_video3_stable` 仅接受公网可访问的参考图 URL，不支持 base64
 </Warning>
 
 ## 模型对比
 
-| 特性 | grok_video3 | grok_video3_pro | grok_video3_max |
-|------|-------------|-----------------|-----------------|
-| 时长 | `6-30` 秒 | 固定 `10` 秒 | `6 / 10 / 12 / 16 / 20 / 30` 秒 |
-| 比例 | `16:9` / `9:16` / `1:1` / `3:2` / `2:3` | 默认 `9:16` | `16:9` / `9:16` / `1:1` |
-| 清晰度 | `480p` / `720p` | 默认 `720p` | `480p` / `720p` |
-| 参考图 | 最多 `7` 张 | 兼容参考图输入 | 最多 `5` 张公网 URL |
+| 特性 | grok_video3 | grok_video3_pro | grok_video3_max | grok_video3_stable |
+|------|-------------|-----------------|-----------------|---------------------|
+| 时长 | `6-30` 秒，默认 `10` 秒 | 固定 `10` 秒 | `6 / 10 / 12 / 16 / 20 / 30` 秒，默认 `10` 秒 | `6 / 10` 秒，默认 `10` 秒 |
+| 比例 | `16:9` / `9:16` / `1:1` / `3:2` / `2:3` | 默认 `16:9` | `16:9` / `9:16` / `1:1`，默认 `16:9` | `16:9` / `9:16` / `3:2` / `2:3` / `1:1`，默认 `16:9` |
+| 清晰度 | `480p` / `720p`，默认 `720p` | 默认 `720p` | `480p` / `720p`，默认 `720p` | `480p` / `720p`，默认 `720p` |
+| 参考图 | 最多 `7` 张 | 兼容参考图输入 | 最多 `5` 张公网 URL | 最多 `7` 张公网 URL |
+| 计费 | 按秒计费 | 按次计费 | 按秒计费 | 按次计费 |
 
 <Info>
 **最佳实践：**
 1. 创建接口返回任务对象，请保存其中的 `id` 用于后续查询。
 2. 提示词尽量描述主体、动作、镜头和风格。
 3. 如果使用 `grok_video3_max`，优先使用公网可访问的高质量图片。
-4. 图生视频场景下，参考图数量越多，通常排队和生成时间也会更长。
+4. 如果使用 `grok_video3_stable`，参考图必须是公网可访问的 URL。
+5. 图生视频场景下，参考图数量越多，通常排队和生成时间也会更长。
 </Info>
 
 <RequestExample>
@@ -146,7 +155,7 @@ curl --request POST \
     "model": "grok_video3_max",
     "prompt": "一只猫在雨中跳舞，电影风格",
     "duration": 10,
-    "aspect_ratio": "9:16",
+    "aspect_ratio": "16:9",
     "resolution": "720p"
   }'
 ```
@@ -169,6 +178,23 @@ curl --request POST \
   }'
 ```
 
+```bash cURL - 图生视频（grok_video3_stable）
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "grok_video3_stable",
+    "prompt": "一只猫在雨中跳舞，电影风格",
+    "duration": 10,
+    "aspect_ratio": "16:9",
+    "resolution": "720p",
+    "image_urls": [
+      "https://example.com/cat1.jpg"
+    ]
+  }'
+```
+
 ```bash cURL - 固定时长模型（grok_video3_pro）
 curl --request POST \
   --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos \
@@ -177,7 +203,7 @@ curl --request POST \
   --data '{
     "model": "grok_video3_pro",
     "prompt": "一只猫在雨中跳舞，电影风格",
-    "aspect_ratio": "9:16"
+    "aspect_ratio": "16:9"
   }'
 ```
 
@@ -194,7 +220,7 @@ String body = """
   "model": "grok_video3_max",
   "prompt": "一只猫在雨中跳舞，电影风格",
   "duration": 10,
-  "aspect_ratio": "9:16",
+  "aspect_ratio": "16:9",
   "resolution": "720p"
 }
 """;
@@ -222,7 +248,7 @@ response = requests.post(
         "model": "grok_video3_max",
         "prompt": "一只猫在雨中跳舞，电影风格",
         "duration": 10,
-        "aspect_ratio": "9:16",
+        "aspect_ratio": "16:9",
         "resolution": "720p",
     },
 )

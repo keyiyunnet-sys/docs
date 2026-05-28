@@ -23,9 +23,10 @@ Authorization: Bearer {{key}}
 
 Supported models:
 
-- `grok_video3`: Variable duration from `6-30` seconds, supports `480p` / `720p`, billed per second
-- `grok_video3_pro`: Fixed `10` second output and does not support manual resolution selection
-- `grok_video3_max`: Supports `6 / 10 / 12 / 16 / 20 / 30` seconds, supports `480p` / `720p`, defaults to `9:16` + `720p`
+- `grok_video3`: Variable duration from `6-30` seconds, supports `480p` / `720p`, billed per second, defaulting to `10` seconds + `16:9` + `720p`
+- `grok_video3_pro`: Fixed `10` second output, handled by default with `16:9` + `720p`
+- `grok_video3_max`: Supports `6 / 10 / 12 / 16 / 20 / 30` seconds, supports `480p` / `720p`, defaults to `10` seconds + `16:9` + `720p`
+- `grok_video3_stable`: Supports `6` / `10` seconds, supports `480p` / `720p`, billed per request at `CNY 0.4`, defaults to `10` seconds + `16:9` + `720p`
 
 ## Request parameters
 
@@ -36,6 +37,7 @@ Supported models:
   - `grok_video3` - Variable duration from `6-30` seconds
   - `grok_video3_pro` - Fixed `10` second output
   - `grok_video3_max` - More fixed duration choices and stricter image constraints
+  - `grok_video3_stable` - Supports `6` / `10` seconds and is billed per request at `CNY 0.4`
 </ParamField>
 
 <ParamField body="prompt" type="string" required>
@@ -48,9 +50,10 @@ Supported models:
   Video duration in seconds.
 
   Rules:
-  - `grok_video3`: supports `6-30`; default is `6`
+  - `grok_video3`: supports `6-30`; default is `10`
   - `grok_video3_pro`: fixed at `10`, so you do not need to send it
   - `grok_video3_max`: only supports `6`, `10`, `12`, `16`, `20`, `30`; default is `10`
+  - `grok_video3_stable`: only supports `6` or `10`; default is `10`
 </ParamField>
 
 <ParamField body="aspect_ratio" type="string">
@@ -58,17 +61,19 @@ Supported models:
 
   Rules:
   - `grok_video3`: supports `16:9`, `9:16`, `1:1`, `3:2`, `2:3`; default is `16:9`
-  - `grok_video3_pro`: defaults to `9:16`
-  - `grok_video3_max`: only supports `16:9`, `9:16`, `1:1`; default is `9:16`
+  - `grok_video3_pro`: defaults to `16:9`
+  - `grok_video3_max`: only supports `16:9`, `9:16`, `1:1`; default is `16:9`
+  - `grok_video3_stable`: supports `16:9`, `9:16`, `3:2`, `2:3`, `1:1`; default is `16:9`
 </ParamField>
 
 <ParamField body="resolution" type="string">
   Output resolution.
 
   Rules:
-  - `grok_video3`: supports `480p` and `720p`; default is `480p`
-  - `grok_video3_pro`: handled by default internal configuration
+  - `grok_video3`: supports `480p` and `720p`; default is `720p`
+  - `grok_video3_pro`: handled by default as `720p`
   - `grok_video3_max`: supports `480p` and `720p`; default is `720p`
+  - `grok_video3_stable`: supports `480p` and `720p`; default is `720p`
 </ParamField>
 
 <ParamField body="image_urls" type="array">
@@ -78,6 +83,7 @@ Supported models:
   - `grok_video3`: up to `7` reference images
   - `grok_video3_pro`: supports reference images
   - `grok_video3_max`: up to `5` public URLs
+  - `grok_video3_stable`: up to `7` public URLs
 
   Example: `["https://example.com/image1.jpg", "https://example.com/image2.jpg"]`
 </ParamField>
@@ -115,23 +121,26 @@ Supported models:
 - Omit `image_urls` for text-to-video
 - Send `image_urls` for image-to-video
 - `grok_video3_max` has the strictest validation for aspect ratio, duration, and resolution, so use supported values directly
+- `grok_video3_stable` only accepts publicly accessible reference image URLs, not base64 content
 </Warning>
 
 ## Model comparison
 
-| Feature | grok_video3 | grok_video3_pro | grok_video3_max |
-|---------|-------------|-----------------|-----------------|
-| Duration | `6-30` seconds | Fixed `10` seconds | `6 / 10 / 12 / 16 / 20 / 30` seconds |
-| Ratio | `16:9` / `9:16` / `1:1` / `3:2` / `2:3` | Default `9:16` | `16:9` / `9:16` / `1:1` |
-| Quality | `480p` / `720p` | Default `720p` | `480p` / `720p` |
-| Reference images | Up to `7` | Compatible with reference image input | Up to `5` public URLs |
+| Feature | grok_video3 | grok_video3_pro | grok_video3_max | grok_video3_stable |
+|---------|-------------|-----------------|-----------------|---------------------|
+| Duration | `6-30` seconds, default `10` | Fixed `10` seconds | `6 / 10 / 12 / 16 / 20 / 30` seconds, default `10` | `6 / 10` seconds, default `10` |
+| Ratio | `16:9` / `9:16` / `1:1` / `3:2` / `2:3` | Default `16:9` | `16:9` / `9:16` / `1:1`, default `16:9` | `16:9` / `9:16` / `3:2` / `2:3` / `1:1`, default `16:9` |
+| Quality | `480p` / `720p`, default `720p` | Default `720p` | `480p` / `720p`, default `720p` | `480p` / `720p`, default `720p` |
+| Reference images | Up to `7` | Compatible with reference image input | Up to `5` public URLs | Up to `7` public URLs |
+| Billing | Per second | Per request | Per second | Per request at `CNY 0.4` |
 
 <Info>
 **Best practices:**
 1. The create API returns a task object. Save its `id` for follow-up queries.
 2. Make prompts specific about subject, action, camera movement, and style.
 3. If you use `grok_video3_max`, prefer high-quality public image URLs.
-4. More reference images usually mean longer queue and generation times.
+4. If you use `grok_video3_stable`, all reference images must be publicly accessible URLs.
+5. More reference images usually mean longer queue and generation times.
 </Info>
 
 <RequestExample>
@@ -145,7 +154,7 @@ curl --request POST \
     "model": "grok_video3_max",
     "prompt": "A cat dancing in the rain, cinematic style",
     "duration": 10,
-    "aspect_ratio": "9:16",
+    "aspect_ratio": "16:9",
     "resolution": "720p"
   }'
 ```
@@ -168,6 +177,23 @@ curl --request POST \
   }'
 ```
 
+```bash cURL - Image-to-video (grok_video3_stable)
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "grok_video3_stable",
+    "prompt": "A cat dancing in the rain, cinematic style",
+    "duration": 10,
+    "aspect_ratio": "16:9",
+    "resolution": "720p",
+    "image_urls": [
+      "https://example.com/cat1.jpg"
+    ]
+  }'
+```
+
 ```bash cURL - Fixed-duration model (grok_video3_pro)
 curl --request POST \
   --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/grok/videos \
@@ -176,7 +202,7 @@ curl --request POST \
   --data '{
     "model": "grok_video3_pro",
     "prompt": "A cat dancing in the rain, cinematic style",
-    "aspect_ratio": "9:16"
+    "aspect_ratio": "16:9"
   }'
 ```
 
@@ -193,7 +219,7 @@ String body = """
   "model": "grok_video3_max",
   "prompt": "A cat dancing in the rain, cinematic style",
   "duration": 10,
-  "aspect_ratio": "9:16",
+  "aspect_ratio": "16:9",
   "resolution": "720p"
 }
 """;
@@ -221,7 +247,7 @@ response = requests.post(
         "model": "grok_video3_max",
         "prompt": "A cat dancing in the rain, cinematic style",
         "duration": 10,
-        "aspect_ratio": "9:16",
+        "aspect_ratio": "16:9",
         "resolution": "720p",
     },
 )
