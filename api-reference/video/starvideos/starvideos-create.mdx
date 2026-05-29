@@ -1,13 +1,13 @@
 ---
-title: "StarVideos - 创建任务"
-description: "创建 StarVideos 视频生成任务，支持文生视频、单图生视频和首尾帧视频"
+title: "StarVideos O3 - 创建任务"
+description: "使用 StarVideos O3 创建视频生成任务，支持文生视频、图片参考、首尾帧、视频参考以及图视频混合参考"
 api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/starvideos/videos"
 ---
 import ApiBaseUrlZh from '/snippets/api-base-url-zh.mdx';
 
-# StarVideos 创建视频任务
+# StarVideos O3 创建视频任务
 
-创建 `StarVideos` 视频生成任务。该接口支持纯文生、单图生视频，以及首尾帧视频 3 种模式。
+使用 `starvideos_o3` 创建视频生成任务。该接口支持文生视频、单图/多图参考、首尾帧、视频参考、图片 + 视频、多图 + 视频等能力。
 
 ## 认证
 
@@ -21,77 +21,99 @@ Authorization: Bearer {{key}}
 
 ## 请求参数
 
+<ParamField body="model" type="string" required>
+  模型名称，固定为 `starvideos_o3`。
+</ParamField>
+
 <ParamField body="prompt" type="string" required>
-  视频生成提示词。
+  视频生成提示词，描述画面内容、动作、镜头和风格。
 
   示例：`"赛博朋克城市夜景，镜头慢慢推进"`
 </ParamField>
 
-<ParamField body="model" type="string" required>
-  模型名称，当前固定为 `starvideos_v3`。
-</ParamField>
-
 <ParamField body="duration" type="integer">
-  视频时长，单位为秒。默认 `5`，允许范围 `3-15`。
+  视频时长，单位为秒。适用于文生视频、图片参考和首尾帧模式。
+
+  - 默认值：`3`
+  - 支持范围：`3-15`
+  - 视频参考、图片 + 视频、多图 + 视频场景下，生成时长以参考视频素材为准
 </ParamField>
 
 <ParamField body="ratio" type="string">
-  输出比例。默认 `16:9`。
+  输出画面比例。适用于文生视频、图片参考和首尾帧模式。
 
-  可选值：
-  - `16:9` - 横屏
-  - `9:16` - 竖屏
+  - 默认值：`9:16`
+  - 可选值：`1:1`、`9:16`、`16:9`
+  - 视频参考、图片 + 视频、多图 + 视频场景下，画面比例以参考视频素材为准
 </ParamField>
 
-<ParamField body="image_urls" type="array">
-  单图输入字段，图生视频时传 `1` 张图片 URL。
+<ParamField body="referenceImages" type="array">
+  图片参考 URL 数组，O3 图片输入主字段。
 
   使用规则：
-  - 不传 `image_urls`：按文生视频处理
-  - 传 `1` 张图：按单图生视频处理
+  - 纯图片参考：最多 `7` 张
+  - 搭配 `referenceVideos`：最多 `4` 张
+  - 首尾帧模式不使用该字段，请使用 `first_image` + `last_image`
 
-  <Note>`image_urls` 仅用于单图输入；首尾帧请使用 `first_image` 与 `last_image`。</Note>
+  示例：`["https://example.com/image1.jpg", "https://example.com/image2.jpg"]`
 </ParamField>
 
 <ParamField body="first_image" type="string">
-  首帧图片 URL，仅首尾帧视频模式使用。
+  首帧图片 URL，仅首尾帧模式使用，必须搭配 `last_image`。
 </ParamField>
 
 <ParamField body="last_image" type="string">
-  尾帧图片 URL，仅首尾帧视频模式使用，必须搭配 `first_image`。
+  尾帧图片 URL，仅首尾帧模式使用，必须搭配 `first_image`。
 </ParamField>
 
-<ParamField body="images" type="array">
-  兼容旧字段：参考图 URL 数组。
+<ParamField body="referenceVideos" type="array">
+  视频参考 URL 数组，最多 `1` 个视频，参考视频时长需在 `3-10` 秒内。
 
-  使用规则：
-  - 不传 `images`：按文生视频处理
-  - 传 `1` 张图：按单图生视频处理
-  - 传 `2` 张图：按首尾帧视频处理
+  搭配视频参考时，生成时长和画面比例以参考视频素材为准。
 
-  <Note>超过 2 张时，仅前 2 张生效。</Note>
+  示例：`["https://example.com/source.mp4"]`
 </ParamField>
 
-<Info>
-**兼容说明：**
-- 历史字段 `images` 仍可继续使用
-- 同时传新旧字段时，优先按新字段处理
-- 同时传新旧字段且值不一致时，接口会返回参数冲突
-</Info>
-
-## 模式说明
+## 能力模式
 
 <CardGroup cols={3}>
   <Card title="文生视频" icon="wand-magic-sparkles">
-    不传图片字段，仅依赖 `prompt` 生成视频
+    仅传 `model`、`prompt`，可选传 `duration` 和 `ratio`。
   </Card>
-  <Card title="单图生视频" icon="image">
-    传入 `image_urls`，增强主体和风格控制
+  <Card title="图片参考" icon="images">
+    使用 `referenceImages` 提供 1-7 张图片参考。
   </Card>
-  <Card title="首尾帧视频" icon="film">
-    传入 `first_image` 和 `last_image`，分别作为首帧和尾帧
+  <Card title="首尾帧" icon="film">
+    使用 `first_image` 和 `last_image` 精确控制开始与结束画面。
+  </Card>
+  <Card title="视频参考" icon="video">
+    使用 `referenceVideos` 提供 1 个参考视频，参考视频时长需在 3-10 秒内。
+  </Card>
+  <Card title="图片 + 视频" icon="layer-group">
+    同时传 `referenceImages` 与 `referenceVideos`，图片最多 4 张。
+  </Card>
+  <Card title="多图 + 视频" icon="photo-film">
+    用多张图片与参考视频共同约束主体、风格和运动。
   </Card>
 </CardGroup>
+
+## 参数约束
+
+<Warning>
+**关键约束：**
+- `model` 仅支持 `starvideos_o3`
+- `duration` 支持 `3-15` 秒，默认 `3`
+- `ratio` 支持 `1:1`、`9:16`、`16:9`，默认 `9:16`
+- `referenceImages` 纯图片模式最多 `7` 张，搭配视频时最多 `4` 张
+- `referenceVideos` 最多 `1` 个视频，参考视频时长需在 `3-10` 秒内
+- `first_image` 与 `last_image` 必须成对传入
+- `first_image` / `last_image` 不能与 `referenceImages`、`referenceVideos` 混用
+</Warning>
+
+<Info>
+**字段说明：**
+`starvideos_o3` 图片输入统一使用 `referenceImages`，首尾帧输入统一使用 `first_image` + `last_image`。
+</Info>
 
 ## 响应参数
 
@@ -123,27 +145,6 @@ Authorization: Bearer {{key}}
   错误信息。当任务状态为 `failed` 时返回。
 </ResponseField>
 
-## 参数约束
-
-<Warning>
-**关键约束：**
-- `model` 当前仅支持 `starvideos_v3`
-- `duration` 必须在 `3-15` 秒之间
-- `ratio` 仅支持 `16:9` 或 `9:16`
-- `image_urls` 仅支持 `1` 张图片
-- `first_image` 与 `last_image` 必须成对传入
-- `images` 最多使用前 `2` 张
-</Warning>
-
-<Info>
-**最佳实践：**
-1. 创建任务为异步处理，请保存返回的 `id`。
-2. 提示词建议同时包含主体、动作、镜头和风格信息。
-3. 首尾帧模式下，建议两张图片在风格和主体上保持连贯。
-4. 单图或双图 URL 需要为可访问的公网地址。
-5. 已接入历史字段 `images` 的调用方可以继续使用旧字段。
-</Info>
-
 <RequestExample>
 
 ```bash cURL - 文生视频
@@ -152,41 +153,59 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
+    "model": "starvideos_o3",
     "prompt": "赛博朋克城市夜景，镜头慢慢推进",
-    "model": "starvideos_v3",
-    "duration": 5,
-    "ratio": "16:9"
+    "duration": 3,
+    "ratio": "9:16"
   }'
 ```
 
-```bash cURL - 单图生视频
+```bash cURL - 图片参考
 curl --request POST \
   --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/starvideos/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
+    "model": "starvideos_o3",
     "prompt": "女孩在花海中转身微笑，镜头轻微推进",
-    "model": "starvideos_v3",
     "duration": 5,
     "ratio": "9:16",
-    "image_urls": [
+    "referenceImages": [
       "https://example.com/girl-flower.jpg"
     ]
   }'
 ```
 
-```bash cURL - 首尾帧视频
+```bash cURL - 首尾帧
 curl --request POST \
   --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/starvideos/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
+    "model": "starvideos_o3",
     "prompt": "从清晨海边过渡到黄昏海边的延时镜头",
-    "model": "starvideos_v3",
     "duration": 8,
     "ratio": "16:9",
     "first_image": "https://example.com/sea-morning.jpg",
     "last_image": "https://example.com/sea-evening.jpg"
+  }'
+```
+
+```bash cURL - 图片 + 视频参考
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/starvideos/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "starvideos_o3",
+    "prompt": "保持参考视频运动节奏，结合参考图中的人物造型生成电影感视频",
+    "referenceImages": [
+      "https://example.com/person-style.jpg",
+      "https://example.com/outfit.jpg"
+    ],
+    "referenceVideos": [
+      "https://example.com/source-motion.mp4"
+    ]
   }'
 ```
 
@@ -200,10 +219,10 @@ response = requests.post(
         "Content-Type": "application/json"
     },
     json={
+        "model": "starvideos_o3",
         "prompt": "赛博朋克城市夜景，镜头慢慢推进",
-        "model": "starvideos_v3",
-        "duration": 5,
-        "ratio": "16:9"
+        "duration": 3,
+        "ratio": "9:16"
     }
 )
 
@@ -216,10 +235,10 @@ print(response.json())
 
 ```json Success
 {
-  "id": "video_starvideos_1234567890",
+  "id": "video_starvideos_o3_1234567890",
   "object": "video",
   "created": 1774836724,
-  "model": "starvideos_v3",
+  "model": "starvideos_o3",
   "status": "queued",
   "error": null
 }
@@ -230,10 +249,14 @@ print(response.json())
   "id": null,
   "object": "error",
   "created": 1774836724,
-  "model": "starvideos_v3",
+  "model": "starvideos_o3",
   "status": "failed",
-  "error": "ratio 仅允许 16:9 或 9:16，当前: 1:1"
+  "error": "ratio 仅允许 1:1、9:16 或 16:9，当前: 4:3"
 }
 ```
 
 </ResponseExample>
+
+
+
+

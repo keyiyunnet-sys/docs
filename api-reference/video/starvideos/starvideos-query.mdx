@@ -1,13 +1,13 @@
 ---
-title: "StarVideos - 查询任务"
-description: "查询 StarVideos 视频生成任务的状态和结果"
+title: "StarVideos O3 - 查询任务"
+description: "查询 StarVideos O3 视频生成任务的状态和结果"
 api: "GET https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/{id}"
 ---
 import ApiBaseUrlZh from '/snippets/api-base-url-zh.mdx';
 
-# StarVideos 查询视频任务
+# StarVideos O3 查询视频任务
 
-使用任务 ID 查询 `StarVideos` 视频生成任务的状态和结果。
+使用任务 ID 查询 `StarVideos O3` 视频生成任务的状态和结果。
 
 ## 认证
 
@@ -42,7 +42,7 @@ Authorization: Bearer {{key}}
 </ResponseField>
 
 <ResponseField name="model" type="string">
-  使用的模型名称。
+  使用的模型名称，当前为 `starvideos_o3`。
 </ResponseField>
 
 <ResponseField name="status" type="string">
@@ -72,7 +72,7 @@ Authorization: Bearer {{key}}
     任务已创建并进入队列，等待处理。
   </Step>
   <Step title="processing">
-    任务处理中，StarVideos 模型正在生成视频。
+    任务处理中，StarVideos O3 正在生成视频。
   </Step>
   <Step title="completed">
     任务完成，可通过 `video_url` 获取结果。
@@ -98,7 +98,7 @@ Authorization: Bearer {{key}}
 
 ```bash cURL
 curl --request GET \
-  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_starvideos_1234567890 \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_starvideos_o3_1234567890 \
   --header 'Authorization: Bearer {{key}}'
 ```
 
@@ -106,7 +106,7 @@ curl --request GET \
 import requests
 
 response = requests.get(
-    "https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_starvideos_1234567890",
+    "https://zcbservice.aizfw.cn/kyyReactApiServer/v1/result/video_starvideos_o3_1234567890",
     headers={"Authorization": "Bearer {{key}}"}
 )
 
@@ -119,10 +119,10 @@ print(response.json())
 
 ```json Processing
 {
-  "id": "video_starvideos_1234567890",
+  "id": "video_starvideos_o3_1234567890",
   "object": "video",
   "created": 1774836724,
-  "model": "starvideos_v3",
+  "model": "starvideos_o3",
   "status": "processing",
   "video_url": null,
   "error": null
@@ -131,12 +131,12 @@ print(response.json())
 
 ```json Completed
 {
-  "id": "video_starvideos_1234567890",
+  "id": "video_starvideos_o3_1234567890",
   "object": "video",
   "created": 1774836724,
-  "model": "starvideos_v3",
+  "model": "starvideos_o3",
   "status": "completed",
-  "video_url": "https://example.com/starvideos-result.mp4",
+  "video_url": "https://example.com/starvideos-o3-result.mp4",
   "actualDuration": 5,
   "error": null
 }
@@ -144,10 +144,10 @@ print(response.json())
 
 ```json Failed
 {
-  "id": "video_starvideos_1234567890",
+  "id": "video_starvideos_o3_1234567890",
   "object": "video",
   "created": 1774836724,
-  "model": "starvideos_v3",
+  "model": "starvideos_o3",
   "status": "failed",
   "video_url": null,
   "error": "Generation failed"

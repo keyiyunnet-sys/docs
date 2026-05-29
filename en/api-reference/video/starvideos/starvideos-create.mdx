@@ -1,13 +1,13 @@
 ---
-title: "StarVideos - Create Task"
-description: "Create StarVideos video generation tasks with text-only, single-image, and first/last frame modes"
+title: "StarVideos O3 - Create Task"
+description: "Create StarVideos O3 video generation tasks with text, image references, first/last frames, video references, and mixed image-video references"
 api: "POST https://zcbservice.aizfw.cn/kyyReactApiServer/v1/starvideos/videos"
 ---
 import ApiBaseUrlEn from '/snippets/api-base-url-en.mdx';
 
-# StarVideos Create Video Task
+# StarVideos O3 Create Video Task
 
-Create a `StarVideos` video generation task. This API supports text-to-video, single-image-to-video, and first/last frame video generation.
+Create a video generation task with `starvideos_o3`. This API supports text-to-video, single/multiple image references, first/last frame generation, video reference, image + video, and multi-image + video modes.
 
 ## Authentication
 
@@ -21,77 +21,99 @@ Authorization: Bearer {{key}}
 
 ## Request Parameters
 
+<ParamField body="model" type="string" required>
+  Model name. The value is fixed to `starvideos_o3`.
+</ParamField>
+
 <ParamField body="prompt" type="string" required>
-  Video generation prompt.
+  Video generation prompt. Describe the subject, motion, camera movement, and style.
 
   Example: `"A cyberpunk city at night with a slow camera push-in"`
 </ParamField>
 
-<ParamField body="model" type="string" required>
-  Model name. The current value is fixed to `starvideos_v3`.
-</ParamField>
-
 <ParamField body="duration" type="integer">
-  Video duration in seconds. Defaults to `5`. Supported range: `3-15`.
+  Video duration in seconds. Applies to text, image reference, and first/last frame modes.
+
+  - Default: `3`
+  - Supported range: `3-15`
+  - For video reference, image + video, and multi-image + video modes, duration follows the reference video material
 </ParamField>
 
 <ParamField body="ratio" type="string">
-  Output aspect ratio. Defaults to `16:9`.
+  Output aspect ratio. Applies to text, image reference, and first/last frame modes.
 
-  Available values:
-  - `16:9`
-  - `9:16`
+  - Default: `9:16`
+  - Available values: `1:1`, `9:16`, `16:9`
+  - For video reference, image + video, and multi-image + video modes, the aspect ratio follows the reference video material
 </ParamField>
 
-<ParamField body="image_urls" type="array">
-  Single-image input field. Provide `1` image URL for image-to-video generation.
+<ParamField body="referenceImages" type="array">
+  Image reference URL array. This is the primary image input field for O3.
 
   Rules:
-  - No `image_urls`: text-to-video
-  - `1` image: single-image-to-video
+  - Image-only reference: up to `7` images
+  - With `referenceVideos`: up to `4` images
+  - Do not use this field for first/last frame mode. Use `first_image` + `last_image` instead
 
-  <Note>`image_urls` is only for single-image input. Use `first_image` and `last_image` for first/last frame mode.</Note>
+  Example: `["https://example.com/image1.jpg", "https://example.com/image2.jpg"]`
 </ParamField>
 
 <ParamField body="first_image" type="string">
-  First frame image URL for first/last frame mode.
+  First frame image URL. Only used for first/last frame mode and must be paired with `last_image`.
 </ParamField>
 
 <ParamField body="last_image" type="string">
-  Last frame image URL for first/last frame mode. Must be used together with `first_image`.
+  Last frame image URL. Only used for first/last frame mode and must be paired with `first_image`.
 </ParamField>
 
-<ParamField body="images" type="array">
-  Legacy reference image list.
+<ParamField body="referenceVideos" type="array">
+  Video reference URL array. Supports up to `1` video. The reference video duration must be within `3-10` seconds.
 
-  Rules:
-  - No `images`: text-to-video
-  - `1` image: single-image-to-video
-  - `2` images: first/last frame mode
+  When video reference is used, the generated duration and aspect ratio follow the reference video material.
 
-  <Note>If more than 2 images are provided, only the first 2 take effect.</Note>
+  Example: `["https://example.com/source.mp4"]`
 </ParamField>
-
-<Info>
-**Compatibility notes:**
-- The legacy field `images` is still supported
-- When both new and legacy fields are provided, the new fields take priority
-- If both new and legacy fields are provided with different values, the API returns a parameter conflict
-</Info>
 
 ## Modes
 
 <CardGroup cols={3}>
   <Card title="Text to Video" icon="wand-magic-sparkles">
-    Do not provide image input fields. The result is generated only from the prompt.
+    Provide `model` and `prompt`; `duration` and `ratio` are optional.
   </Card>
-  <Card title="Single Image" icon="image">
-    Provide `image_urls` to strengthen subject and style control.
+  <Card title="Image Reference" icon="images">
+    Use `referenceImages` to provide 1-7 reference images.
   </Card>
   <Card title="First/Last Frame" icon="film">
-    Provide `first_image` and `last_image` as the start frame and end frame.
+    Use `first_image` and `last_image` to control the start and end frames.
+  </Card>
+  <Card title="Video Reference" icon="video">
+    Use `referenceVideos` to provide 1 reference video. The reference video duration must be within 3-10 seconds.
+  </Card>
+  <Card title="Image + Video" icon="layer-group">
+    Use `referenceImages` with `referenceVideos`; images are limited to 4.
+  </Card>
+  <Card title="Multi-image + Video" icon="photo-film">
+    Use multiple images and a reference video to constrain subject, style, and motion.
   </Card>
 </CardGroup>
+
+## Constraints
+
+<Warning>
+**Key constraints:**
+- `model` only supports `starvideos_o3`
+- `duration` supports `3-15` seconds and defaults to `3`
+- `ratio` supports `1:1`, `9:16`, and `16:9`; default is `9:16`
+- `referenceImages` supports up to `7` images, or up to `4` images when used with video reference
+- `referenceVideos` supports up to `1` video; the reference video duration must be within `3-10` seconds
+- `first_image` and `last_image` must be provided together
+- `first_image` / `last_image` cannot be used together with `referenceImages` or `referenceVideos`
+</Warning>
+
+<Info>
+**Field note:**
+For `starvideos_o3`, image input uses `referenceImages`, while first/last frame input uses `first_image` + `last_image`.
+</Info>
 
 ## Response Parameters
 
@@ -123,27 +145,6 @@ Authorization: Bearer {{key}}
   Error message returned when the task status is `failed`.
 </ResponseField>
 
-## Constraints
-
-<Warning>
-**Key constraints:**
-- `model` currently only supports `starvideos_v3`
-- `duration` must be between `3` and `15` seconds
-- `ratio` only supports `16:9` or `9:16`
-- `image_urls` supports exactly `1` image
-- `first_image` and `last_image` must be provided together
-- only the first `2` items in `images` are used
-</Warning>
-
-<Info>
-**Best practices:**
-1. Task creation is asynchronous, so save the returned `id`.
-2. Include subject, action, camera, and style details in your prompt.
-3. In first/last frame mode, keep the 2 images visually consistent.
-4. Image URLs must be publicly accessible when the request is sent.
-5. Existing integrations using the legacy `images` field can continue to use it.
-</Info>
-
 <RequestExample>
 
 ```bash cURL - Text to Video
@@ -152,24 +153,24 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
+    "model": "starvideos_o3",
     "prompt": "A cyberpunk city at night with a slow camera push-in",
-    "model": "starvideos_v3",
-    "duration": 5,
-    "ratio": "16:9"
+    "duration": 3,
+    "ratio": "9:16"
   }'
 ```
 
-```bash cURL - Single Image
+```bash cURL - Image Reference
 curl --request POST \
   --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/starvideos/videos \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
-    "prompt": "A girl turns around and smiles in a flower field",
-    "model": "starvideos_v3",
+    "model": "starvideos_o3",
+    "prompt": "A girl turns around and smiles in a flower field with a subtle camera push-in",
     "duration": 5,
     "ratio": "9:16",
-    "image_urls": [
+    "referenceImages": [
       "https://example.com/girl-flower.jpg"
     ]
   }'
@@ -181,12 +182,30 @@ curl --request POST \
   --header 'Authorization: Bearer {{key}}' \
   --header 'Content-Type: application/json' \
   --data '{
+    "model": "starvideos_o3",
     "prompt": "A time-lapse transition from morning to evening by the sea",
-    "model": "starvideos_v3",
     "duration": 8,
     "ratio": "16:9",
     "first_image": "https://example.com/sea-morning.jpg",
     "last_image": "https://example.com/sea-evening.jpg"
+  }'
+```
+
+```bash cURL - Image + Video Reference
+curl --request POST \
+  --url https://zcbservice.aizfw.cn/kyyReactApiServer/v1/starvideos/videos \
+  --header 'Authorization: Bearer {{key}}' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "starvideos_o3",
+    "prompt": "Keep the motion rhythm from the video and combine it with the character style from the reference images",
+    "referenceImages": [
+      "https://example.com/person-style.jpg",
+      "https://example.com/outfit.jpg"
+    ],
+    "referenceVideos": [
+      "https://example.com/source-motion.mp4"
+    ]
   }'
 ```
 
@@ -196,10 +215,10 @@ curl --request POST \
 
 ```json Success
 {
-  "id": "video_starvideos_1234567890",
+  "id": "video_starvideos_o3_1234567890",
   "object": "video",
   "created": 1774836724,
-  "model": "starvideos_v3",
+  "model": "starvideos_o3",
   "status": "queued",
   "error": null
 }
@@ -210,10 +229,14 @@ curl --request POST \
   "id": null,
   "object": "error",
   "created": 1774836724,
-  "model": "starvideos_v3",
+  "model": "starvideos_o3",
   "status": "failed",
-  "error": "ratio only supports 16:9 or 9:16, current: 1:1"
+  "error": "ratio only supports 1:1, 9:16, or 16:9, current: 4:3"
 }
 ```
 
 </ResponseExample>
+
+
+
+
